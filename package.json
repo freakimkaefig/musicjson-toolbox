@@ -1,0 +1,16 @@
+{
+  "name": "musicjson-toolbox",
+  "version": "0.0.1",
+  "description": "A toolbox for comparing musicjson objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "musicjson",
+    "toolbox",
+    "similarity"
+  ],
+  "author": "Lukas Lamm <info@lukaslamm.com>",
+  "license": "MIT"
+}
