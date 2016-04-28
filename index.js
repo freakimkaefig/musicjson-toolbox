@@ -28,6 +28,27 @@
       }
 
       return tempNotes;
+    },
+
+    /**
+     * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad})
+     * @param {Array} array - An array of notes (returned by {@link MusicJsonToolbox.notes})
+     * @param {Number} length - The length of n
+     */
+    ngrams: function(array, length) {
+      var nGramsArray = [];
+
+      for (var i = 0; i < array.length - (length - 1); i++) {
+        var subNgramsArray = [];
+
+        for (var j = 0; j < length; j++) {
+          subNgramsArray.push(array[i + j]);
+        }
+
+        nGramsArray.push(subNgramsArray);
+      }
+
+      return nGramsArray;
     }
   };
 
