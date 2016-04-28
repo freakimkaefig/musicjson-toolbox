@@ -4,7 +4,8 @@
   "description": "A toolbox for comparing musicjson objects",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "docs": "jsdoc2md index.js > API.md"
   },
   "repository": {
     "type": "git",

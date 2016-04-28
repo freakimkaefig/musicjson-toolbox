@@ -1,10 +1,17 @@
 (function() {
   'use strict';
 
+  /**
+   * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
+   * @exports MusicJsonToolbox
+   */
   var MusicJsonToolbox = {
     /**
-     * Returns an array of all notes (transposed to C major)
+     * Returns an array of all notes (transposed to C major).
+     *
+     * Example:
      * [ {object}, {object}, ... ]
+     * 
      * @param {object} obj - The musicjson object
      */
     notes: function(obj) {
@@ -31,8 +38,8 @@
     },
 
     /**
-     * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad})
-     * @param {Array} array - An array of notes (returned by {@link MusicJsonToolbox.notes})
+     * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad}).
+     * @param {Array} array - An array of notes (returned by function "notes")
      * @param {Number} length - The length of n
      */
     ngrams: function(array, length) {
