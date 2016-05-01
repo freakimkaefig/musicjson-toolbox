@@ -165,7 +165,7 @@
           }
         }
         costs.push({
-          cost: tempCost,
+          cost: tempCost / search.length,
           measures: this.uniques(tempMeasures).sort()
         });
       }
