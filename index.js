@@ -86,12 +86,18 @@
      * @returns {number} The base12 pitch number
      */
     base12Pitch: function(step, octave, alter, absolute) {
+      var ret = base12[step];
+      if (ret === 0) {
+        ret = 12;
+      }
       if (absolute) {
-        return (base12[step] + octave * 12) + alter;
-      } else {
-        return base12[step] + alter;
+        ret += (octave * 12);
+      }
+      if (alter) {
+        ret += alter;
       }
 
+      return ret;
     },
 
     /**
