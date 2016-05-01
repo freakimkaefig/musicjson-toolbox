@@ -174,8 +174,8 @@
 
       // TODO: return multiple values if same lowest cost!
       return costs.sort(function (a, b) {
-        return b.cost - a.cost;
-      }).pop();
+        return a.cost - b.cost;
+      }).shift();
     }
   };
 
