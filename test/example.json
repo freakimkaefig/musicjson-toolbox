@@ -426,6 +426,56 @@
           "type": "half"
         }
       ]
+    },
+    {
+      "attributes": {
+        "repeat": {
+          "left": true,
+          "right": true
+        }
+      },
+      "notes": [
+        {
+          "pitch": {
+            "step": "C",
+            "octave": 4,
+            "alter": 0
+          },
+          "rest": false,
+          "duration": 4,
+          "type": "quarter"
+        },
+        {
+          "pitch": {
+            "step": "E",
+            "octave": 4,
+            "alter": 0
+          },
+          "rest": false,
+          "duration": 4,
+          "type": "quarter"
+        },
+        {
+          "pitch": {
+            "step": "F",
+            "octave": 4,
+            "alter": 0
+          },
+          "rest": false,
+          "duration": 2,
+          "type": "eighth"
+        },
+        {
+          "pitch": {
+            "step": "F",
+            "octave": 4,
+            "alter": 0
+          },
+          "rest": false,
+          "duration": 2,
+          "type": "eighth"
+        }
+      ]
     }
   ],
   "id": "A 59440"
