@@ -1,6 +1,10 @@
 (function() {
   'use strict';
 
+  // C  |    | D |    | E  | F  |    | G |    | A  |    | B
+  // B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
+  //    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
+  // 1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12
   var base12 = {
     "C": 1,
     "D": 3,
@@ -16,6 +20,7 @@
    * @exports MusicJsonToolbox
    */
   var MusicJsonToolbox = {
+
     /**
      * Returns an array of all notes (transposed to C major).
      *
@@ -56,6 +61,8 @@
     },
 
     /**
+    // TODO: Method to generate contour (in Parsons code)
+
      * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad}).
      * @param {Array} array - An array of notes (returned by function "notes")
      * @param {number} length - The length of n
@@ -142,13 +149,6 @@
      * @returns {object} The first finding with minimum cost
      */
     distanceNgrams: function(object, search) {
-      // TODO: improve from pseudo-edit-distance to real edit-distance
-      //       maybe comparing strings of base12 pitches
-      //       eg: 5 4 12 9 11
-      //           | |  | |  |
-      //           0 0  2 1  0
-      //           | |  | |  |
-      //           5 4 10 8 11
       var ngrams = this.ngrams(this.notes(object), search.length);
       var costs = [];
       for (var i = 0; i < ngrams.length; i++) {
@@ -163,6 +163,10 @@
           if (!tempMeasures.hasOwnProperty(ngrams[i][j].measure)) {
             tempMeasures.push(ngrams[i][j].measure);
           }
+          // TODO: Adjust weighting
+          // eg: C D C D vs. G A G A = 7        same structure: up(2) > down(2) > up(2)
+          //     C D C D vs. G A C A = 5.25     different structure: up(2) > down(2 vs 9) > up(2 vs 9)
+
         }
         costs.push({
           cost: tempCost / search.length,
@@ -171,15 +175,27 @@
       }
 
       console.log(costs);
+    // TODO: improve from pseudo-edit-distance to real edit-distance
+    //       maybe comparing strings of base12 pitches
+    //       eg: 5 4 12 9 11
+    //           | |  | |  |
+    //           0 0  2 1  0
+    //           | |  | |  |
+    //           5 4 10 8 11
 
-      // TODO: return multiple values if same lowest cost!
-      return costs.sort(function (a, b) {
+
+      return costs.sort(function(a, b) {
         return a.cost - b.cost;
       }).shift();
     }
+
+    // TODO: Distance calculation based on intervals
   };
 
 
+  // =============================
+  // ========== EXPORTS ==========
+  // =============================
   // amd
   if (typeof define !== "undefined" && define !== null && define.amd) {
     define(function() {
