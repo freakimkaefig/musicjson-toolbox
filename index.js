@@ -97,7 +97,43 @@
       return tempIntervals;
     },
 
-    // TODO: Method to generate contour (in Parsons code)
+    /**
+     * Generate array of parson code from notes
+     * @param {Array} notes - Array of notes for which the contour should be created
+     * @returns {Array} An array of notes as parsons code
+     */
+    parsons: function(notes) {
+      var tempParsons = [];
+
+      tempParsons.push({
+        value: '*',
+        noteNumber: 0,
+        measureNumber: 0
+      });
+
+      for (var i = 1; i < notes.length; i++) {
+        var parson;
+        if (notes[i].rest) {
+          continue;
+        } else {
+          var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
+          if (pitchDiff === 0) {
+            parson = 'r';
+          } else if (pitchDiff > 0) {
+            parson = 'u';
+          } else if (pitchDiff < 0) {
+            parson = 'd';
+          }
+        }
+        tempParsons.push({
+          value: parson,
+          noteNumber: notes[i].noteNumber,
+          measureNumber: notes[i].measureNumber
+        });
+      }
+
+      return tempParsons;
+    },
 
     /**
      * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad}).
@@ -185,6 +221,49 @@
       }
 
       return ret;
+    },
+
+    /**
+     * Edit-Distance from https://gist.github.com/andrei-m/982927
+     * Copyright (c) 2011 Andrei Mackenzie
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+     * @param {string} a
+     * @param {string} b
+     */
+    editDistance: function(a, b) {
+      if (a.length == 0) return b.length;
+      if (b.length == 0) return a.length;
+
+      var matrix = [];
+
+      // increment along the first column of each row
+      var i;
+      for (i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+      }
+
+      // increment each column in the first row
+      var j;
+      for (j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+      }
+
+      // Fill in the rest of the matrix
+      for (i = 1; i <= b.length; i++) {
+        for (j = 1; j <= a.length; j++) {
+          if (b.charAt(i-1) == a.charAt(j-1)) {
+            matrix[i][j] = matrix[i-1][j-1];
+          } else {
+            matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                                    Math.min(matrix[i][j-1] + 1, // insertion
+                                             matrix[i-1][j] + 1)); // deletion
+          }
+        }
+      }
+
+      return matrix[b.length][a.length];
     },
 
     /**
@@ -300,9 +379,72 @@
       return costs.sort(function(a, b) {
         return a.cost - b.cost;
       }).shift();
-    }
+    },
 
-    // TODO: Distance calculation based on intervals
+    /**
+     * Returns minimum edit distance between searched notes and the given document.
+     *
+     * @param {object} object - A musicjson object to search in
+     * @param {Array} search - An array of notes that should be searched
+     * @returns {Number}
+     */
+    distanceParsonsLevenshtein: function(object, search) {
+      var parsons = this.parsons(this.notes(object));
+      var searchParsons = this.parsons(search);
+      var editDistance = this.editDistance(
+        parsons.map(function(item) {
+          return item.value;
+        }).join(''),
+        searchParsons.map(function(item) {
+          return item.value;
+        }).join('')
+      );
+
+      return editDistance;
+    },
+
+    /**
+     * Returns minimum edit distance between searched notes and the corresponding ngrams.
+     * Notes are represented in parsons code.
+     *
+     * @param {object} object - A musicjson object to search in
+     * @param {Array} search - An array of notes that should be searched
+     * @returns {object} The first finding with minimum cost
+     */
+    distanceParsonsNgramsLevenshtein: function(object, search) {
+      var ngrams = this.ngrams(this.parsons(this.notes(object)), search.length);
+      var searchParsons = this.parsons(search);
+      var costs = [];
+
+      for (var i = 0; i < ngrams.length; i++) {
+        var tempCost = 0;
+        var tempMeasures = [];
+
+        for (var j = 0; j < ngrams[i].length; j++) {
+          tempMeasures.push({
+            measure: ngrams[i][j].measureNumber,
+            note: ngrams[i][j].noteNumber
+          });
+        }
+
+        tempCost = tempCost + this.editDistance(
+          ngrams[i].map(function(item) {
+            return item.value;
+          }).join(''),
+          searchParsons.map(function(item) {
+            return item.value;
+          }).join('')
+        );
+        costs.push({
+          cost: tempCost,
+          highlight: this.uniques(tempMeasures).sort()
+        });
+      }
+
+      return costs.sort(function(a, b) {
+        return a.cost - b.cost;
+      }).shift();
+    }
   };
 
 
