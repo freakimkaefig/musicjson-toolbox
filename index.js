@@ -82,7 +82,7 @@
       for (var i = 1; i < notes.length; i++) {
         var pitchDiff = 0;
         if (notes[i].rest) {
-          pitchDiff = 0; // TODO: maybe weight rests different than zero
+          continue;// TODO: maybe weight rests different than zero
         } else {
           pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
         }
@@ -208,7 +208,7 @@
      * @param {Array} search - An array of notes that should be searched
      * @returns {object} The first finding with minimum cost
      */
-    distanceNgramsRawPitch: function(object, search) {
+    distancePitchNgrams: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var ngrams = this.ngrams(this.notes(object), search.length);
       var costs = [];
@@ -261,13 +261,13 @@
 
     /**
      * Returns the minimum distance between the searched notes and the corresponding ngrams.
-     * Notes are represented as contour of pitches.
+     * Notes are represented as intervals.
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of notes that should be searched
      * @returns {object} The first finding with minimum cost
      */
-    distanceIntervalPitch: function(object, search) {
+    distanceIntervalNgrams: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var ngrams = this.ngrams(this.intervals(this.notes(object), keyAdjust), search.length);
       var searchIntervals = this.intervals(search, 0);
