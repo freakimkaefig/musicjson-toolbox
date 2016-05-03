@@ -4,8 +4,10 @@
   "description": "A toolbox for comparing musicjson objects",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "docs": "jsdoc2md index.js > API.md"
+    "test": "node ./node_modules/mocha/bin/_mocha -R spec",
+    "docs": "jsdoc2md index.js > API.md",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
+    "coveralls": "npm run coverage && node ./node_modules/coveralls/bin/coveralls.js < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,7 @@
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
     "fs": "0.0.2",
     "mocha": "^2.4.5"
   }

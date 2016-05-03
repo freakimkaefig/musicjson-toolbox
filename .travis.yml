@@ -20,5 +20,5 @@ deploy:
     repo: freakimkaefig/musicjson-toolbox
     node: 5.1.0
 after_success:
-  - coveralls
+  - npm run coveralls
 
