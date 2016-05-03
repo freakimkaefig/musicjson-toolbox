@@ -1,0 +1,42 @@
+[
+  {
+    "pitch": {
+      "step": "G",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter"
+  },
+  {
+    "pitch": {
+      "step": "B",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter"
+  },
+  {
+    "pitch": {
+      "step": "C",
+      "octave": 5,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth"
+  },
+  {
+    "pitch": {
+      "step": "C",
+      "octave": 5,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth"
+  }
+]
