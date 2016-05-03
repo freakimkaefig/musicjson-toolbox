@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+- '5'
+- '5.9'
+- '5.8'
+- '5.7'
+- '5.6'
+- '5.5'
+- '5.4'
+- '5.3'
+- '5.2'
+- 5.1.0
+deploy:
+  provider: npm
+  email: freak.im.kaefig@gmx.net
+  api_key:
+    secure: hxkY0CmPl3Lf5GOXgSyb2QWblC73JiV77nnA3auyg4816EhLb9LblIgOB4u1sYKUmowR8UJ3LL70Z0pMsyyHX5KEY6haD5zhXznu95kKhuHmEx/fD6Tb/byC+xtDYwjqSpDJAIEK8wupHXCvwQGzDJEEJ4b33T0c2Tv0CZn5+kr893+gqnRkUVnZ2qv59bnuoSvWehW9fbPSeiSBfzffPGvlpouwFfFKms5o4ufk+jdDgHOtuNDHjJ6M6AqOBSoUMmnQXdzJMc3MlNmPlhmwkXD4mDKtd75glGm/TPo1xAGts2WaNVOek1Umxn4y1saJ2fe5XQ12V+9LCIr+1sJoT5ScswZ90e4SJkWak3zGrACI7eHfWmHM7sUJmXya35faSbGL9crddh4+HoBBy+cihr/azaEiDRhPMJK7EHiiREPLBTLs7GBZygKCyKSiZmdks6tKugGXJoCEY2liJUihJAcItNyCIrqOiKUMXnbcRDgH2uNrHGsePlDNG+E9YoJX240JO3wpYsh8+x2n+1hXYUT7Sdvncnrl/MvQ4hCgIJhETd1sUXTOJJK42J5Kvut+hnVgaWwH/RlPfHSQ5tvp59vAz3Miv3BOLjatPB+FTwC0R/0D9kFEEiT6d8TwFlzJG24jK8imqWIgRCQl/0FoNhOh1oy0r7Nhlkzu3fNNobQ=
+  on:
+    tags: true
+    repo: freakimkaefig/musicjson-toolbox
+    node: 5.1.0

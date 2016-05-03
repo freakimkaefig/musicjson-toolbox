@@ -1,5 +1,8 @@
 # musicjson-toolbox
 
+[![Build Status](https://travis-ci.org/freakimkaefig/musicjson-toolbox.svg?branch=master)](https://travis-ci.org/freakimkaefig/musicjson-toolbox)
+[![Coverage Status](https://coveralls.io/repos/github/freakimkaefig/musicjson-toolbox/badge.svg?branch=master)](https://coveralls.io/github/freakimkaefig/musicjson-toolbox?branch=master)
+
 The project is still under construction.
 
 The plan is to create a node toolbox for comparing musicJSON objects.
