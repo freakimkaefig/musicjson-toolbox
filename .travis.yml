@@ -10,6 +10,7 @@ node_js:
 - '5.3'
 - '5.2'
 - 5.1.0
+before_install: npm install -g istanbul
 deploy:
   provider: npm
   email: freak.im.kaefig@gmx.net
