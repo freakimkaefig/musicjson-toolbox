@@ -1,5 +1,4 @@
 var expect = require('chai').expect;
-var fs = require('fs');
 var MusicJsonToolbox = require('../index');
 
 var musicjson = require('./example.json');

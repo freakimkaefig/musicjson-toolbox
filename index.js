@@ -6,13 +6,13 @@
   //    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
   // 1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12
   var base12 = {
-    "C": 1,
-    "D": 3,
-    "E": 5,
-    "F": 6,
-    "G": 8,
-    "A": 10,
-    "B": 12
+    'C': 1,
+    'D': 3,
+    'E': 5,
+    'F': 6,
+    'G': 8,
+    'A': 10,
+    'B': 12
   };
 
   /**
@@ -235,8 +235,8 @@
      * @param {string} b
      */
     editDistance: function(a, b) {
-      if (a.length == 0) return b.length;
-      if (b.length == 0) return a.length;
+      if (a.length === 0) return b.length;
+      if (b.length === 0) return a.length;
 
       var matrix = [];
 
@@ -255,7 +255,7 @@
       // Fill in the rest of the matrix
       for (i = 1; i <= b.length; i++) {
         for (j = 1; j <= a.length; j++) {
-          if (b.charAt(i-1) == a.charAt(j-1)) {
+          if (b.charAt(i-1) === a.charAt(j-1)) {
             matrix[i][j] = matrix[i-1][j-1];
           } else {
             matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
@@ -455,21 +455,21 @@
   // =============================
   // amd
   /* istanbul ignore next */
-  if (typeof define !== "undefined" && define !== null && define.amd) {
+  if (typeof define !== 'undefined' && define !== null && define.amd) {
     define(function() {
       return MusicJsonToolbox;
     });
   }
   // commonjs
-  else if (typeof module !== "undefined" && module !== null) {
+  else if (typeof module !== 'undefined' && module !== null) {
     module.exports = MusicJsonToolbox;
   }
   // web worker
-  else if (typeof self !== "undefined" && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
+  else if (typeof self !== 'undefined' && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
     self.MusicJsonToolbox = MusicJsonToolbox;
   }
   // browser main thread
-  else if (typeof window !== "undefined" && window !== null) {
+  else if (typeof window !== 'undefined' && window !== null) {
     window.MusicJsonToolbox = MusicJsonToolbox;
   }
 }());

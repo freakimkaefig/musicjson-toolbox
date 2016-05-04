@@ -1,9 +1,8 @@
 var expect = require('chai').expect;
-var fs = require('fs');
 var MusicJsonToolbox = require('../index');
 
-musicjson = require('./example.json');
-search = require('./search.json');
+var musicjson = require('./example.json');
+var search = require('./search.json');
 
 describe('MusicJsonToolbox Distance Functions', function() {
 

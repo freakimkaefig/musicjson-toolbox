@@ -1,12 +1,7 @@
 var expect = require('chai').expect;
-var fs = require('fs');
 var MusicJsonToolbox = require('../index');
 
-var notes = require('./notes.json');
-var intervals = require('./intervals.json');
-
 describe('MusicJsonToolbox Helper Functions', function() {
-
 
   describe('MusicJsonToolbox.base12Pitch', function() {
     it('converts note object to base12Pitch', function() {
@@ -28,34 +23,34 @@ describe('MusicJsonToolbox Helper Functions', function() {
       var output;
 
       output = MusicJsonToolbox.pitchDifference(
-        {"step": "C", "accidental": "flat", "octave": 4, "alter": -1},
+        {'step': 'C', 'accidental': 'flat', 'octave': 4, 'alter': -1},
         0,
-        {"step": "F", "octave": 2, "alter": 0},
+        {'step': 'F', 'octave': 2, 'alter': 0},
         true,
         false
       );
       expect(output).to.equal(-18);
 
       output = MusicJsonToolbox.pitchDifference(
-        {"step": "C", "accidental": "flat", "octave": 4, "alter": -1},
+        {'step': 'C', 'accidental': 'flat', 'octave': 4, 'alter': -1},
         0,
-        {"step": "F", "octave": 3, "alter": 0},
+        {'step': 'F', 'octave': 3, 'alter': 0},
         false,
         false
       );
       expect(output).to.equal(-6);
 
       output = MusicJsonToolbox.pitchDifference(
-        {"step": "C", "accidental": "flat", "octave": 4, "alter": -1},
+        {'step': 'C', 'accidental': 'flat', 'octave': 4, 'alter': -1},
         0,
-        {"step": "F", "octave": 3, "alter": 0}
+        {'step': 'F', 'octave': 3, 'alter': 0}
       );
       expect(output).to.equal(-6);
 
       output = MusicJsonToolbox.pitchDifference(
-        {"step": "C", "accidental": "flat", "octave": 4, "alter": -1},
+        {'step': 'C', 'accidental': 'flat', 'octave': 4, 'alter': -1},
         0,
-        {"step": "F", "octave": 3, "alter": 0},
+        {'step': 'F', 'octave': 3, 'alter': 0},
         true,
         true
       );

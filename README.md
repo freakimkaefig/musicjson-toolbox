@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/freakimkaefig/musicjson-toolbox.svg?branch=master)](https://travis-ci.org/freakimkaefig/musicjson-toolbox)
 [![Coverage Status](https://coveralls.io/repos/github/freakimkaefig/musicjson-toolbox/badge.svg?branch=master)](https://coveralls.io/github/freakimkaefig/musicjson-toolbox?branch=master)
+[![Code Climate](https://codeclimate.com/github/freakimkaefig/musicjson-toolbox/badges/gpa.svg)](https://codeclimate.com/github/freakimkaefig/musicjson-toolbox)
 
 The project is still under construction.
 
