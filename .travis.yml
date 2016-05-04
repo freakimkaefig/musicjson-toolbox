@@ -4,7 +4,9 @@ node_js:
   - '6'
   - '5.11.0'
 
-before_install: npm install -g istanbul
+before_install:
+  - npm install -g istanbul
+  - npm install -g codeclimate-test-reporter
 
 deploy:
   provider: npm
@@ -17,5 +19,6 @@ deploy:
     node: 5.11.0
 
 after_success:
-  - npm run coveralls
+  - npm run coverage
+  - codeclimate-test-reporter < coverage/lcov.info
 
