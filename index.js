@@ -1,5 +1,5 @@
+'use strict';
 (function() {
-  'use strict';
 
   // C  |    | D |    | E  | F  |    | G |    | A  |    | B
   // B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
@@ -165,7 +165,7 @@
      * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @param {number} octave - The octave
      * @param {number} alter - The value for alter (either from accidental or key)
-     * @param {bool} withOctave - When set, the octave is taken into account, otherwise function return relative value (from 1 to 12)
+     * @param {boolean} withOctave - When set, the octave is taken into account, otherwise function return relative value (from 1 to 12)
      * @returns {number} The base12 pitch number
      */
     base12Pitch: function(step, keyAdjust, octave, alter, withOctave) {
@@ -191,8 +191,8 @@
      * @param {object} pitch1 - The first pitch to compare
      * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @param {object} pitch2 - The second pitch to compare
-     * @param {bool} withOctave - When set, the octave is taken into account, otherwise function return relative value (from 1 to 12)
-     * @param {bool} absolute - When set, the absolute difference is returned ( | Pitch 2 - Pitch 1 | )
+     * @param {boolean} withOctave - When set, the octave is taken into account, otherwise function return relative value (from 1 to 12)
+     * @param {boolean} absolute - When set, the absolute difference is returned ( | Pitch 2 - Pitch 1 | )
      * @returns {number} The difference between two pitches
      */
     pitchDifference: function(pitch1, keyAdjust, pitch2, withOctave, absolute) {
@@ -211,7 +211,7 @@
      * Calculates difference between two durations
      * @param {number} duration1 - The first duration to compare
      * @param {number} duration2 - The second duration to compare
-     * @param {bool} absolute - When set, the absolute difference is returned ( | Duration 2 - Duration 1 | )
+     * @param {boolean} absolute - When set, the absolute difference is returned ( | Duration 2 - Duration 1 | )
      * @returns {number} The difference between two durations
      */
     durationDifference: function(duration1, duration2, absolute) {
@@ -227,12 +227,15 @@
 
     /**
      * Edit-Distance from https://gist.github.com/andrei-m/982927
+     *
      * Copyright (c) 2011 Andrei Mackenzie
      * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
      * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
      * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-     * @param {string} a
-     * @param {string} b
+     *
+     * @param {string} a - The first string
+     * @param {string} b - The second string
+     * @returns {number} The calculated edit distance
      */
     editDistance: function(a, b) {
       if (a.length === 0) return b.length;
@@ -388,12 +391,12 @@
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of notes that should be searched
-     * @returns {Number}
+     * @returns {Number} The edit distance between parsons codes
      */
     distanceParsonsLevenshtein: function(object, search) {
       var parsons = this.parsons(this.notes(object));
       var searchParsons = this.parsons(search);
-      var editDistance = this.editDistance(
+      return this.editDistance(
         parsons.map(function(item) {
           return item.value;
         }).join(''),
@@ -401,8 +404,6 @@
           return item.value;
         }).join('')
       );
-
-      return editDistance;
     },
 
     /**

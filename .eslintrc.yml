@@ -9,8 +9,19 @@ rules:
     - error
     - 2
   quotes:
-    - error
+    - warn
     - single
   semi:
     - error
     - always
+  eqeqeq:
+    - warn
+    - smart
+  valid-jsdoc:
+    - warn
+  no-unreachable:
+    - error
+  strict:
+    - error
+  no-trailing-spaces:
+    - warn
