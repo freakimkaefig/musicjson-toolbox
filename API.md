@@ -12,7 +12,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
     * [.durationDifference(duration1, duration2, absolute)](#module_MusicJsonToolbox.durationDifference) ⇒ <code>number</code>
-    * [.editDistance(a, b)](#module_MusicJsonToolbox.editDistance)
+    * [.editDistance(a, b)](#module_MusicJsonToolbox.editDistance) ⇒ <code>number</code>
     * [.uniques(array)](#module_MusicJsonToolbox.uniques) ⇒ <code>Array</code>
     * [.distancePitchNgrams(object, search)](#module_MusicJsonToolbox.distancePitchNgrams) ⇒ <code>object</code>
     * [.distanceIntervalNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalNgrams) ⇒ <code>object</code>
@@ -83,7 +83,7 @@ Calculates the base 12 represented pitch
 | keyAdjust | <code>number</code> | The position in circle of fifths of the searched notes |
 | octave | <code>number</code> | The octave |
 | alter | <code>number</code> | The value for alter (either from accidental or key) |
-| withOctave | <code>bool</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
+| withOctave | <code>boolean</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
 
 <a name="module_MusicJsonToolbox.pitchDifference"></a>
 
@@ -98,8 +98,8 @@ Calculates difference between two pitches
 | pitch1 | <code>object</code> | The first pitch to compare |
 | keyAdjust | <code>number</code> | The position in circle of fifths of the searched notes |
 | pitch2 | <code>object</code> | The second pitch to compare |
-| withOctave | <code>bool</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
-| absolute | <code>bool</code> | When set, the absolute difference is returned ( | Pitch 2 - Pitch 1 | ) |
+| withOctave | <code>boolean</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
+| absolute | <code>boolean</code> | When set, the absolute difference is returned ( | Pitch 2 - Pitch 1 | ) |
 
 <a name="module_MusicJsonToolbox.durationDifference"></a>
 
@@ -113,19 +113,20 @@ Calculates difference between two durations
 | --- | --- | --- |
 | duration1 | <code>number</code> | The first duration to compare |
 | duration2 | <code>number</code> | The second duration to compare |
-| absolute | <code>bool</code> | When set, the absolute difference is returned ( | Duration 2 - Duration 1 | ) |
+| absolute | <code>boolean</code> | When set, the absolute difference is returned ( | Duration 2 - Duration 1 | ) |
 
 <a name="module_MusicJsonToolbox.editDistance"></a>
 
-### MusicJsonToolbox.editDistance(a, b)
-Edit-Distance from https://gist.github.com/andrei-m/982927Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+### MusicJsonToolbox.editDistance(a, b) ⇒ <code>number</code>
+Edit-Distance from https://gist.github.com/andrei-m/982927Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The calculated edit distance  
 
-| Param | Type |
-| --- | --- |
-| a | <code>string</code> | 
-| b | <code>string</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>string</code> | The first string |
+| b | <code>string</code> | The second string |
 
 <a name="module_MusicJsonToolbox.uniques"></a>
 
@@ -171,6 +172,7 @@ Returns the minimum distance between the searched notes and the corresponding ng
 Returns minimum edit distance between searched notes and the given document.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Number</code> - The edit distance between parsons codes  
 
 | Param | Type | Description |
 | --- | --- | --- |
