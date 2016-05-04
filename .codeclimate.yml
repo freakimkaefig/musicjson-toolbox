@@ -15,6 +15,10 @@ ratings:
 exclude_paths:
 - test/
 - node_modules/
+- "API.md"
+- "LICENSE"
+- "README.md"
+- "package.json"
 exclude_fingerprints:
 - f3b166b0a755f0ac4b5e91933417c0f8
 - 76b539d0a7f961edfd85bd434c906aef
