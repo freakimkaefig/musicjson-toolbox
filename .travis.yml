@@ -1,24 +1,19 @@
 language: node_js
 node_js:
-  - '5'
-  - '6'
-  - '5.11.0'
-
+- '5'
+- '6'
+- 5.11.0
 before_install:
-  - npm install -g istanbul
-  - npm install -g codeclimate-test-reporter
-
+- npm install -g codeclimate-test-reporter
 deploy:
   provider: npm
   email: freak.im.kaefig@gmx.net
   api_key:
-    secure: hxkY0CmPl3Lf5GOXgSyb2QWblC73JiV77nnA3auyg4816EhLb9LblIgOB4u1sYKUmowR8UJ3LL70Z0pMsyyHX5KEY6haD5zhXznu95kKhuHmEx/fD6Tb/byC+xtDYwjqSpDJAIEK8wupHXCvwQGzDJEEJ4b33T0c2Tv0CZn5+kr893+gqnRkUVnZ2qv59bnuoSvWehW9fbPSeiSBfzffPGvlpouwFfFKms5o4ufk+jdDgHOtuNDHjJ6M6AqOBSoUMmnQXdzJMc3MlNmPlhmwkXD4mDKtd75glGm/TPo1xAGts2WaNVOek1Umxn4y1saJ2fe5XQ12V+9LCIr+1sJoT5ScswZ90e4SJkWak3zGrACI7eHfWmHM7sUJmXya35faSbGL9crddh4+HoBBy+cihr/azaEiDRhPMJK7EHiiREPLBTLs7GBZygKCyKSiZmdks6tKugGXJoCEY2liJUihJAcItNyCIrqOiKUMXnbcRDgH2uNrHGsePlDNG+E9YoJX240JO3wpYsh8+x2n+1hXYUT7Sdvncnrl/MvQ4hCgIJhETd1sUXTOJJK42J5Kvut+hnVgaWwH/RlPfHSQ5tvp59vAz3Miv3BOLjatPB+FTwC0R/0D9kFEEiT6d8TwFlzJG24jK8imqWIgRCQl/0FoNhOh1oy0r7Nhlkzu3fNNobQ=
+    secure: SzOOG4aqiLjoQdakIr1Xghfe9drCDmWspcrd6+hTg7jz7eGLK36JbpeHWFRJR1jQDzVQUdG/ZNU66k5xEc08WUzm3/LziL71FMNw63h+I94bFBv3ZISyVreVRLAcsfE0IWslsfA9/dQbxeRMdUw7Pom7ZRHAfloyHsaONFDcL+VuMjQ159QnmlTHF6ftCHp09YBvAFZxIlmDM5LwzCaSFq6vlTNOwFk8oLb7iBQXT8a4N3kr0Wra/YrblQOA7yjaXWWvpXQEiq8nc7aPUVEvyo0BBJB22+CPvbVDH3NmN/GN2XTq8sFVPYaQ15r/5ffwjw6xUTMVUNl6CmdW1oJdsdA/NUrKPgWw51dkU4AJ8kJn8VAdSfwCsbSwsjUmGMmK1GcQ9akOLMn34r08UmHfX2fhOj2MWCl+O4wnGl6LoL73F2zUiuncuQQVee+jZdZKnJnCaXQhGg48rkQw5pVdgaeBtBVyHFAhLw10e7703E8nBu1n061HO4suETGd1UG6YW4lLS5HZpl2iReqwU0nbj1UP/00/ZWa+8im1YJOKQwRHXMWv6zW8/uvGBuqdlD8VJkD7lfwkBmdxFLKwaqKK/msop0pDGp21KjEI02vxnTQ/5INGJkiJx+EfOddRSVaWkTLfwhV0pfa5mVIRrovezPcb5LHf1zrZU/PjUmpcHs=
   on:
     tags: true
     repo: freakimkaefig/musicjson-toolbox
     node: 5.11.0
-
 after_success:
-  - npm run coverage
-  - codeclimate-test-reporter < coverage/lcov.info
-
+- npm run coverage
+- codeclimate-test-reporter < coverage/lcov.info
