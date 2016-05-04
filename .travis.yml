@@ -1,16 +1,11 @@
 language: node_js
 node_js:
 - '5'
-- '5.9'
-- '5.8'
-- '5.7'
-- '5.6'
-- '5.5'
-- '5.4'
-- '5.3'
-- '5.2'
-- 5.1.0
+- '6
+- '5.11.0'
+
 before_install: npm install -g istanbul
+
 deploy:
   provider: npm
   email: freak.im.kaefig@gmx.net
@@ -19,7 +14,8 @@ deploy:
   on:
     tags: true
     repo: freakimkaefig/musicjson-toolbox
-    node: 5.1.0
+    node: 5.11.0
+    
 after_success:
   - npm run coveralls
 

@@ -9,6 +9,7 @@ describe('MusicJsonToolbox.intervals', function() {
 
   it('creates array of intervals from array of notes', function() {
     var output = MusicJsonToolbox.intervals(notes, 0);
+    console.log(output);
     expect(JSON.stringify(output)).to.equal(JSON.stringify(intervals));
   });
 

@@ -48,6 +48,7 @@
         tempNotes = tempNotes.concat(obj.measures[i].notes);
 
         if (obj.measures[i].attributes.repeat.right) {
+          /* istanbul ignore else  */
           if (repeatStart !== -1) {
             while (repeatStart <= i) {
               tempNotes = tempNotes.concat(obj.measures[repeatStart].notes);
@@ -82,7 +83,7 @@
       for (var i = 1; i < notes.length; i++) {
         var pitchDiff = 0;
         if (notes[i].rest) {
-          continue;// TODO: maybe weight rests different than zero
+          // TODO: maybe weight rests different than zero
         } else {
           pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
         }
@@ -117,6 +118,7 @@
           continue;
         } else {
           var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
+          /* istanbul ignore else  */
           if (pitchDiff === 0) {
             parson = 'r';
           } else if (pitchDiff > 0) {
@@ -452,6 +454,7 @@
   // ========== EXPORTS ==========
   // =============================
   // amd
+  /* istanbul ignore next */
   if (typeof define !== "undefined" && define !== null && define.amd) {
     define(function() {
       return MusicJsonToolbox;

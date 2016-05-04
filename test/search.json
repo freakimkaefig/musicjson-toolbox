@@ -38,5 +38,15 @@
     "rest": false,
     "duration": 2,
     "type": "eighth"
+  },
+  {
+    "pitch": {
+      "step": "C",
+      "octave": 5,
+      "alter": 0
+    },
+    "rest": true,
+    "duration": 4,
+    "type": "quarter"
   }
 ]

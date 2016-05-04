@@ -48,6 +48,13 @@ describe('MusicJsonToolbox Helper Functions', function() {
       output = MusicJsonToolbox.pitchDifference(
         {"step": "C", "accidental": "flat", "octave": 4, "alter": -1},
         0,
+        {"step": "F", "octave": 3, "alter": 0}
+      );
+      expect(output).to.equal(-6);
+
+      output = MusicJsonToolbox.pitchDifference(
+        {"step": "C", "accidental": "flat", "octave": 4, "alter": -1},
+        0,
         {"step": "F", "octave": 3, "alter": 0},
         true,
         true
@@ -73,6 +80,9 @@ describe('MusicJsonToolbox Helper Functions', function() {
       var output;
 
       output = MusicJsonToolbox.editDistance('uudr', '');
+      expect(output).to.equal(4);
+
+      output = MusicJsonToolbox.editDistance('', 'uudr');
       expect(output).to.equal(4);
 
       output = MusicJsonToolbox.editDistance('uudr', 'uudr');
