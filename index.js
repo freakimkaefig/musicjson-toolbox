@@ -1,6 +1,5 @@
-'use strict';
 (function() {
-
+  'use strict';
   // C  |    | D |    | E  | F  |    | G |    | A  |    | B
   // B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
   //    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
@@ -196,8 +195,12 @@
      * @returns {number} The difference between two pitches
      */
     pitchDifference: function(pitch1, keyAdjust, pitch2, withOctave, absolute) {
-      if (typeof withOctave === 'undefined') withOctave = false;
-      if (typeof absolute === 'undefined') absolute = false;
+      if (typeof withOctave === 'undefined') {
+        withOctave = false;
+      }
+      if (typeof absolute === 'undefined') {
+        absolute = false;
+      }
 
       var ret = this.base12Pitch(pitch2.step, keyAdjust, pitch2.octave, pitch2.alter, withOctave) - this.base12Pitch(pitch1.step, keyAdjust, pitch1.octave, pitch1.alter, withOctave);
       if (absolute) {
@@ -215,7 +218,9 @@
      * @returns {number} The difference between two durations
      */
     durationDifference: function(duration1, duration2, absolute) {
-      if (typeof absolute === 'undefined') absolute = false;
+      if (typeof absolute === 'undefined') {
+        absolute = false;
+      }
 
       var ret = duration2 - duration1;
       if (absolute) {
@@ -238,8 +243,12 @@
      * @returns {number} The calculated edit distance
      */
     editDistance: function(a, b) {
-      if (a.length === 0) return b.length;
-      if (b.length === 0) return a.length;
+      if (a.length === 0) {
+        return b.length;
+      }
+      if (b.length === 0) {
+        return a.length;
+      }
 
       var matrix = [];
 
@@ -278,9 +287,12 @@
      */
     uniques: function(array) {
       var a = [];
-      for (var i=0, l=array.length; i<l; i++)
-        if (a.indexOf(array[i]) === -1 && array[i] !== '')
+      for (var i=0, l=array.length; i<l; i++) {
+        if (a.indexOf(array[i]) === -1 && array[i] !== '') {
           a.push(array[i]);
+        }
+      }
+
       return a;
     },
 
@@ -457,20 +469,14 @@
   // amd
   /* istanbul ignore next */
   if (typeof define !== 'undefined' && define !== null && define.amd) {
-    define(function() {
+    define(function () {
       return MusicJsonToolbox;
     });
-  }
-  // commonjs
-  else if (typeof module !== 'undefined' && module !== null) {
+  } else if (typeof module !== 'undefined' && module !== null) { // commonjs
     module.exports = MusicJsonToolbox;
-  }
-  // web worker
-  else if (typeof self !== 'undefined' && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
+  } else if (typeof self !== 'undefined' && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') { // web worker
     self.MusicJsonToolbox = MusicJsonToolbox;
-  }
-  // browser main thread
-  else if (typeof window !== 'undefined' && window !== null) {
+  } else if (typeof window !== 'undefined' && window !== null) { // browser main thread
     window.MusicJsonToolbox = MusicJsonToolbox;
   }
 }());
