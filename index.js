@@ -14,6 +14,22 @@
     'B': 12
   };
 
+  var intervalFactor = [
+    1,  // 0  =   unison          (perfect consonant)
+    3,  // 1  =   minor second    (dissonant)
+    3,  // 2  =   major second    (dissonant)
+    2,  // 3  =   minor third     (imperfect consonant)
+    2,  // 4  =   major third     (imperfect consonant)
+    1,  // 5  =   perfect fourth  (perfect consonant)
+    3,  // 6  =   minor fifth     (dissonant)
+    1,  // 7  =   perfect fourth  (perfect consonant)
+    2,  // 8  =   minor sixth     (imperfect consonant)
+    2,  // 9  =   major sixth     (imperfect consonant)
+    3,  // 10 =   minor seventh   (dissonant)
+    3,  // 11 =   major seventh   (dissonant)
+    1   // 12 =   octave          (perfect consonant)
+  ];
+
   /**
    * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
    * @exports MusicJsonToolbox
@@ -27,9 +43,10 @@
      * [ {object}, {object}, ... ]
      *
      * @param {object} obj - The musicjson object
+     * @param {boolean} repeat - If set to true, repeated measures are also repeated in notes output
      * @returns {Array} An array containing all notes of the given object
      */
-    notes: function(obj) {
+    notes: function(obj, repeat) {
       var tempNotes = [];
       var repeatStart = -1;
 
@@ -40,13 +57,13 @@
           obj.measures[i].notes[j].noteNumber = j;
         }
 
-        if (obj.measures[i].attributes.repeat.left) {
+        if (repeat && obj.measures[i].attributes.repeat.left) {
           repeatStart = i;
         }
 
         tempNotes = tempNotes.concat(obj.measures[i].notes);
 
-        if (obj.measures[i].attributes.repeat.right) {
+        if (repeat && obj.measures[i].attributes.repeat.right) {
           /* istanbul ignore else  */
           if (repeatStart !== -1) {
             while (repeatStart <= i) {
@@ -114,7 +131,7 @@
       for (var i = 1; i < notes.length; i++) {
         var parson;
         if (notes[i].rest) {
-          continue;
+          parson = 'r';
         } else {
           var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
           /* istanbul ignore else  */
@@ -231,18 +248,35 @@
     },
 
     /**
-     * Edit-Distance from {@link https://gist.github.com/andrei-m/982927}
+     * Calculates weighting value for edit-distance substitution
+     * Calculation is based on consonant or dissonant values
+     *
+     * @param {number} a - The first interval
+     * @param {number} b - The second interval
+     * @returns {number} Consonant/Dissonant based weighting value
+     */
+    intervalWeight: function(a, b) {
+      var x = Math.abs(b - a);
+      while (x > 12) {
+        x -= 12;
+      }
+
+      return x * intervalFactor[x];
+    },
+
+    /**
+     * Edit-Distance for parsons strings from {@link https://gist.github.com/andrei-m/982927}
      *
      * Copyright (c) 2011 Andrei Mackenzie
      * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
      * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
      * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      *
-     * @param {string} a - The first string
-     * @param {string} b - The second string
+     * @param {string} a - The first string (document)
+     * @param {string} b - The second string (query)
      * @returns {number} The calculated edit distance
      */
-    editDistance: function(a, b) {
+    stringEditDistance: function(a, b) {
       if (a.length === 0) {
         return b.length;
       }
@@ -270,14 +304,156 @@
           if (b.charAt(i-1) === a.charAt(j-1)) {
             matrix[i][j] = matrix[i-1][j-1];
           } else {
-            matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
-                                    Math.min(matrix[i][j-1] + 1, // insertion
-                                             matrix[i-1][j] + 1)); // deletion
+            matrix[i][j] = Math.min( // TODO: reconsider weighting
+              matrix[i-1][j-1] + 1, // substitution
+              Math.min(
+                matrix[i][j-1] + 1, // insertion
+                matrix[i-1][j] + 1  // deletion
+              )
+            );
           }
         }
       }
 
+      // for (i = 0; i <= b.length; i++) {
+      //   console.log(matrix[i].join(' | '));
+      // }
+
       return matrix[b.length][a.length];
+    },
+
+    /**
+     * Edit-Distance for pitch arrays adapted from {@link https://gist.github.com/andrei-m/982927}
+     *
+     * Copyright (c) 2011 Andrei Mackenzie
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+     *
+     * The function implements improved weighting for interval differences based on consonance / dissonance
+     *
+     * @param {Array} a - The first interval array (document)
+     * @param {Array} b - The second interval array (query)
+     * @returns {number} The calculated edit distance
+     */
+    pitchEditDistance: function(a, b) {
+      if (a.length === 0) {
+        return b.length;
+      }
+      if (b.length === 0) {
+        return a.length;
+      }
+
+      var matrix = [];
+
+      // increment along the first column of each row
+      var i;
+      for (i = 0; i <= b.length; i++) {
+        matrix[i] = [i * 12];
+      }
+
+      // increment each column in the first row
+      var j;
+      for (j = 0; j <= a.length; j++) {
+        matrix[0][j] = j * 12;
+      }
+
+      for (i = 1; i <= b.length; i++) {
+        for (j = 1; j <= a.length; j++) {
+          if (b[i-1] === a[j-1]) {
+            matrix[i][j] = matrix[i-1][j-1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i-1][j-1] + this.intervalWeight(a[j-1], b[i-1]), // substitution
+              Math.min(
+                matrix[i][j-1] + 12, // insertion
+                matrix[i-1][j] + 12  // deletion
+              )
+            );
+          }
+        }
+      }
+
+      return matrix[b.length-1][a.length-1];
+    },
+
+    /**
+     * Edit-Distance for interval arrays adapted from {@link https://gist.github.com/andrei-m/982927}
+     *
+     * Copyright (c) 2011 Andrei Mackenzie
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+     *
+     * The function implements improved weighting for interval differences based on consonance / dissonance
+     *
+     * @param {Array} a - The first interval array (document)
+     * @param {Array} b - The second interval array (query)
+     * @returns {number} The calculated edit distance
+     */
+    intervalEditDistance: function(a, b) {
+      if (a.length === 0) {
+        return b.length;
+      }
+      if (b.length === 0) {
+        return a.length;
+      }
+
+      var matrix = [];
+
+      // increment along the first column of each row
+      var i;
+      for (i = 0; i <= b.length; i++) {
+        matrix[i] = [i * 12];
+      }
+
+      // increment each column in the first row
+      var j;
+      for (j = 0; j <= a.length; j++) {
+        matrix[0][j] = j * 12;
+      }
+
+      // Fill in the rest of the matrix
+      // console.log('=======================================================');
+      // console.log(a.join(', '), ' | ', a.length);
+      // console.log(b.join(', '), ' | ', b.length);
+      for (i = 1; i <= b.length; i++) {
+        for (j = 1; j <= a.length; j++) {
+          // console.log('--------------------------------------------');
+          // console.log('i, j', i, j);
+          if (b[i-1] === a[j-1]) {
+            // console.log('cost is zero');
+            matrix[i][j] = matrix[i-1][j-1];
+          } else {
+            // console.log('calculate cost:');
+            // console.log('    char(a):', a[j-1]);
+            // console.log('    char(b):', b[i-1]);
+            // console.log('         -> substitution:');
+            // console.log('             interval(a[j-1], b[i-1]):', this.intervalWeight(a[j-1], b[i-1]));
+            // console.log('');
+            // console.log('         -> insertion (matrix[i][j-1]):');
+            // console.log('             val(a[j-1]): 12');
+            // console.log('');
+            // console.log('         -> deletion:');
+            // console.log('             val(b[i-1]): 12');
+            // console.log('');
+            matrix[i][j] = Math.min(
+              matrix[i-1][j-1] + this.intervalWeight(a[j-1], b[i-1]), // substitution
+              Math.min(
+                matrix[i][j-1] + 12, // insertion
+                matrix[i-1][j] + 12  // deletion
+              )
+            );
+          }
+          // console.log('');
+        }
+      }
+
+      // for (i = 0; i <= b.length; i++) {
+      //   console.log(matrix[i].join(' | '));
+      // }
+
+      return matrix[b.length-1][a.length-1];
     },
 
     /**
@@ -297,118 +473,17 @@
     },
 
     /**
-     * Returns the minimum pseudo-edit-distance between the searched notes and corresponding ngrams.
-     * Notes are represented with pitch and duration
-     *
-     * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of notes that should be searched
-     * @returns {object} The first finding with minimum cost
-     */
-    distancePitchNgrams: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
-      var ngrams = this.ngrams(this.notes(object), search.length);
-      var costs = [];
-
-      for (var i = 0; i < ngrams.length; i++) {
-        var tempCost = 0;
-        var tempMeasures = [];
-
-        for (var j = 0; j < ngrams[i].length; j++) {
-          if (ngrams[i][j].rest || search[j].rest) {
-            tempCost = tempCost + this.durationDifference(ngrams[i][j].duration, search[j].duration);
-            if (ngrams[i][j].rest && search[j].rest) {
-              // both notes are rests --> do nothing
-            } else {
-              // if one note isn't a rest add maximum pitch value
-              tempCost += 12;
-            }
-          } else {
-            tempCost = tempCost + this.pitchDifference(ngrams[i][j].pitch, keyAdjust, search[j].pitch, false, true) + this.durationDifference(ngrams[i][j].duration, search[j].duration);
-          }
-          // TODO: Adjust weighting
-          // eg: C D C D vs. G A G A = 7        same structure: up(2) > down(2) > up(2)
-          //     C D C D vs. G A C A = 5.25     different structure: up(2) > down(2 vs 9) > up(2 vs 9)
-
-          // Add measure number and note number to finding
-          tempMeasures.push({
-            measure: ngrams[i][j].measureNumber,
-            note: ngrams[i][j].noteNumber
-          });
-        }
-
-        costs.push({
-          cost: tempCost / search.length,
-          highlight: this.uniques(tempMeasures).sort()
-        });
-      }
-
-      return costs.sort(function(a, b) {
-        return a.cost - b.cost;
-      }).shift();
-    },
-
-    // TODO: improve from pseudo-edit-distance to real edit-distance
-    //       maybe comparing strings of base12 pitches
-    //       eg: 5 4 12 9 11
-    //           | |  | |  |
-    //           0 0  2 1  0
-    //           | |  | |  |
-    //           5 4 10 8 11
-
-    /**
-     * Returns the minimum distance between the searched notes and the corresponding ngrams.
-     * Notes are represented as intervals.
-     *
-     * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of notes that should be searched
-     * @returns {object} The first finding with minimum cost
-     */
-    distanceIntervalNgrams: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
-      var ngrams = this.ngrams(this.intervals(this.notes(object), keyAdjust), search.length);
-      var searchIntervals = this.intervals(search, 0);
-      var costs = [];
-
-      for (var i = 0; i < ngrams.length; i++) {
-        var tempCost = 0;
-        var tempMeasures = [];
-
-        for (var j = 1; j < ngrams[i].length; j++) {
-          tempCost = tempCost + Math.abs(ngrams[i][j].value - searchIntervals[j].value);
-
-          // subtract octaves for relative results
-          while (tempCost > 12) {
-            tempCost -= 12;
-          }
-
-          tempMeasures.push({
-            measure: ngrams[i][j].measureNumber,
-            note: ngrams[i][j].noteNumber
-          });
-        }
-
-        costs.push({
-          cost: tempCost / search.length,
-          highlight: this.uniques(tempMeasures).sort()
-        });
-      }
-
-      return costs.sort(function(a, b) {
-        return a.cost - b.cost;
-      }).shift();
-    },
-
-    /**
      * Returns minimum edit distance between searched notes and the given document.
+     * Calculation based on parsons code strings
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of notes that should be searched
      * @returns {Number} The edit distance between parsons codes
      */
-    distanceParsonsLevenshtein: function(object, search) {
-      var parsons = this.parsons(this.notes(object));
+    distanceParsons: function(object, search) {
+      var parsons = this.parsons(this.notes(object, false));
       var searchParsons = this.parsons(search);
-      return this.editDistance(
+      return this.stringEditDistance(
         parsons.map(function(item) {
           return item.value;
         }).join(''),
@@ -419,6 +494,65 @@
     },
 
     /**
+     * Returns minimum edit distance between searched notes and the given document.
+     * Calculation based on pitch values
+     *
+     * @param {object} object - The document
+     * @param {Array} search - An array of notes
+     * @returns {number} The edit distance between intervals
+     */
+    distancePitch: function(object, search) {
+      var keyAdjust = object.attributes.key.fifths;
+      var notes = this.notes(object, false);
+      return this.pitchEditDistance(
+        notes.map(function(item) {
+          return this.base12Pitch(
+            item.pitch.step,
+            keyAdjust,
+            item.pitch.octave,
+            item.pitch.alter,
+            false
+          );
+        }.bind(this)),
+        search.map(function(item) {
+          return this.base12Pitch(
+            item.pitch.step,
+            0,
+            item.pitch.octave,
+            item.pitch.alter,
+            false
+          );
+        }.bind(this))
+      );
+    },
+
+    /**
+     * Returns minimum edit distance between searched notes and the given document.
+     * Calculation based on intervals
+     *
+     * @param {object} object - The document
+     * @param {Array} search - An array of notes
+     * @returns {number} The edit distance between intervals
+     */
+    distanceIntervals: function(object, search) {
+      var keyAdjust = object.attributes.key.fifths;
+      var intervals = this.intervals(this.notes(object, false), keyAdjust);
+      var searchIntervals = this.intervals(search, 0);
+      return this.intervalEditDistance(
+        intervals.map(function(item) {
+          return item.value;
+        }),
+        searchIntervals.map(function(item) {
+          return item.value;
+        })
+      );
+    },
+
+    // TODO: distanceIntervalsDurations
+    // Edit-Distance which considers intervals and note durations
+    // See Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
+
+    /**
      * Returns minimum edit distance between searched notes and the corresponding ngrams.
      * Notes are represented in parsons code.
      *
@@ -426,13 +560,12 @@
      * @param {Array} search - An array of notes that should be searched
      * @returns {object} The first finding with minimum cost
      */
-    distanceParsonsNgramsLevenshtein: function(object, search) {
-      var ngrams = this.ngrams(this.parsons(this.notes(object)), search.length);
+    distanceParsonsNgrams: function(object, search) {
+      var ngrams = this.ngrams(this.parsons(this.notes(object, false)), search.length);
       var searchParsons = this.parsons(search);
       var costs = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        var tempCost = 0;
         var tempMeasures = [];
 
         for (var j = 0; j < ngrams[i].length; j++) {
@@ -442,16 +575,110 @@
           });
         }
 
-        tempCost = tempCost + this.editDistance(
-          ngrams[i].map(function(item) {
-            return item.value;
-          }).join(''),
-          searchParsons.map(function(item) {
-            return item.value;
-          }).join('')
-        );
         costs.push({
-          cost: tempCost,
+          cost: this.stringEditDistance(
+            ngrams[i].map(function(item) {
+              return item.value;
+            }).join(''),
+            searchParsons.map(function(item) {
+              return item.value;
+            }).join('')
+          ),
+          highlight: this.uniques(tempMeasures).sort()
+        });
+      }
+
+      return costs.sort(function(a, b) {
+        return a.cost - b.cost;
+      }).shift();
+    },
+
+    /**
+     * Returns the minimum edit-distance between the searched notes and corresponding ngrams.
+     * Notes are represented with pitch and duration
+     *
+     * @param {object} object - A musicjson object to search in
+     * @param {Array} search - An array of notes that should be searched
+     * @returns {object} The first finding with minimum cost
+     */
+    distancePitchNgrams: function(object, search) {
+      var keyAdjust = object.attributes.key.fifths;
+      var ngrams = this.ngrams(this.notes(object, false), search.length);
+      var costs = [];
+
+      for (var i = 0; i < ngrams.length; i++) {
+        var tempMeasures = [];
+
+        for (var j = 0; j < ngrams[i].length; j++) {
+          tempMeasures.push({
+            measure: ngrams[i][j].measureNumber,
+            note: ngrams[i][j].noteNumber
+          });
+        }
+
+        costs.push({
+          cost: this.pitchEditDistance(
+            ngrams[i].map(function(item) {
+              return this.base12Pitch(
+                item.pitch.step,
+                keyAdjust,
+                item.pitch.octave,
+                item.pitch.alter,
+                false
+              );
+            }.bind(this)),
+            search.map(function(item) {
+              return this.base12Pitch(
+                item.pitch.step,
+                0,
+                item.pitch.octave,
+                item.pitch.alter,
+                false
+              );
+            }.bind(this))
+          ),
+          highlight: this.uniques(tempMeasures).sort()
+        });
+      }
+
+      return costs.sort(function(a, b) {
+        return a.cost - b.cost;
+      }).shift();
+    },
+
+    /**
+     * Returns the minimum distance between the searched notes and the corresponding ngrams.
+     * Notes are represented as intervals.
+     *
+     * @param {object} object - A musicjson object to search in
+     * @param {Array} search - An array of notes that should be searched
+     * @returns {object} The first finding with minimum cost
+     */
+    distanceIntervalsNgrams: function(object, search) {
+      var keyAdjust = object.attributes.key.fifths;
+      var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
+      var searchIntervals = this.intervals(search, 0);
+      var costs = [];
+
+      for (var i = 0; i < ngrams.length; i++) {
+        var tempMeasures = [];
+
+        for (var j = 1; j < ngrams[i].length; j++) {
+          tempMeasures.push({
+            measure: ngrams[i][j].measureNumber,
+            note: ngrams[i][j].noteNumber
+          });
+        }
+
+        costs.push({
+          cost: this.intervalEditDistance(
+            ngrams[i].map(function(item) {
+              return item.value;
+            }),
+            searchIntervals.map(function(item) {
+              return item.value;
+            })
+          ),
           highlight: this.uniques(tempMeasures).sort()
         });
       }

@@ -157,5 +157,53 @@
     "type": "eighth",
     "measureNumber": 2,
     "noteNumber": 3
+  },
+  {
+    "pitch": {
+      "step": "E",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 2,
+    "noteNumber": 0
+  },
+  {
+    "pitch": {
+      "step": "A",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 2,
+    "noteNumber": 1
+  },
+  {
+    "pitch": {
+      "step": "E",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 2,
+    "noteNumber": 2
+  },
+  {
+    "pitch": {
+      "step": "A",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 2,
+    "noteNumber": 3
   }
 ]

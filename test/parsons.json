@@ -10,233 +10,58 @@
     "measureNumber": 0
   },
   {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 1
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 1
-  },
-  {
-    "value": "d",
-    "noteNumber": 2,
-    "measureNumber": 1
-  },
-  {
-    "value": "d",
-    "noteNumber": 3,
-    "measureNumber": 1
-  },
-  {
-    "value": "u",
-    "noteNumber": 0,
-    "measureNumber": 2
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 2
-  },
-  {
     "value": "u",
     "noteNumber": 2,
-    "measureNumber": 2
+    "measureNumber": 0
   },
   {
-    "value": "r",
+    "value": "u",
     "noteNumber": 3,
-    "measureNumber": 2
-  },
-  {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 3
+    "measureNumber": 0
   },
   {
     "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 3
-  },
-  {
-    "value": "r",
-    "noteNumber": 2,
-    "measureNumber": 3
-  },
-  {
-    "value": "d",
-    "noteNumber": 3,
-    "measureNumber": 3
-  },
-  {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 4
-  },
-  {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 5
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 5
-  },
-  {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 5
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 5
-  },
-  {
-    "value": "u",
-    "noteNumber": 0,
-    "measureNumber": 6
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 6
-  },
-  {
-    "value": "u",
-    "noteNumber": 2,
-    "measureNumber": 6
-  },
-  {
-    "value": "d",
-    "noteNumber": 3,
-    "measureNumber": 6
-  },
-  {
-    "value": "d",
     "noteNumber": 4,
-    "measureNumber": 6
-  },
-  {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 7
-  },
-  {
-    "value": "d",
-    "noteNumber": 1,
-    "measureNumber": 7
-  },
-  {
-    "value": "d",
-    "noteNumber": 2,
-    "measureNumber": 7
-  },
-  {
-    "value": "u",
-    "noteNumber": 0,
-    "measureNumber": 8
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 8
+    "measureNumber": 0
   },
   {
     "value": "r",
-    "noteNumber": 2,
-    "measureNumber": 8
-  },
-  {
-    "value": "d",
-    "noteNumber": 3,
-    "measureNumber": 8
+    "noteNumber": 5,
+    "measureNumber": 0
   },
   {
     "value": "d",
     "noteNumber": 0,
-    "measureNumber": 9
-  },
-  {
-    "value": "u",
-    "noteNumber": 0,
-    "measureNumber": 7
-  },
-  {
-    "value": "d",
-    "noteNumber": 1,
-    "measureNumber": 7
-  },
-  {
-    "value": "d",
-    "noteNumber": 2,
-    "measureNumber": 7
-  },
-  {
-    "value": "u",
-    "noteNumber": 0,
-    "measureNumber": 8
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 8
+    "measureNumber": 1
   },
   {
     "value": "r",
+    "noteNumber": 1,
+    "measureNumber": 1
+  },
+  {
+    "value": "u",
     "noteNumber": 2,
-    "measureNumber": 8
-  },
-  {
-    "value": "d",
-    "noteNumber": 3,
-    "measureNumber": 8
+    "measureNumber": 1
   },
   {
     "value": "d",
     "noteNumber": 0,
-    "measureNumber": 9
-  },
-  {
-    "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 10
+    "measureNumber": 2
   },
   {
     "value": "u",
     "noteNumber": 1,
-    "measureNumber": 10
-  },
-  {
-    "value": "u",
-    "noteNumber": 2,
-    "measureNumber": 10
-  },
-  {
-    "value": "r",
-    "noteNumber": 3,
-    "measureNumber": 10
+    "measureNumber": 2
   },
   {
     "value": "d",
-    "noteNumber": 0,
-    "measureNumber": 10
-  },
-  {
-    "value": "u",
-    "noteNumber": 1,
-    "measureNumber": 10
-  },
-  {
-    "value": "u",
     "noteNumber": 2,
-    "measureNumber": 10
+    "measureNumber": 2
   },
   {
-    "value": "r",
+    "value": "u",
     "noteNumber": 3,
-    "measureNumber": 10
+    "measureNumber": 2
   }
 ]

@@ -1,4 +1,5 @@
 {
+  "id": "example",
   "attributes": {
     "divisions": 4,
     "clef": {
@@ -25,9 +26,28 @@
         {
           "pitch": {
             "step": "C",
-            "accidental": "flat",
             "octave": 4,
-            "alter": -1
+            "alter": 0
+          },
+          "rest": false,
+          "duration": 2,
+          "type": "eighth"
+        },
+        {
+          "pitch": {
+            "step": "D",
+            "octave": 4,
+            "alter": 0
+          },
+          "rest": false,
+          "duration": 2,
+          "type": "eighth"
+        },
+        {
+          "pitch": {
+            "step": "E",
+            "octave": 4,
+            "alter": 0
           },
           "rest": false,
           "duration": 2,
@@ -42,68 +62,7 @@
           "rest": false,
           "duration": 2,
           "type": "eighth"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": false,
-          "right": false
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "F",
-            "octave": 2,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
         },
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 7,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "A",
-            "accidental": "sharp",
-            "octave": 4,
-            "alter": 1
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        },
-        {
-          "pitch": {
-            "step": "F",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": false,
-          "right": false
-        }
-      },
-      "notes": [
         {
           "pitch": {
             "step": "G",
@@ -111,108 +70,8 @@
             "alter": 0
           },
           "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "B",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
           "duration": 2,
           "type": "eighth"
-        },
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": false,
-          "right": false
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "B",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        },
-        {
-          "pitch": {
-            "step": "A",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": false,
-          "right": false
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "G",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
         },
         {
           "pitch": {
@@ -221,36 +80,6 @@
             "alter": 0
           },
           "rest": true,
-          "duration": 4,
-          "type": "quarter"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": true,
-          "right": true
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "G",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        },
-        {
-          "pitch": {
-            "step": "A",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
           "duration": 2,
           "type": "eighth"
         }
@@ -266,9 +95,10 @@
       "notes": [
         {
           "pitch": {
-            "step": "B",
+            "step": "C",
             "octave": 4,
-            "alter": 0
+            "alter": 1,
+            "accidental": "sharp"
           },
           "rest": false,
           "duration": 4,
@@ -277,57 +107,39 @@
         {
           "pitch": {
             "step": "D",
-            "octave": 5,
-            "alter": 0
+            "octave": 4,
+            "alter": -1,
+            "accidental": "flat"
           },
           "rest": false,
-          "duration": 2,
-          "type": "eighth"
+          "duration": 4,
+          "type": "quarter"
         },
         {
           "pitch": {
-            "step": "F",
-            "octave": 5,
-            "alter": 0
+            "step": "B",
+            "octave": 4,
+            "alter": 0,
+            "accidental": "natural"
           },
           "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        },
+          "duration": 4,
+          "type": "quarter"
+        }
+      ]
+    },
+    {
+      "attributes": {
+        "repeat": {
+          "left": true,
+          "right": true
+        }
+      },
+      "notes": [
         {
           "pitch": {
             "step": "E",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        },
-        {
-          "pitch": {
-            "step": "D",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": true,
-          "right": false
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 5,
+            "octave": 4,
             "alter": 0
           },
           "rest": false,
@@ -337,107 +149,6 @@
         {
           "pitch": {
             "step": "A",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "F",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": false,
-          "right": false
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "C",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "D",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "D",
-            "octave": 5,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 2,
-          "type": "eighth",
-          "dot": true
-        },
-        {
-          "pitch": {
-            "step": "B",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 1,
-          "type": "16th"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": false,
-          "right": true
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "A",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
-          "duration": 8,
-          "type": "half"
-        }
-      ]
-    },
-    {
-      "attributes": {
-        "repeat": {
-          "left": true,
-          "right": true
-        }
-      },
-      "notes": [
-        {
-          "pitch": {
-            "step": "C",
             "octave": 4,
             "alter": 0
           },
@@ -452,22 +163,12 @@
             "alter": 0
           },
           "rest": false,
-          "duration": 4,
-          "type": "quarter"
-        },
-        {
-          "pitch": {
-            "step": "F",
-            "octave": 4,
-            "alter": 0
-          },
-          "rest": false,
           "duration": 2,
           "type": "eighth"
         },
         {
           "pitch": {
-            "step": "F",
+            "step": "A",
             "octave": 4,
             "alter": 0
           },
@@ -477,6 +178,5 @@
         }
       ]
     }
-  ],
-  "id": "A 59440"
+  ]
 }

@@ -6,8 +6,8 @@
   "scripts": {
     "test": "node ./node_modules/mocha/bin/_mocha -R spec",
     "lint": "node ./node_modules/eslint/bin/eslint.js ./**/*.js",
-    "docs": "node ./node_modules/jsdoc-to-markdown/bin/cli.js index.js > API.md",
-    "coverage": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec"
+    "coverage": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec",
+    "docs": "node ./node_modules/jsdoc-to-markdown/bin/cli.js index.js > API.md"
   },
   "repository": {
     "type": "git",

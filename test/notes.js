@@ -5,12 +5,18 @@ var MusicJsonToolbox = require('../index');
 
 var musicjson = require('./example.json');
 var notes = require('./notes.json');
+var notesRepeated = require('./notes_repeated.json');
 
 describe('MusicJsonToolbox.notes', function() {
 
   it('creates array of notes from musicjson', function() {
-    var output = MusicJsonToolbox.notes(musicjson);
+    var output = MusicJsonToolbox.notes(musicjson, false);
     expect(JSON.stringify(output)).to.equal(JSON.stringify(notes));
+  });
+
+  it('creates array of repeated notes from musicjson', function() {
+    var output = MusicJsonToolbox.notes(musicjson, true);
+    expect(JSON.stringify(output)).to.equal(JSON.stringify(notesRepeated));
   });
 
 });

@@ -8,55 +8,66 @@ var search = require('./search.json');
 
 describe('MusicJsonToolbox Distance Functions', function() {
 
-  describe('MusicJsonToolbox.distancePitchNgrams', function() {
-    it('calculates distance between ngrams of pitches', function() {
-      var distancePitchNgrams = MusicJsonToolbox.distancePitchNgrams(musicjson, search);
-      expect(distancePitchNgrams).to.deep.equal({
-        cost: 2.4,
-        highlight: [
-          { measure: 2, note: 0 },
-          { measure: 2, note: 1 },
-          { measure: 2, note: 2 },
-          { measure: 2, note: 3 },
-          { measure: 3, note: 0 }
-        ]
-      });
+  describe('MusicJsonToolbox.distanceParsons', function() {
+    it('calculates edit-distance between parsons code strings', function() {
+      var distanceParsons = MusicJsonToolbox.distanceParsons(musicjson, search);
+      expect(distanceParsons).to.be.equal(9);
     });
   });
 
-  describe('MusicJsonToolbox.distanceIntervalNgrams', function() {
-    it('calculates distance between ngrams of intervals', function() {
-      var distanceIntervalNgrams = MusicJsonToolbox.distanceIntervalNgrams(musicjson, search);
-      expect(distanceIntervalNgrams).to.deep.equal({
-        cost: 0.2,
-        highlight: [
-          { measure: 6, note: 3 },
-          { measure: 6, note: 4 },
-          { measure: 7, note: 0 },
-          { measure: 7, note: 1 }
-        ]
-      });
+  describe('MusicJsonToolbox.distancePitch', function() {
+    it('calculates edit-distance between pitch values', function() {
+      var distancePitch = MusicJsonToolbox.distancePitch(musicjson, search);
+      expect(distancePitch).to.be.equal(114);
     });
   });
 
-  describe('MusicJsonToolbox.distanceParsonsLevenshtein', function() {
-    it('calculates levenshtein distance between parsons code strings', function() {
-      var distanceParsonsLevenshtein = MusicJsonToolbox.distanceParsonsLevenshtein(musicjson, search);
-      expect(distanceParsonsLevenshtein).to.be.equal(44);
+  describe('MusicJsonToolbox.distanceIntervals', function() {
+    it('calculates edit-distance between interval values', function() {
+      var distancePitch = MusicJsonToolbox.distanceIntervals(musicjson, search);
+      expect(distancePitch).to.be.equal(108);
     });
   });
 
-  describe('MusicJsonToolbox.distanceParsonsNgramsLevenshtein', function() {
-    it('calculates distance between ngrams of intervals', function() {
-      var distanceParsonsNgramsLevenshtein = MusicJsonToolbox.distanceParsonsNgramsLevenshtein(musicjson, search);
-      expect(distanceParsonsNgramsLevenshtein).to.deep.equal({
-        cost: 2,
+  describe('MusicJsonToolbox.distanceParsonsNgrams', function() {
+    it('calculates edit-distance between ngrams of parsons code strings', function() {
+      var distanceParsonsNgrams = MusicJsonToolbox.distanceParsonsNgrams(musicjson, search);
+      expect(distanceParsonsNgrams).to.deep.equal({
+        cost: 1,
         highlight: [
           { measure: 0, note: 0 },
           { measure: 0, note: 1 },
-          { measure: 1, note: 0 },
-          { measure: 1, note: 1 },
-          { measure: 1, note: 2 }
+          { measure: 0, note: 2 },
+          { measure: 0, note: 3 }
+        ]
+      });
+    });
+  });
+
+  describe('MusicJsonToolbox.distancePitchNgrams', function() {
+    it('calculates edit-distance between ngrams of pitch values', function() {
+      var distancePitchNgrams = MusicJsonToolbox.distancePitchNgrams(musicjson, search);
+      expect(distancePitchNgrams).to.deep.equal({
+        cost: 14,
+        highlight: [
+          { measure: 0, note: 0 },
+          { measure: 0, note: 1 },
+          { measure: 0, note: 2 },
+          { measure: 0, note: 3 }
+        ]
+      });
+    });
+  });
+
+  describe('MusicJsonToolbox.distanceIntervalsNgrams', function() {
+    it('calculates edit-distance between ngrams of intervals', function() {
+      var distanceIntervalsNgrams = MusicJsonToolbox.distanceIntervalsNgrams(musicjson, search);
+      expect(distanceIntervalsNgrams).to.deep.equal({
+        cost: 7,
+        highlight: [
+          { measure: 2, note: 1 },
+          { measure: 2, note: 2 },
+          { measure: 2, note: 3 }
         ]
       });
     });

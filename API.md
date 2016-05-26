@@ -5,23 +5,28 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 
 
 * [MusicJsonToolbox](#module_MusicJsonToolbox)
-    * [.notes(obj)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
+    * [.notes(obj, repeat)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
     * [.intervals(notes, keyAdjust)](#module_MusicJsonToolbox.intervals) ⇒ <code>Array</code>
     * [.parsons(notes)](#module_MusicJsonToolbox.parsons) ⇒ <code>Array</code>
     * [.ngrams(array, length)](#module_MusicJsonToolbox.ngrams) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
     * [.durationDifference(duration1, duration2, absolute)](#module_MusicJsonToolbox.durationDifference) ⇒ <code>number</code>
-    * [.editDistance(a, b)](#module_MusicJsonToolbox.editDistance) ⇒ <code>number</code>
+    * [.intervalWeight(a, b)](#module_MusicJsonToolbox.intervalWeight) ⇒ <code>number</code>
+    * [.stringEditDistance(a, b)](#module_MusicJsonToolbox.stringEditDistance) ⇒ <code>number</code>
+    * [.pitchEditDistance(a, b)](#module_MusicJsonToolbox.pitchEditDistance) ⇒ <code>number</code>
+    * [.intervalEditDistance(a, b)](#module_MusicJsonToolbox.intervalEditDistance) ⇒ <code>number</code>
     * [.uniques(array)](#module_MusicJsonToolbox.uniques) ⇒ <code>Array</code>
+    * [.distanceParsons(object, search)](#module_MusicJsonToolbox.distanceParsons) ⇒ <code>Number</code>
+    * [.distancePitch(object, search)](#module_MusicJsonToolbox.distancePitch) ⇒ <code>number</code>
+    * [.distanceIntervals(object, search)](#module_MusicJsonToolbox.distanceIntervals) ⇒ <code>number</code>
+    * [.distanceParsonsNgrams(object, search)](#module_MusicJsonToolbox.distanceParsonsNgrams) ⇒ <code>object</code>
     * [.distancePitchNgrams(object, search)](#module_MusicJsonToolbox.distancePitchNgrams) ⇒ <code>object</code>
-    * [.distanceIntervalNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalNgrams) ⇒ <code>object</code>
-    * [.distanceParsonsLevenshtein(object, search)](#module_MusicJsonToolbox.distanceParsonsLevenshtein) ⇒ <code>Number</code>
-    * [.distanceParsonsNgramsLevenshtein(object, search)](#module_MusicJsonToolbox.distanceParsonsNgramsLevenshtein) ⇒ <code>object</code>
+    * [.distanceIntervalsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsNgrams) ⇒ <code>object</code>
 
 <a name="module_MusicJsonToolbox.notes"></a>
 
-### MusicJsonToolbox.notes(obj) ⇒ <code>Array</code>
+### MusicJsonToolbox.notes(obj, repeat) ⇒ <code>Array</code>
 Returns an array of all notes (transposed to C major).Example:[ {object}, {object}, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -30,6 +35,7 @@ Returns an array of all notes (transposed to C major).Example:[ {object}, {ob
 | Param | Type | Description |
 | --- | --- | --- |
 | obj | <code>object</code> | The musicjson object |
+| repeat | <code>boolean</code> | If set to true, repeated measures are also repeated in notes output |
 
 <a name="module_MusicJsonToolbox.intervals"></a>
 
@@ -115,18 +121,57 @@ Calculates difference between two durations
 | duration2 | <code>number</code> | The second duration to compare |
 | absolute | <code>boolean</code> | When set, the absolute difference is returned ( | Duration 2 - Duration 1 | ) |
 
-<a name="module_MusicJsonToolbox.editDistance"></a>
+<a name="module_MusicJsonToolbox.intervalWeight"></a>
 
-### MusicJsonToolbox.editDistance(a, b) ⇒ <code>number</code>
-Edit-Distance from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+### MusicJsonToolbox.intervalWeight(a, b) ⇒ <code>number</code>
+Calculates weighting value for edit-distance substitutionCalculation is based on consonant or dissonant values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - Consonant/Dissonant based weighting value  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>number</code> | The first interval |
+| b | <code>number</code> | The second interval |
+
+<a name="module_MusicJsonToolbox.stringEditDistance"></a>
+
+### MusicJsonToolbox.stringEditDistance(a, b) ⇒ <code>number</code>
+Edit-Distance for parsons strings from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The calculated edit distance  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| a | <code>string</code> | The first string |
-| b | <code>string</code> | The second string |
+| a | <code>string</code> | The first string (document) |
+| b | <code>string</code> | The second string (query) |
+
+<a name="module_MusicJsonToolbox.pitchEditDistance"></a>
+
+### MusicJsonToolbox.pitchEditDistance(a, b) ⇒ <code>number</code>
+Edit-Distance for pitch arrays adapted from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.The function implements improved weighting for interval differences based on consonance / dissonance
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The calculated edit distance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>Array</code> | The first interval array (document) |
+| b | <code>Array</code> | The second interval array (query) |
+
+<a name="module_MusicJsonToolbox.intervalEditDistance"></a>
+
+### MusicJsonToolbox.intervalEditDistance(a, b) ⇒ <code>number</code>
+Edit-Distance for interval arrays adapted from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.The function implements improved weighting for interval differences based on consonance / dissonance
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The calculated edit distance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>Array</code> | The first interval array (document) |
+| b | <code>Array</code> | The second interval array (query) |
 
 <a name="module_MusicJsonToolbox.uniques"></a>
 
@@ -140,36 +185,10 @@ Returns only unique array values
 | --- | --- | --- |
 | array | <code>Array</code> | The array with possible duplicate values |
 
-<a name="module_MusicJsonToolbox.distancePitchNgrams"></a>
+<a name="module_MusicJsonToolbox.distanceParsons"></a>
 
-### MusicJsonToolbox.distancePitchNgrams(object, search) ⇒ <code>object</code>
-Returns the minimum pseudo-edit-distance between the searched notes and corresponding ngrams.Notes are represented with pitch and duration
-
-**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>object</code> - The first finding with minimum cost  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of notes that should be searched |
-
-<a name="module_MusicJsonToolbox.distanceIntervalNgrams"></a>
-
-### MusicJsonToolbox.distanceIntervalNgrams(object, search) ⇒ <code>object</code>
-Returns the minimum distance between the searched notes and the corresponding ngrams.Notes are represented as intervals.
-
-**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>object</code> - The first finding with minimum cost  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of notes that should be searched |
-
-<a name="module_MusicJsonToolbox.distanceParsonsLevenshtein"></a>
-
-### MusicJsonToolbox.distanceParsonsLevenshtein(object, search) ⇒ <code>Number</code>
-Returns minimum edit distance between searched notes and the given document.
+### MusicJsonToolbox.distanceParsons(object, search) ⇒ <code>Number</code>
+Returns minimum edit distance between searched notes and the given document.Calculation based on parsons code strings
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>Number</code> - The edit distance between parsons codes  
@@ -179,10 +198,62 @@ Returns minimum edit distance between searched notes and the given document.
 | object | <code>object</code> | A musicjson object to search in |
 | search | <code>Array</code> | An array of notes that should be searched |
 
-<a name="module_MusicJsonToolbox.distanceParsonsNgramsLevenshtein"></a>
+<a name="module_MusicJsonToolbox.distancePitch"></a>
 
-### MusicJsonToolbox.distanceParsonsNgramsLevenshtein(object, search) ⇒ <code>object</code>
+### MusicJsonToolbox.distancePitch(object, search) ⇒ <code>number</code>
+Returns minimum edit distance between searched notes and the given document.Calculation based on pitch values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between intervals  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>object</code> | The document |
+| search | <code>Array</code> | An array of notes |
+
+<a name="module_MusicJsonToolbox.distanceIntervals"></a>
+
+### MusicJsonToolbox.distanceIntervals(object, search) ⇒ <code>number</code>
+Returns minimum edit distance between searched notes and the given document.Calculation based on intervals
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between intervals  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>object</code> | The document |
+| search | <code>Array</code> | An array of notes |
+
+<a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
+
+### MusicJsonToolbox.distanceParsonsNgrams(object, search) ⇒ <code>object</code>
 Returns minimum edit distance between searched notes and the corresponding ngrams.Notes are represented in parsons code.
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>object</code> - The first finding with minimum cost  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>object</code> | A musicjson object to search in |
+| search | <code>Array</code> | An array of notes that should be searched |
+
+<a name="module_MusicJsonToolbox.distancePitchNgrams"></a>
+
+### MusicJsonToolbox.distancePitchNgrams(object, search) ⇒ <code>object</code>
+Returns the minimum edit-distance between the searched notes and corresponding ngrams.Notes are represented with pitch and duration
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>object</code> - The first finding with minimum cost  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>object</code> | A musicjson object to search in |
+| search | <code>Array</code> | An array of notes that should be searched |
+
+<a name="module_MusicJsonToolbox.distanceIntervalsNgrams"></a>
+
+### MusicJsonToolbox.distanceIntervalsNgrams(object, search) ⇒ <code>object</code>
+Returns the minimum distance between the searched notes and the corresponding ngrams.Notes are represented as intervals.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>object</code> - The first finding with minimum cost  

@@ -5,243 +5,64 @@
     "measureNumber": 0
   },
   {
-    "value": 6,
+    "value": 2,
     "noteNumber": 1,
     "measureNumber": 0
   },
   {
-    "value": -24,
-    "noteNumber": 0,
-    "measureNumber": 1
-  },
-  {
-    "value": 55,
-    "noteNumber": 1,
-    "measureNumber": 1
-  },
-  {
-    "value": -26,
-    "noteNumber": 2,
-    "measureNumber": 1
-  },
-  {
-    "value": -5,
-    "noteNumber": 3,
-    "measureNumber": 1
-  },
-  {
     "value": 2,
-    "noteNumber": 0,
-    "measureNumber": 2
-  },
-  {
-    "value": 4,
-    "noteNumber": 1,
-    "measureNumber": 2
+    "noteNumber": 2,
+    "measureNumber": 0
   },
   {
     "value": 1,
-    "noteNumber": 2,
-    "measureNumber": 2
-  },
-  {
-    "value": 0,
     "noteNumber": 3,
-    "measureNumber": 2
-  },
-  {
-    "value": -1,
-    "noteNumber": 0,
-    "measureNumber": 3
-  },
-  {
-    "value": 1,
-    "noteNumber": 1,
-    "measureNumber": 3
-  },
-  {
-    "value": 0,
-    "noteNumber": 2,
-    "measureNumber": 3
-  },
-  {
-    "value": -3,
-    "noteNumber": 3,
-    "measureNumber": 3
-  },
-  {
-    "value": -2,
-    "noteNumber": 0,
-    "measureNumber": 4
-  },
-  {
-    "value": 0,
-    "noteNumber": 1,
-    "measureNumber": 4
-  },
-  {
-    "value": -5,
-    "noteNumber": 0,
-    "measureNumber": 5
+    "measureNumber": 0
   },
   {
     "value": 2,
-    "noteNumber": 1,
-    "measureNumber": 5
-  },
-  {
-    "value": -2,
-    "noteNumber": 0,
-    "measureNumber": 5
-  },
-  {
-    "value": 2,
-    "noteNumber": 1,
-    "measureNumber": 5
-  },
-  {
-    "value": 2,
-    "noteNumber": 0,
-    "measureNumber": 6
-  },
-  {
-    "value": 3,
-    "noteNumber": 1,
-    "measureNumber": 6
-  },
-  {
-    "value": 3,
-    "noteNumber": 2,
-    "measureNumber": 6
-  },
-  {
-    "value": -1,
-    "noteNumber": 3,
-    "measureNumber": 6
-  },
-  {
-    "value": -2,
     "noteNumber": 4,
-    "measureNumber": 6
-  },
-  {
-    "value": -2,
-    "noteNumber": 0,
-    "measureNumber": 7
-  },
-  {
-    "value": -3,
-    "noteNumber": 1,
-    "measureNumber": 7
-  },
-  {
-    "value": -4,
-    "noteNumber": 2,
-    "measureNumber": 7
-  },
-  {
-    "value": 7,
-    "noteNumber": 0,
-    "measureNumber": 8
-  },
-  {
-    "value": 2,
-    "noteNumber": 1,
-    "measureNumber": 8
+    "measureNumber": 0
   },
   {
     "value": 0,
-    "noteNumber": 2,
-    "measureNumber": 8
+    "noteNumber": 5,
+    "measureNumber": 0
   },
   {
-    "value": -3,
-    "noteNumber": 3,
-    "measureNumber": 8
-  },
-  {
-    "value": -2,
+
+    "value": -11,
     "noteNumber": 0,
-    "measureNumber": 9
-  },
-  {
-    "value": 3,
-    "noteNumber": 0,
-    "measureNumber": 7
-  },
-  {
-    "value": -3,
-    "noteNumber": 1,
-    "measureNumber": 7
-  },
-  {
-    "value": -4,
-    "noteNumber": 2,
-    "measureNumber": 7
-  },
-  {
-    "value": 7,
-    "noteNumber": 0,
-    "measureNumber": 8
-  },
-  {
-    "value": 2,
-    "noteNumber": 1,
-    "measureNumber": 8
+    "measureNumber": 1
   },
   {
     "value": 0,
-    "noteNumber": 2,
-    "measureNumber": 8
-  },
-  {
-    "value": -3,
-    "noteNumber": 3,
-    "measureNumber": 8
-  },
-  {
-    "value": -2,
-    "noteNumber": 0,
-    "measureNumber": 9
-  },
-  {
-    "value": -9,
-    "noteNumber": 0,
-    "measureNumber": 10
-  },
-  {
-    "value": 4,
     "noteNumber": 1,
-    "measureNumber": 10
+    "measureNumber": 1
   },
   {
-    "value": 1,
+    "value": 10,
     "noteNumber": 2,
-    "measureNumber": 10
+    "measureNumber": 1
   },
   {
-    "value": 0,
-    "noteNumber": 3,
-    "measureNumber": 10
+    "value": -7,
+    "noteNumber": 0,
+    "measureNumber": 2
+  },
+  {
+    "value": 5,
+    "noteNumber": 1,
+    "measureNumber": 2
   },
   {
     "value": -5,
-    "noteNumber": 0,
-    "measureNumber": 10
-  },
-  {
-    "value": 4,
-    "noteNumber": 1,
-    "measureNumber": 10
-  },
-  {
-    "value": 1,
     "noteNumber": 2,
-    "measureNumber": 10
+    "measureNumber": 2
   },
   {
-    "value": 0,
+    "value": 5,
     "noteNumber": 3,
-    "measureNumber": 10
+    "measureNumber": 2
   }
 ]
