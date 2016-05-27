@@ -1,9 +1,17 @@
 (function() {
   'use strict';
-  // C  |    | D |    | E  | F  |    | G |    | A  |    | B
-  // B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
-  //    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
-  // 1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12
+
+  /**
+   * Pitch values for steps in base 12 system
+   * C  |    | D |    | E  | F  |    | G |    | A  |    | B
+   * B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
+   *    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
+   * 1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12
+   *
+   * @constant
+   * @type {object}
+   * @default
+   */
   var base12 = {
     'C': 1,
     'D': 3,
@@ -14,6 +22,13 @@
     'B': 12
   };
 
+  /**
+   * Cost weighting factors for consonant/dissonant intervals
+   *
+   * @constant
+   * @type {Array}
+   * @default
+   */
   var intervalFactor = [
     1,  // 0  =   unison          (perfect consonant)
     3,  // 1  =   minor second    (dissonant)
@@ -566,13 +581,12 @@
       var costs = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        var tempMeasures = [];
 
         for (var j = 0; j < ngrams[i].length; j++) {
-          tempMeasures.push({
-            measure: ngrams[i][j].measureNumber,
-            note: ngrams[i][j].noteNumber
-          });
+          if (j === 0) {
+            // Reset first value of ngram
+            ngrams[i][j].value = '*';
+          }
         }
 
         costs.push({
@@ -584,13 +598,18 @@
               return item.value;
             }).join('')
           ),
-          highlight: this.uniques(tempMeasures).sort()
+          highlight: ngrams[i].map(function(item) {
+            return {
+              measure: item.measureNumber,
+              note: item.noteNumber
+            };
+          })
         });
       }
 
-      return costs.sort(function(a, b) {
+      return costs/*.sort(function(a, b) {
         return a.cost - b.cost;
-      }).shift();
+      }).shift()*/;
     },
 
     /**
@@ -607,15 +626,6 @@
       var costs = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        var tempMeasures = [];
-
-        for (var j = 0; j < ngrams[i].length; j++) {
-          tempMeasures.push({
-            measure: ngrams[i][j].measureNumber,
-            note: ngrams[i][j].noteNumber
-          });
-        }
-
         costs.push({
           cost: this.pitchEditDistance(
             ngrams[i].map(function(item) {
@@ -637,13 +647,18 @@
               );
             }.bind(this))
           ),
-          highlight: this.uniques(tempMeasures).sort()
+          highlight: ngrams[i].map(function(item) {
+            return {
+              measure: item.measureNumber,
+              note: item.noteNumber
+            };
+          })
         });
       }
 
-      return costs.sort(function(a, b) {
+      return costs/*.sort(function(a, b) {
         return a.cost - b.cost;
-      }).shift();
+      }).shift()*/;
     },
 
     /**
@@ -661,13 +676,11 @@
       var costs = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        var tempMeasures = [];
-
-        for (var j = 1; j < ngrams[i].length; j++) {
-          tempMeasures.push({
-            measure: ngrams[i][j].measureNumber,
-            note: ngrams[i][j].noteNumber
-          });
+        for (var j = 0; j < ngrams[i].length; j++) {
+          if (j === 0) {
+            // Reset first value of ngram
+            ngrams[i][j].value = 0;
+          }
         }
 
         costs.push({
@@ -679,13 +692,18 @@
               return item.value;
             })
           ),
-          highlight: this.uniques(tempMeasures).sort()
+          highlight: ngrams[i].map(function(item) {
+            return {
+              measure: item.measureNumber,
+              note: item.noteNumber
+            };
+          })
         });
       }
 
-      return costs.sort(function(a, b) {
+      return costs/*.sort(function(a, b) {
         return a.cost - b.cost;
-      }).shift();
+      })shift()*/;
     }
   };
 

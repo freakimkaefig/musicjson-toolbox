@@ -1,0 +1,212 @@
+[
+  {
+    "cost": 1,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 0
+      },
+      {
+        "measure": 0,
+        "note": 1
+      },
+      {
+        "measure": 0,
+        "note": 2
+      },
+      {
+        "measure": 0,
+        "note": 3
+      }
+    ]
+  },
+  {
+    "cost": 1,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 1
+      },
+      {
+        "measure": 0,
+        "note": 2
+      },
+      {
+        "measure": 0,
+        "note": 3
+      },
+      {
+        "measure": 0,
+        "note": 4
+      }
+    ]
+  },
+  {
+    "cost": 2,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 2
+      },
+      {
+        "measure": 0,
+        "note": 3
+      },
+      {
+        "measure": 0,
+        "note": 4
+      },
+      {
+        "measure": 0,
+        "note": 5
+      }
+    ]
+  },
+  {
+    "cost": 2,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 3
+      },
+      {
+        "measure": 0,
+        "note": 4
+      },
+      {
+        "measure": 0,
+        "note": 5
+      },
+      {
+        "measure": 1,
+        "note": 0
+      }
+    ]
+  },
+  {
+    "cost": 2,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 4
+      },
+      {
+        "measure": 0,
+        "note": 5
+      },
+      {
+        "measure": 1,
+        "note": 0
+      },
+      {
+        "measure": 1,
+        "note": 1
+      }
+    ]
+  },
+  {
+    "cost": 2,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 5
+      },
+      {
+        "measure": 1,
+        "note": 0
+      },
+      {
+        "measure": 1,
+        "note": 1
+      },
+      {
+        "measure": 1,
+        "note": 2
+      }
+    ]
+  },
+  {
+    "cost": 2,
+    "highlight": [
+      {
+        "measure": 1,
+        "note": 0
+      },
+      {
+        "measure": 1,
+        "note": 1
+      },
+      {
+        "measure": 1,
+        "note": 2
+      },
+      {
+        "measure": 2,
+        "note": 0
+      }
+    ]
+  },
+  {
+    "cost": 0,
+    "highlight": [
+      {
+        "measure": 1,
+        "note": 1
+      },
+      {
+        "measure": 1,
+        "note": 2
+      },
+      {
+        "measure": 2,
+        "note": 0
+      },
+      {
+        "measure": 2,
+        "note": 1
+      }
+    ]
+  },
+  {
+    "cost": 2,
+    "highlight": [
+      {
+        "measure": 1,
+        "note": 2
+      },
+      {
+        "measure": 2,
+        "note": 0
+      },
+      {
+        "measure": 2,
+        "note": 1
+      },
+      {
+        "measure": 2,
+        "note": 2
+      }
+    ]
+  },
+  {
+    "cost": 0,
+    "highlight": [
+      {
+        "measure": 2,
+        "note": 0
+      },
+      {
+        "measure": 2,
+        "note": 1
+      },
+      {
+        "measure": 2,
+        "note": 2
+      },
+      {
+        "measure": 2,
+        "note": 3
+      }
+    ]
+  }
+]
