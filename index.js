@@ -52,7 +52,7 @@
   var MusicJsonToolbox = {
 
     /**
-     * Returns an array of all notes (transposed to C major).
+     * Returns an array of all notes.
      *
      * Example:
      * [ {object}, {object}, ... ]
@@ -94,7 +94,7 @@
     },
 
     /**
-     * Returns an array of notes as intervals
+     * Returns an array of intervals from an array of notes
      *
      * Example:
      * [ {0}, {2}, {-2}, {5}, ... ]
@@ -131,6 +131,7 @@
 
     /**
      * Generate array of parson code from notes
+     *
      * @param {Array} notes - Array of notes for which the contour should be created
      * @returns {Array} An array of notes as parsons code
      */
@@ -170,6 +171,7 @@
 
     /**
      * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad}).
+     *
      * @param {Array} array - An array of notes (returned by function "notes")
      * @param {number} length - The length of n
      * @returns {Array} An Array of ngrams with the given length
@@ -192,6 +194,7 @@
 
     /**
      * Calculates the base 12 represented pitch
+     *
      * @param {string} step - The step (c, d, e, f, g, a, b)
      * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @param {number} octave - The octave
@@ -219,6 +222,7 @@
 
     /**
      * Calculates difference between two pitches
+     *
      * @param {object} pitch1 - The first pitch to compare
      * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @param {object} pitch2 - The second pitch to compare
@@ -244,6 +248,7 @@
 
     /**
      * Calculates difference between two durations
+     *
      * @param {number} duration1 - The first duration to compare
      * @param {number} duration2 - The second duration to compare
      * @param {boolean} absolute - When set, the absolute difference is returned ( | Duration 2 - Duration 1 | )

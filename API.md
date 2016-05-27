@@ -27,7 +27,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 <a name="module_MusicJsonToolbox.notes"></a>
 
 ### MusicJsonToolbox.notes(obj, repeat) ⇒ <code>Array</code>
-Returns an array of all notes (transposed to C major).Example:[ {object}, {object}, ... ]
+Returns an array of all notes.Example:[ {object}, {object}, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>Array</code> - An array containing all notes of the given object  
@@ -40,7 +40,7 @@ Returns an array of all notes (transposed to C major).Example:[ {object}, {ob
 <a name="module_MusicJsonToolbox.intervals"></a>
 
 ### MusicJsonToolbox.intervals(notes, keyAdjust) ⇒ <code>Array</code>
-Returns an array of notes as intervalsExample:[ {0}, {2}, {-2}, {5}, ... ]
+Returns an array of intervals from an array of notesExample:[ {0}, {2}, {-2}, {5}, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>Array</code> - An array of notes as contour  
