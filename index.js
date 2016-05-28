@@ -55,7 +55,7 @@
      * Returns an array of all notes.
      *
      * Example:
-     * [ {object}, {object}, ... ]
+     * [ {pitch: {step, octave, alter, accidental}, rest: false, duration, type}, { ... }, ... ]
      *
      * @param {object} obj - The musicjson object
      * @param {boolean} repeat - If set to true, repeated measures are also repeated in notes output
@@ -227,7 +227,7 @@
      * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @param {object} pitch2 - The second pitch to compare
      * @param {boolean} withOctave - When set, the octave is taken into account, otherwise function return relative value (from 1 to 12)
-     * @param {boolean} absolute - When set, the absolute difference is returned ( | Pitch 2 - Pitch 1 | )
+     * @param {boolean} absolute - When set, the absolute difference is returned as Math.abs(Pitch 2 - Pitch 1)
      * @returns {number} The difference between two pitches
      */
     pitchDifference: function(pitch1, keyAdjust, pitch2, withOctave, absolute) {
@@ -251,7 +251,7 @@
      *
      * @param {number} duration1 - The first duration to compare
      * @param {number} duration2 - The second duration to compare
-     * @param {boolean} absolute - When set, the absolute difference is returned ( | Duration 2 - Duration 1 | )
+     * @param {boolean} absolute - When set, the absolute difference is returned as Math.abs(Duration 2 - Duration 1)
      * @returns {number} The difference between two durations
      */
     durationDifference: function(duration1, duration2, absolute) {
@@ -497,19 +497,16 @@
      * Calculation based on parsons code strings
      *
      * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of notes that should be searched
+     * @param {string} search - A string in parsons code (e.g. '*udu')
      * @returns {Number} The edit distance between parsons codes
      */
     distanceParsons: function(object, search) {
       var parsons = this.parsons(this.notes(object, false));
-      var searchParsons = this.parsons(search);
       return this.stringEditDistance(
         parsons.map(function(item) {
           return item.value;
         }).join(''),
-        searchParsons.map(function(item) {
-          return item.value;
-        }).join('')
+        search
       );
     },
 
@@ -518,7 +515,7 @@
      * Calculation based on pitch values
      *
      * @param {object} object - The document
-     * @param {Array} search - An array of notes
+     * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
      * @returns {number} The edit distance between intervals
      */
     distancePitch: function(object, search) {
@@ -534,15 +531,7 @@
             false
           );
         }.bind(this)),
-        search.map(function(item) {
-          return this.base12Pitch(
-            item.pitch.step,
-            0,
-            item.pitch.octave,
-            item.pitch.alter,
-            false
-          );
-        }.bind(this))
+        search
       );
     },
 
@@ -550,21 +539,18 @@
      * Returns minimum edit distance between searched notes and the given document.
      * Calculation based on intervals
      *
-     * @param {object} object - The document
-     * @param {Array} search - An array of notes
+     * @param {object} object - The musicjson document
+     * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
      * @returns {number} The edit distance between intervals
      */
     distanceIntervals: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var intervals = this.intervals(this.notes(object, false), keyAdjust);
-      var searchIntervals = this.intervals(search, 0);
       return this.intervalEditDistance(
         intervals.map(function(item) {
           return item.value;
         }),
-        searchIntervals.map(function(item) {
-          return item.value;
-        })
+        search
       );
     },
 
@@ -577,12 +563,11 @@
      * Notes are represented in parsons code.
      *
      * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of notes that should be searched
+     * @param {string} search - A string in parsons code (e.g. '*udu')
      * @returns {object} The first finding with minimum cost
      */
     distanceParsonsNgrams: function(object, search) {
       var ngrams = this.ngrams(this.parsons(this.notes(object, false)), search.length);
-      var searchParsons = this.parsons(search);
       var costs = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -599,9 +584,7 @@
             ngrams[i].map(function(item) {
               return item.value;
             }).join(''),
-            searchParsons.map(function(item) {
-              return item.value;
-            }).join('')
+            search
           ),
           highlight: ngrams[i].map(function(item) {
             return {
@@ -622,7 +605,7 @@
      * Notes are represented with pitch and duration
      *
      * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of notes that should be searched
+     * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
      * @returns {object} The first finding with minimum cost
      */
     distancePitchNgrams: function(object, search) {
@@ -642,15 +625,7 @@
                 false
               );
             }.bind(this)),
-            search.map(function(item) {
-              return this.base12Pitch(
-                item.pitch.step,
-                0,
-                item.pitch.octave,
-                item.pitch.alter,
-                false
-              );
-            }.bind(this))
+            search
           ),
           highlight: ngrams[i].map(function(item) {
             return {
@@ -671,13 +646,12 @@
      * Notes are represented as intervals.
      *
      * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of notes that should be searched
+     * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
      * @returns {object} The first finding with minimum cost
      */
     distanceIntervalsNgrams: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
-      var searchIntervals = this.intervals(search, 0);
       var costs = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -693,9 +667,7 @@
             ngrams[i].map(function(item) {
               return item.value;
             }),
-            searchIntervals.map(function(item) {
-              return item.value;
-            })
+            search
           ),
           highlight: ngrams[i].map(function(item) {
             return {

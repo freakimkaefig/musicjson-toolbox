@@ -27,7 +27,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 <a name="module_MusicJsonToolbox.notes"></a>
 
 ### MusicJsonToolbox.notes(obj, repeat) ⇒ <code>Array</code>
-Returns an array of all notes.Example:[ {object}, {object}, ... ]
+Returns an array of all notes.Example:[ {pitch: {step, octave, alter, accidental}, rest: false}, { ... }, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>Array</code> - An array containing all notes of the given object  
@@ -105,7 +105,7 @@ Calculates difference between two pitches
 | keyAdjust | <code>number</code> | The position in circle of fifths of the searched notes |
 | pitch2 | <code>object</code> | The second pitch to compare |
 | withOctave | <code>boolean</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
-| absolute | <code>boolean</code> | When set, the absolute difference is returned ( | Pitch 2 - Pitch 1 | ) |
+| absolute | <code>boolean</code> | When set, the absolute difference is returned as Math.abs(Pitch 2 - Pitch 1) |
 
 <a name="module_MusicJsonToolbox.durationDifference"></a>
 
@@ -119,7 +119,7 @@ Calculates difference between two durations
 | --- | --- | --- |
 | duration1 | <code>number</code> | The first duration to compare |
 | duration2 | <code>number</code> | The second duration to compare |
-| absolute | <code>boolean</code> | When set, the absolute difference is returned ( | Duration 2 - Duration 1 | ) |
+| absolute | <code>boolean</code> | When set, the absolute difference is returned as Math.abs(Duration 2 - Duration 1) |
 
 <a name="module_MusicJsonToolbox.intervalWeight"></a>
 
@@ -196,7 +196,7 @@ Returns minimum edit distance between searched notes and the given document.Cal
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of notes that should be searched |
+| search | <code>string</code> | A string in parsons code (e.g. '*udu') |
 
 <a name="module_MusicJsonToolbox.distancePitch"></a>
 
@@ -209,7 +209,7 @@ Returns minimum edit distance between searched notes and the given document.Cal
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | The document |
-| search | <code>Array</code> | An array of notes |
+| search | <code>Array</code> | An array of pitch values (e.g. [1, 6, 1, 6]) |
 
 <a name="module_MusicJsonToolbox.distanceIntervals"></a>
 
@@ -221,8 +221,8 @@ Returns minimum edit distance between searched notes and the given document.Cal
 
 | Param | Type | Description |
 | --- | --- | --- |
-| object | <code>object</code> | The document |
-| search | <code>Array</code> | An array of notes |
+| object | <code>object</code> | The musicjson document |
+| search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
 
 <a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
 
@@ -235,7 +235,7 @@ Returns minimum edit distance between searched notes and the corresponding ngram
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of notes that should be searched |
+| search | <code>string</code> | A string in parsons code (e.g. '*udu') |
 
 <a name="module_MusicJsonToolbox.distancePitchNgrams"></a>
 
@@ -248,7 +248,7 @@ Returns the minimum edit-distance between the searched notes and corresponding n
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of notes that should be searched |
+| search | <code>Array</code> | An array of pitch values (e.g. [1, 6, 1, 6]) |
 
 <a name="module_MusicJsonToolbox.distanceIntervalsNgrams"></a>
 
@@ -261,5 +261,5 @@ Returns the minimum distance between the searched notes and the corresponding ng
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of notes that should be searched |
+| search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
 
