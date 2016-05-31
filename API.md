@@ -13,9 +13,10 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
     * [.durationDifference(duration1, duration2, absolute)](#module_MusicJsonToolbox.durationDifference) ⇒ <code>number</code>
     * [.intervalWeight(a, b)](#module_MusicJsonToolbox.intervalWeight) ⇒ <code>number</code>
+    * [.editDistance(a, b, compare, weight)](#module_MusicJsonToolbox.editDistance) ⇒ <code>number</code>
     * [.stringEditDistance(a, b)](#module_MusicJsonToolbox.stringEditDistance) ⇒ <code>number</code>
-    * [.pitchEditDistance(a, b)](#module_MusicJsonToolbox.pitchEditDistance) ⇒ <code>number</code>
-    * [.intervalEditDistance(a, b)](#module_MusicJsonToolbox.intervalEditDistance) ⇒ <code>number</code>
+    * [.arrayEditDistance(a, b)](#module_MusicJsonToolbox.arrayEditDistance) ⇒ <code>number</code>
+    * [.arrayWeightedEditDistance(a, b)](#module_MusicJsonToolbox.arrayWeightedEditDistance) ⇒ <code>number</code>
     * [.uniques(array)](#module_MusicJsonToolbox.uniques) ⇒ <code>Array</code>
     * [.distanceParsons(object, search)](#module_MusicJsonToolbox.distanceParsons) ⇒ <code>Number</code>
     * [.distancePitch(object, search)](#module_MusicJsonToolbox.distancePitch) ⇒ <code>number</code>
@@ -27,7 +28,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 <a name="module_MusicJsonToolbox.notes"></a>
 
 ### MusicJsonToolbox.notes(obj, repeat) ⇒ <code>Array</code>
-Returns an array of all notes.Example:[ {pitch: {step, octave, alter, accidental}, rest: false}, { ... }, ... ]
+Returns an array of all notes.Example:[ {pitch: {step, octave, alter, accidental}, rest: false, duration, type}, { ... }, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>Array</code> - An array containing all notes of the given object  
@@ -134,10 +135,25 @@ Calculates weighting value for edit-distance substitutionCalculation is based o
 | a | <code>number</code> | The first interval |
 | b | <code>number</code> | The second interval |
 
+<a name="module_MusicJsonToolbox.editDistance"></a>
+
+### MusicJsonToolbox.editDistance(a, b, compare, weight) ⇒ <code>number</code>
+Edit-Distance implmentation from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The calculated edit distance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>string</code> | The first string (document) |
+| b | <code>string</code> | The second string (query) |
+| compare | <code>boolean</code> | The compare function which returns boolean value between two items |
+| weight | <code>number</code> | The weight function which returns numeric for weighting operations |
+
 <a name="module_MusicJsonToolbox.stringEditDistance"></a>
 
 ### MusicJsonToolbox.stringEditDistance(a, b) ⇒ <code>number</code>
-Edit-Distance for parsons strings from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Calculate edit distance for strings
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The calculated edit distance  
@@ -147,10 +163,10 @@ Edit-Distance for parsons strings from [https://gist.github.com/andrei-m/982927]
 | a | <code>string</code> | The first string (document) |
 | b | <code>string</code> | The second string (query) |
 
-<a name="module_MusicJsonToolbox.pitchEditDistance"></a>
+<a name="module_MusicJsonToolbox.arrayEditDistance"></a>
 
-### MusicJsonToolbox.pitchEditDistance(a, b) ⇒ <code>number</code>
-Edit-Distance for pitch arrays adapted from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.The function implements improved weighting for interval differences based on consonance / dissonance
+### MusicJsonToolbox.arrayEditDistance(a, b) ⇒ <code>number</code>
+Calculate edit distance for arrays
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The calculated edit distance  
@@ -160,10 +176,10 @@ Edit-Distance for pitch arrays adapted from [https://gist.github.com/andrei-m/98
 | a | <code>Array</code> | The first interval array (document) |
 | b | <code>Array</code> | The second interval array (query) |
 
-<a name="module_MusicJsonToolbox.intervalEditDistance"></a>
+<a name="module_MusicJsonToolbox.arrayWeightedEditDistance"></a>
 
-### MusicJsonToolbox.intervalEditDistance(a, b) ⇒ <code>number</code>
-Edit-Distance for interval arrays adapted from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.The function implements improved weighting for interval differences based on consonance / dissonance
+### MusicJsonToolbox.arrayWeightedEditDistance(a, b) ⇒ <code>number</code>
+Calculate weighted edit distance for arraysThe function implements improved weighting for interval differencesbased on consonance / dissonance
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The calculated edit distance  

@@ -30,20 +30,33 @@
    * @default
    */
   var intervalFactor = [
-    1,  // 0  =   unison          (perfect consonant)
-    3,  // 1  =   minor second    (dissonant)
-    3,  // 2  =   major second    (dissonant)
-    2,  // 3  =   minor third     (imperfect consonant)
-    2,  // 4  =   major third     (imperfect consonant)
-    1,  // 5  =   perfect fourth  (perfect consonant)
-    3,  // 6  =   minor fifth     (dissonant)
-    1,  // 7  =   perfect fourth  (perfect consonant)
-    2,  // 8  =   minor sixth     (imperfect consonant)
-    2,  // 9  =   major sixth     (imperfect consonant)
-    3,  // 10 =   minor seventh   (dissonant)
-    3,  // 11 =   major seventh   (dissonant)
-    1   // 12 =   octave          (perfect consonant)
+    0.5,  // 0  =   unison          (perfect consonant)
+    1,  // 1  =   minor second    (dissonant)
+    1,  // 2  =   major second    (dissonant)
+    0.75,  // 3  =   minor third     (imperfect consonant)
+    0.75,  // 4  =   major third     (imperfect consonant)
+    0.5,  // 5  =   perfect fourth  (perfect consonant)
+    1,  // 6  =   minor fifth     (dissonant)
+    0.5,  // 7  =   perfect fourth  (perfect consonant)
+    0.75,  // 8  =   minor sixth     (imperfect consonant)
+    0.75,  // 9  =   major sixth     (imperfect consonant)
+    1,  // 10 =   minor seventh   (dissonant)
+    1,  // 11 =   major seventh   (dissonant)
+    0.5   // 12 =   octave          (perfect consonant)
   ];
+
+  /**
+   * edit distance operation types
+   *
+   * @constant
+   * @type {{SUBSTITUTION: string, INSERTION: string, DELETION: string}}
+   * @default
+   */
+  var editOperations = {
+    'SUBSTITUTION': 'SUBSTITUTION',
+    'INSERTION': 'INSERTION',
+    'DELETION': 'DELETION'
+  };
 
   /**
    * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
@@ -281,11 +294,11 @@
         x -= 12;
       }
 
-      return x * intervalFactor[x];
+      return intervalFactor[x];
     },
 
     /**
-     * Edit-Distance for parsons strings from {@link https://gist.github.com/andrei-m/982927}
+     * Edit-Distance implmentation from {@link https://gist.github.com/andrei-m/982927}
      *
      * Copyright (c) 2011 Andrei Mackenzie
      * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -294,9 +307,11 @@
      *
      * @param {string} a - The first string (document)
      * @param {string} b - The second string (query)
+     * @param {boolean} compare - The compare function which returns boolean value between two items
+     * @param {number} weight - The weight function which returns numeric for weighting operations
      * @returns {number} The calculated edit distance
      */
-    stringEditDistance: function(a, b) {
+    editDistance: function(a, b, compare, weight) {
       if (a.length === 0) {
         return b.length;
       }
@@ -321,159 +336,84 @@
       // Fill in the rest of the matrix
       for (i = 1; i <= b.length; i++) {
         for (j = 1; j <= a.length; j++) {
-          if (b.charAt(i-1) === a.charAt(j-1)) {
+          if (compare(i, j)) {
             matrix[i][j] = matrix[i-1][j-1];
           } else {
             matrix[i][j] = Math.min( // TODO: reconsider weighting
-              matrix[i-1][j-1] + 1, // substitution
+              matrix[i-1][j-1] + weight(i, j, editOperations['SUBSTITUTION']), // substitution
               Math.min(
-                matrix[i][j-1] + 1, // insertion
-                matrix[i-1][j] + 1  // deletion
+                matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
+                matrix[i-1][j] + weight(i, j, editOperations['DELETION'])  // deletion
               )
             );
           }
         }
       }
-
-      // for (i = 0; i <= b.length; i++) {
-      //   console.log(matrix[i].join(' | '));
-      // }
 
       return matrix[b.length][a.length];
     },
 
     /**
-     * Edit-Distance for pitch arrays adapted from {@link https://gist.github.com/andrei-m/982927}
+     * Calculate edit distance for strings
      *
-     * Copyright (c) 2011 Andrei Mackenzie
-     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-     *
-     * The function implements improved weighting for interval differences based on consonance / dissonance
-     *
-     * @param {Array} a - The first interval array (document)
-     * @param {Array} b - The second interval array (query)
+     * @param {string} a - The first string (document)
+     * @param {string} b - The second string (query)
      * @returns {number} The calculated edit distance
      */
-    pitchEditDistance: function(a, b) {
-      if (a.length === 0) {
-        return b.length;
-      }
-      if (b.length === 0) {
-        return a.length;
-      }
-
-      var matrix = [];
-
-      // increment along the first column of each row
-      var i;
-      for (i = 0; i <= b.length; i++) {
-        matrix[i] = [i * 12];
-      }
-
-      // increment each column in the first row
-      var j;
-      for (j = 0; j <= a.length; j++) {
-        matrix[0][j] = j * 12;
-      }
-
-      for (i = 1; i <= b.length; i++) {
-        for (j = 1; j <= a.length; j++) {
-          if (b[i-1] === a[j-1]) {
-            matrix[i][j] = matrix[i-1][j-1];
-          } else {
-            matrix[i][j] = Math.min(
-              matrix[i-1][j-1] + this.intervalWeight(a[j-1], b[i-1]), // substitution
-              Math.min(
-                matrix[i][j-1] + 12, // insertion
-                matrix[i-1][j] + 12  // deletion
-              )
-            );
-          }
+    stringEditDistance: function(a, b) {
+      return this.editDistance(a, b,
+        function(i, j) {
+          return b.charAt(i-1) === a.charAt(j-1);
+        },
+        function() {
+          return 1;
         }
-      }
-
-      return matrix[b.length-1][a.length-1];
+      );
     },
 
     /**
-     * Edit-Distance for interval arrays adapted from {@link https://gist.github.com/andrei-m/982927}
-     *
-     * Copyright (c) 2011 Andrei Mackenzie
-     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-     * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-     *
-     * The function implements improved weighting for interval differences based on consonance / dissonance
+     * Calculate edit distance for arrays
      *
      * @param {Array} a - The first interval array (document)
      * @param {Array} b - The second interval array (query)
      * @returns {number} The calculated edit distance
      */
-    intervalEditDistance: function(a, b) {
-      if (a.length === 0) {
-        return b.length;
-      }
-      if (b.length === 0) {
-        return a.length;
-      }
-
-      var matrix = [];
-
-      // increment along the first column of each row
-      var i;
-      for (i = 0; i <= b.length; i++) {
-        matrix[i] = [i * 12];
-      }
-
-      // increment each column in the first row
-      var j;
-      for (j = 0; j <= a.length; j++) {
-        matrix[0][j] = j * 12;
-      }
-
-      // Fill in the rest of the matrix
-      // console.log('=======================================================');
-      // console.log(a.join(', '), ' | ', a.length);
-      // console.log(b.join(', '), ' | ', b.length);
-      for (i = 1; i <= b.length; i++) {
-        for (j = 1; j <= a.length; j++) {
-          // console.log('--------------------------------------------');
-          // console.log('i, j', i, j);
-          if (b[i-1] === a[j-1]) {
-            // console.log('cost is zero');
-            matrix[i][j] = matrix[i-1][j-1];
-          } else {
-            // console.log('calculate cost:');
-            // console.log('    char(a):', a[j-1]);
-            // console.log('    char(b):', b[i-1]);
-            // console.log('         -> substitution:');
-            // console.log('             interval(a[j-1], b[i-1]):', this.intervalWeight(a[j-1], b[i-1]));
-            // console.log('');
-            // console.log('         -> insertion (matrix[i][j-1]):');
-            // console.log('             val(a[j-1]): 12');
-            // console.log('');
-            // console.log('         -> deletion:');
-            // console.log('             val(b[i-1]): 12');
-            // console.log('');
-            matrix[i][j] = Math.min(
-              matrix[i-1][j-1] + this.intervalWeight(a[j-1], b[i-1]), // substitution
-              Math.min(
-                matrix[i][j-1] + 12, // insertion
-                matrix[i-1][j] + 12  // deletion
-              )
-            );
-          }
-          // console.log('');
+    arrayEditDistance: function(a, b) {
+      return this.editDistance(a, b,
+        function(i, j) {
+          return b[i-1] === a[j-1];
+        },
+        function() {
+          return 1;
         }
-      }
+      );
+    },
 
-      // for (i = 0; i <= b.length; i++) {
-      //   console.log(matrix[i].join(' | '));
-      // }
-
-      return matrix[b.length-1][a.length-1];
+    /**
+     * Calculate weighted edit distance for arrays
+     * The function implements improved weighting for interval differences
+     * based on consonance / dissonance
+     *
+     * @param {Array} a - The first interval array (document)
+     * @param {Array} b - The second interval array (query)
+     * @returns {number} The calculated edit distance
+     */
+    arrayWeightedEditDistance: function(a, b) {
+      return this.editDistance(a, b,
+        function(i, j) {
+          return b[i-1] === a[j-1];
+        },
+        function(i, j, operation) {
+          switch (operation) {
+          case editOperations['SUBSTITUTION']:
+            return this.intervalWeight(a[j-1], b[i-1]);
+          case editOperations['INSERTION']:
+            return this.intervalWeight(a[j-1], 0);
+          case editOperations['DELETION']:
+            return this.intervalWeight(0, b[i-1]);
+          }
+        }.bind(this)
+      );
     },
 
     /**
@@ -521,7 +461,7 @@
     distancePitch: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var notes = this.notes(object, false);
-      return this.pitchEditDistance(
+      return this.arrayEditDistance(
         notes.map(function(item) {
           return this.base12Pitch(
             item.pitch.step,
@@ -546,7 +486,7 @@
     distanceIntervals: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var intervals = this.intervals(this.notes(object, false), keyAdjust);
-      return this.intervalEditDistance(
+      return this.arrayEditDistance(
         intervals.map(function(item) {
           return item.value;
         }),
@@ -615,7 +555,7 @@
 
       for (var i = 0; i < ngrams.length; i++) {
         costs.push({
-          cost: this.pitchEditDistance(
+          cost: this.arrayEditDistance(
             ngrams[i].map(function(item) {
               return this.base12Pitch(
                 item.pitch.step,
@@ -663,7 +603,7 @@
         }
 
         costs.push({
-          cost: this.intervalEditDistance(
+          cost: this.arrayEditDistance(
             ngrams[i].map(function(item) {
               return item.value;
             }),

@@ -20,14 +20,14 @@ describe('MusicJsonToolbox Distance Functions', function() {
   describe('MusicJsonToolbox.distancePitch', function() {
     it('calculates edit-distance between pitch values', function() {
       var distancePitch = MusicJsonToolbox.distancePitch(musicjson, searchPitch);
-      expect(distancePitch).to.be.equal(114);
+      expect(distancePitch).to.be.equal(11);
     });
   });
 
   describe('MusicJsonToolbox.distanceIntervals', function() {
     it('calculates edit-distance between interval values', function() {
       var distancePitch = MusicJsonToolbox.distanceIntervals(musicjson, searchIntervals);
-      expect(distancePitch).to.be.equal(108);
+      expect(distancePitch).to.be.equal(9);
     });
   });
 
