@@ -1,67 +1,80 @@
 [
   {
-    "value": 0,
+    "value": "*",
+    "duration": "*",
     "noteNumber": 0,
     "measureNumber": 0
   },
   {
     "value": 2,
+    "duration": 0,
     "noteNumber": 1,
     "measureNumber": 0
   },
   {
     "value": 2,
+    "duration": 0,
     "noteNumber": 2,
     "measureNumber": 0
   },
   {
     "value": 1,
+    "duration": 0,
     "noteNumber": 3,
     "measureNumber": 0
   },
   {
     "value": 2,
+    "duration": 0,
     "noteNumber": 4,
     "measureNumber": 0
   },
   {
     "value": 0,
+    "duration": 0,
     "noteNumber": 5,
     "measureNumber": 0
   },
   {
 
     "value": -11,
+    "duration": 2,
     "noteNumber": 0,
     "measureNumber": 1
   },
   {
     "value": 0,
+    "duration": 0,
     "noteNumber": 1,
     "measureNumber": 1
   },
   {
     "value": 10,
+    "duration": 0,
     "noteNumber": 2,
     "measureNumber": 1
   },
   {
     "value": -7,
+    "duration": 0,
     "noteNumber": 0,
     "measureNumber": 2
   },
   {
     "value": 5,
+    "duration": 0,
     "noteNumber": 1,
     "measureNumber": 2
   },
   {
     "value": -5,
+    "duration": -2,
     "noteNumber": 2,
     "measureNumber": 2
   },
   {
     "value": 5,
+    "duration": 0,
     "noteNumber": 3,
     "measureNumber": 2
   }

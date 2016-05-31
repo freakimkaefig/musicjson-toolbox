@@ -107,24 +107,6 @@
     },
 
     /**
-     * Get array of base 12 pitch values from array of notes
-     * @param {Array} notes - The array of notes
-     * @param  {number} keyAdjust - Adjusting of key by semitones
-     * @returns {Array} - The array of base 12 pitch values
-     */
-    pitchValues: function(notes, keyAdjust) {
-      return notes.map(function(item) {
-        return this.base12Pitch(
-          item.pitch.step,
-          keyAdjust,
-          item.pitch.octave,
-          item.pitch.alter,
-          false
-        );
-      }.bind(this));
-    },
-
-    /**
      * Returns an array of intervals from an array of notes
      *
      * Example:
@@ -137,7 +119,8 @@
       var tempIntervals = [];
 
       tempIntervals.push({
-        value: 0,
+        value: '*',
+        duration: '*',
         noteNumber: 0,
         measureNumber: 0
       });
@@ -145,12 +128,13 @@
       for (var i = 1; i < notes.length; i++) {
         var pitchDiff = 0;
         if (notes[i].rest) {
-          // rest is weighted zero
+          // set rest to zero
         } else {
           pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
         }
         var tempNote = {
           value: pitchDiff,
+          duration: this.durationDifference(notes[i-1].duration, notes[i].duration),
           noteNumber: notes[i].noteNumber,
           measureNumber: notes[i].measureNumber
         };
@@ -224,6 +208,38 @@
     },
 
     /**
+     * Get array of base 12 pitch values from array of notes
+     * @param {Array} notes - The array of notes
+     * @param  {number} keyAdjust - Adjusting of key by semitones
+     * @returns {Array} - The array of base 12 pitch values
+     */
+    pitchValues: function(notes, keyAdjust) {
+      return notes.map(function(item) {
+        return this.base12Pitch(
+          item.pitch.step,
+          keyAdjust,
+          item.pitch.octave,
+          item.pitch.alter,
+          false
+        );
+      }.bind(this));
+    },
+
+    /**
+     *
+     * @param {Array} intervals - Array of intervals (e.g. returned by  MusicJsonToolbox.intervals)
+     * @returns {Array} - The correctly mapped array with intervals and duration values
+     */
+    intervalDurationValues: function(intervals) {
+      return intervals.map(function(item) {
+        return {
+          value: item.value,
+          duration: item.duration
+        };
+      });
+    },
+
+    /**
      * Array mapping for note highlighting
      *
      * @param {Array} array - The array that should be mapped for highlighting
@@ -253,7 +269,7 @@
       if (alter) {
         ret += alter;
       }
-      ret -= keyAdjust;
+      ret += keyAdjust;
       if (ret === 0) {
         ret = 12;
         octave--;
@@ -423,6 +439,24 @@
     },
 
     /**
+     * Calculate edit distance for arrays of interval and duration values
+     *
+     * @param {Array} a - The first interval array (document)
+     * @param {Array} b - The second interval array (query)
+     * @returns {number} The calculated edit distance
+     */
+    intervalDurationsEditDistance: function(a, b) {
+      return this.editDistance(a, b,
+        function(i, j) {
+          return (b[i-1].value === a[j-1].value) && (b[i-1].duration === a[j-1].duration);
+        },
+        function() {
+          return 1;
+        }
+      );
+    },
+
+    /**
      * Calculate weighted edit distance for arrays
      * The function implements improved weighting for interval differences
      * based on consonance / dissonance
@@ -516,9 +550,19 @@
       );
     },
 
-    // TODO: distanceIntervalsDurations
-    // Edit-Distance which considers intervals and note durations
-    // See Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
+    /**
+     * Returns minimum edit distance between searched notes and the given document.
+     * Calculation based on intervals and duration values
+     *
+     * @param {object} object - The musicjson document
+     * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
+     * @returns {number} The edit distance between intervals
+     */
+    distanceIntervalsDurations: function(object, search) {
+      var keyAdjust = object.attributes.key.fifths;
+      var intervals = this.intervals(this.notes(object, false), keyAdjust);
+      return this.intervalDurationsEditDistance(this.intervalDurationValues(intervals), search);
+    },
 
     /**
      * Returns minimum edit distance between searched notes and the corresponding ngrams.
@@ -530,7 +574,7 @@
      */
     distanceParsonsNgrams: function(object, search) {
       var ngrams = this.ngrams(this.parsons(this.notes(object, false)), search.length);
-      var costs = [];
+      var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
 
@@ -541,8 +585,8 @@
           }
         }
 
-        costs.push({
-          cost: this.stringEditDistance(
+        distances.push({
+          distance: this.stringEditDistance(
             ngrams[i].map(function(item) {
               return item.value;
             }).join(''),
@@ -552,7 +596,7 @@
         });
       }
 
-      return costs/*.sort(function(a, b) {
+      return distances/*.sort(function(a, b) {
         return a.cost - b.cost;
       }).shift()*/;
     },
@@ -568,16 +612,16 @@
     distancePitchNgrams: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var ngrams = this.ngrams(this.notes(object, false), search.length);
-      var costs = [];
+      var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        costs.push({
-          cost: this.arrayEditDistance(this.pitchValues(ngrams[i], keyAdjust), search),
+        distances.push({
+          distance: this.arrayEditDistance(this.pitchValues(ngrams[i], keyAdjust), search),
           highlight: this.highlightMapping(ngrams[i])
         });
       }
 
-      return costs/*.sort(function(a, b) {
+      return distances/*.sort(function(a, b) {
         return a.cost - b.cost;
       }).shift()*/;
     },
@@ -593,18 +637,18 @@
     distanceIntervalsNgrams: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
-      var costs = [];
+      var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
         for (var j = 0; j < ngrams[i].length; j++) {
           if (j === 0) {
             // Reset first value of ngram
-            ngrams[i][j].value = 0;
+            ngrams[i][j].value = '*';
           }
         }
 
-        costs.push({
-          cost: this.arrayEditDistance(
+        distances.push({
+          distance: this.arrayEditDistance(
             ngrams[i].map(function(item) {
               return item.value;
             }),
@@ -614,11 +658,45 @@
         });
       }
 
-      return costs/*.sort(function(a, b) {
+      return distances/*.sort(function(a, b) {
         return a.cost - b.cost;
       })shift()*/;
+    },
+
+    /**
+     * Returns the minimum distance between the searched notes and the corresponding ngrams.
+     * Notes are represented as intervals and duration values.
+     *
+     * @param {object} object - A musicjson object to search in
+     * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
+     * @returns {object} The first finding with minimum cost
+     */
+    distanceIntervalsDurationsNgrams: function(object, search) {
+      var keyAdjust = object.attributes.key.fifths;
+      var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
+      var distances = [];
+
+      for (var i = 0; i < ngrams.length; i++) {
+        for (var j = 0; j < ngrams[i].length; j++) {
+          if (j === 0) {
+            // Reset first value of ngram
+            ngrams[i][j].value = '*';
+            ngrams[i][j].duration = '*';
+          }
+        }
+
+        distances.push({
+          distance: this.intervalDurationsEditDistance(this.intervalDurationValues(ngrams[i]), search),
+          highlight: this.highlightMapping(ngrams[i])
+        });
+      }
+
+      return distances/*.sort(function(a, b) {
+       return a.cost - b.cost;
+       })shift()*/;
     }
   };
+
 
 
   // =============================

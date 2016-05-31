@@ -6,10 +6,11 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 
 * [MusicJsonToolbox](#module_MusicJsonToolbox)
     * [.notes(obj, repeat)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
-    * [.pitchValues(notes, keyAdjust)](#module_MusicJsonToolbox.pitchValues) ⇒ <code>Array</code>
     * [.intervals(notes, keyAdjust)](#module_MusicJsonToolbox.intervals) ⇒ <code>Array</code>
     * [.parsons(notes)](#module_MusicJsonToolbox.parsons) ⇒ <code>Array</code>
     * [.ngrams(array, length)](#module_MusicJsonToolbox.ngrams) ⇒ <code>Array</code>
+    * [.pitchValues(notes, keyAdjust)](#module_MusicJsonToolbox.pitchValues) ⇒ <code>Array</code>
+    * [.intervalDurationValues(intervals)](#module_MusicJsonToolbox.intervalDurationValues) ⇒ <code>Array</code>
     * [.highlightMapping(array)](#module_MusicJsonToolbox.highlightMapping) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
@@ -18,14 +19,17 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.editDistance(a, b, compare, weight)](#module_MusicJsonToolbox.editDistance) ⇒ <code>number</code>
     * [.stringEditDistance(a, b)](#module_MusicJsonToolbox.stringEditDistance) ⇒ <code>number</code>
     * [.arrayEditDistance(a, b)](#module_MusicJsonToolbox.arrayEditDistance) ⇒ <code>number</code>
+    * [.intervalDurationsEditDistance(a, b)](#module_MusicJsonToolbox.intervalDurationsEditDistance) ⇒ <code>number</code>
     * [.arrayWeightedEditDistance(a, b)](#module_MusicJsonToolbox.arrayWeightedEditDistance) ⇒ <code>number</code>
     * [.uniques(array)](#module_MusicJsonToolbox.uniques) ⇒ <code>Array</code>
     * [.distanceParsons(object, search)](#module_MusicJsonToolbox.distanceParsons) ⇒ <code>Number</code>
     * [.distancePitch(object, search)](#module_MusicJsonToolbox.distancePitch) ⇒ <code>number</code>
     * [.distanceIntervals(object, search)](#module_MusicJsonToolbox.distanceIntervals) ⇒ <code>number</code>
+    * [.distanceIntervalsDurations(object, search)](#module_MusicJsonToolbox.distanceIntervalsDurations) ⇒ <code>number</code>
     * [.distanceParsonsNgrams(object, search)](#module_MusicJsonToolbox.distanceParsonsNgrams) ⇒ <code>object</code>
     * [.distancePitchNgrams(object, search)](#module_MusicJsonToolbox.distancePitchNgrams) ⇒ <code>object</code>
     * [.distanceIntervalsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsNgrams) ⇒ <code>object</code>
+    * [.distanceIntervalsDurationsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsDurationsNgrams) ⇒ <code>object</code>
 
 <a name="module_MusicJsonToolbox.notes"></a>
 
@@ -39,19 +43,6 @@ Returns an array of all notes.Example:[ {pitch: {step, octave, alter, acciden
 | --- | --- | --- |
 | obj | <code>object</code> | The musicjson object |
 | repeat | <code>boolean</code> | If set to true, repeated measures are also repeated in notes output |
-
-<a name="module_MusicJsonToolbox.pitchValues"></a>
-
-### MusicJsonToolbox.pitchValues(notes, keyAdjust) ⇒ <code>Array</code>
-Get array of base 12 pitch values from array of notes
-
-**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - - The array of base 12 pitch values  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| notes | <code>Array</code> | The array of notes |
-| keyAdjust | <code>number</code> | Adjusting of key by semitones |
 
 <a name="module_MusicJsonToolbox.intervals"></a>
 
@@ -90,6 +81,29 @@ Generates array of ngrams in specified length (based on [https://gist.github.com
 | --- | --- | --- |
 | array | <code>Array</code> | An array of notes (returned by function "notes") |
 | length | <code>number</code> | The length of n |
+
+<a name="module_MusicJsonToolbox.pitchValues"></a>
+
+### MusicJsonToolbox.pitchValues(notes, keyAdjust) ⇒ <code>Array</code>
+Get array of base 12 pitch values from array of notes
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Array</code> - - The array of base 12 pitch values  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| notes | <code>Array</code> | The array of notes |
+| keyAdjust | <code>number</code> | Adjusting of key by semitones |
+
+<a name="module_MusicJsonToolbox.intervalDurationValues"></a>
+
+### MusicJsonToolbox.intervalDurationValues(intervals) ⇒ <code>Array</code>
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Array</code> - - The correctly mapped array with intervals and duration values  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| intervals | <code>Array</code> | Array of intervals (e.g. returned by  MusicJsonToolbox.intervals) |
 
 <a name="module_MusicJsonToolbox.highlightMapping"></a>
 
@@ -203,6 +217,19 @@ Calculate edit distance for arrays
 | a | <code>Array</code> | The first interval array (document) |
 | b | <code>Array</code> | The second interval array (query) |
 
+<a name="module_MusicJsonToolbox.intervalDurationsEditDistance"></a>
+
+### MusicJsonToolbox.intervalDurationsEditDistance(a, b) ⇒ <code>number</code>
+Calculate edit distance for arrays of interval and duration values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The calculated edit distance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>Array</code> | The first interval array (document) |
+| b | <code>Array</code> | The second interval array (query) |
+
 <a name="module_MusicJsonToolbox.arrayWeightedEditDistance"></a>
 
 ### MusicJsonToolbox.arrayWeightedEditDistance(a, b) ⇒ <code>number</code>
@@ -267,6 +294,19 @@ Returns minimum edit distance between searched notes and the given document.Cal
 | object | <code>object</code> | The musicjson document |
 | search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
 
+<a name="module_MusicJsonToolbox.distanceIntervalsDurations"></a>
+
+### MusicJsonToolbox.distanceIntervalsDurations(object, search) ⇒ <code>number</code>
+Returns minimum edit distance between searched notes and the given document.Calculation based on intervals and duration values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between intervals  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>object</code> | The musicjson document |
+| search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
+
 <a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
 
 ### MusicJsonToolbox.distanceParsonsNgrams(object, search) ⇒ <code>object</code>
@@ -297,6 +337,19 @@ Returns the minimum edit-distance between the searched notes and corresponding n
 
 ### MusicJsonToolbox.distanceIntervalsNgrams(object, search) ⇒ <code>object</code>
 Returns the minimum distance between the searched notes and the corresponding ngrams.Notes are represented as intervals.
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>object</code> - The first finding with minimum cost  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>object</code> | A musicjson object to search in |
+| search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
+
+<a name="module_MusicJsonToolbox.distanceIntervalsDurationsNgrams"></a>
+
+### MusicJsonToolbox.distanceIntervalsDurationsNgrams(object, search) ⇒ <code>object</code>
+Returns the minimum distance between the searched notes and the corresponding ngrams.Notes are represented as intervals and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>object</code> - The first finding with minimum cost  

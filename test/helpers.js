@@ -5,22 +5,111 @@ var MusicJsonToolbox = require('../index');
 
 describe('MusicJsonToolbox Helper Functions', function() {
 
-  describe('MusicJsonToolbox.base12Pitch', function() {
+  describe('.pitchValues', function() {
+    it('correctly maps pitch values from array of notes', function() {
+      var output;
+      output = MusicJsonToolbox.pitchValues([
+        {
+          pitch: {
+            step: 'C',
+            octave: 4,
+            alter: 0
+          },
+          rest: false,
+          duration: 2,
+          type: 'eighth',
+          measureNumber: 0,
+          noteNumber: 0
+        },
+        {
+          pitch: {
+            step: 'D',
+            octave: 5,
+            alter: 0
+          },
+          rest: false,
+          duration: 4,
+          type: 'quarter',
+          measureNumber: 0,
+          noteNumber: 1
+        }
+      ], 1);
+      expect(output).to.deep.equal([2, 4]);
+    });
+  });
+
+  describe('.intervalDurationValues', function() {
+    it('correctly maps interval and duration values from array of intervals', function() {
+      var output;
+      output = MusicJsonToolbox.intervalDurationValues([
+        {
+          value: '*',
+          duration: '*',
+          noteNumber: 0,
+          measureNumber: 0
+        },
+        {
+          value: 2,
+          duration: 0,
+          noteNumber: 1,
+          measureNumber: 0
+        }
+      ]);
+      expect(output).to.deep.equal([
+        {
+          value: '*',
+          duration: '*'
+        },
+        {
+          value: 2,
+          duration: 0
+        }
+      ]);
+    });
+  });
+
+  describe('.highlightMapping', function() {
+    it('correctly maps highlighting measures', function() {
+      var output;
+      output = MusicJsonToolbox.highlightMapping([
+        {
+          measureNumber: 0,
+          noteNumber: 0
+        },
+        {
+          measureNumber: 0,
+          noteNumber: 1
+        }
+      ]);
+      expect(output).to.deep.equal([
+        {
+          measure: 0,
+          note: 0
+        },
+        {
+          measure: 0,
+          note: 1
+        }
+      ]);
+    });
+  });
+
+  describe('.base12Pitch', function() {
     it('converts note object to base12Pitch', function() {
       var output;
 
       output = MusicJsonToolbox.base12Pitch('C', -1, 4, 0, true);
-      expect(output).to.equal(50);
+      expect(output).to.equal(48);
 
       output = MusicJsonToolbox.base12Pitch('D', 1, 4, 1, true);
-      expect(output).to.equal(51);
+      expect(output).to.equal(53);
 
       output = MusicJsonToolbox.base12Pitch('E', 0, 3, 0, false);
       expect(output).to.equal(5);
     });
   });
 
-  describe('MusicJsonToolbox.pitchDifference', function() {
+  describe('.pitchDifference', function() {
     it('calculates difference between pitch objects', function() {
       var output;
 
@@ -60,7 +149,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('MusicJsonToolbox.durationDifference', function() {
+  describe('.durationDifference', function() {
     it('calculates difference between durations', function() {
       var output;
 
@@ -75,7 +164,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('MusicJsonToolbox.intervalWeight', function() {
+  describe('.intervalWeight', function() {
     it('calculates interval weight for edit-distance', function() {
       var output;
 
@@ -120,7 +209,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('MusicJsonToolbox.stringEditDistance', function() {
+  describe('.stringEditDistance', function() {
     it('calculates edit distance between two strings', function() {
       var output;
 
@@ -141,7 +230,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('MusicJsonToolbox.arrayEditDistance', function() {
+  describe('.arrayEditDistance', function() {
     it('calculates edit distance between two pitch arrays', function() {
       var output;
 
@@ -181,7 +270,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('MusicJsonToolbox.arrayWeightedEditDistance', function() {
+  describe('.arrayWeightedEditDistance', function() {
     it('calculates weighted edit distance between two pitch arrays', function() {
       var output;
 
@@ -208,7 +297,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('MusicJsonToolbox.uniques', function() {
+  describe('.uniques', function() {
     it('returns array of unique values', function() {
       var output = MusicJsonToolbox.uniques([1, 1, 2, 3, 3]);
       expect(output).to.deep.equal([1, 2, 3]);
