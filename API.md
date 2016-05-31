@@ -6,9 +6,11 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 
 * [MusicJsonToolbox](#module_MusicJsonToolbox)
     * [.notes(obj, repeat)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
+    * [.pitchValues(notes, keyAdjust)](#module_MusicJsonToolbox.pitchValues) ⇒ <code>Array</code>
     * [.intervals(notes, keyAdjust)](#module_MusicJsonToolbox.intervals) ⇒ <code>Array</code>
     * [.parsons(notes)](#module_MusicJsonToolbox.parsons) ⇒ <code>Array</code>
     * [.ngrams(array, length)](#module_MusicJsonToolbox.ngrams) ⇒ <code>Array</code>
+    * [.highlightMapping(array)](#module_MusicJsonToolbox.highlightMapping) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
     * [.durationDifference(duration1, duration2, absolute)](#module_MusicJsonToolbox.durationDifference) ⇒ <code>number</code>
@@ -37,6 +39,19 @@ Returns an array of all notes.Example:[ {pitch: {step, octave, alter, acciden
 | --- | --- | --- |
 | obj | <code>object</code> | The musicjson object |
 | repeat | <code>boolean</code> | If set to true, repeated measures are also repeated in notes output |
+
+<a name="module_MusicJsonToolbox.pitchValues"></a>
+
+### MusicJsonToolbox.pitchValues(notes, keyAdjust) ⇒ <code>Array</code>
+Get array of base 12 pitch values from array of notes
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Array</code> - - The array of base 12 pitch values  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| notes | <code>Array</code> | The array of notes |
+| keyAdjust | <code>number</code> | Adjusting of key by semitones |
 
 <a name="module_MusicJsonToolbox.intervals"></a>
 
@@ -75,6 +90,18 @@ Generates array of ngrams in specified length (based on [https://gist.github.com
 | --- | --- | --- |
 | array | <code>Array</code> | An array of notes (returned by function "notes") |
 | length | <code>number</code> | The length of n |
+
+<a name="module_MusicJsonToolbox.highlightMapping"></a>
+
+### MusicJsonToolbox.highlightMapping(array) ⇒ <code>Array</code>
+Array mapping for note highlighting
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Array</code> - - The mapped array  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| array | <code>Array</code> | The array that should be mapped for highlighting |
 
 <a name="module_MusicJsonToolbox.base12Pitch"></a>
 

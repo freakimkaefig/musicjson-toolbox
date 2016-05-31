@@ -107,6 +107,24 @@
     },
 
     /**
+     * Get array of base 12 pitch values from array of notes
+     * @param {Array} notes - The array of notes
+     * @param  {number} keyAdjust - Adjusting of key by semitones
+     * @returns {Array} - The array of base 12 pitch values
+     */
+    pitchValues: function(notes, keyAdjust) {
+      return notes.map(function(item) {
+        return this.base12Pitch(
+          item.pitch.step,
+          keyAdjust,
+          item.pitch.octave,
+          item.pitch.alter,
+          false
+        );
+      }.bind(this));
+    },
+
+    /**
      * Returns an array of intervals from an array of notes
      *
      * Example:
@@ -127,7 +145,7 @@
       for (var i = 1; i < notes.length; i++) {
         var pitchDiff = 0;
         if (notes[i].rest) {
-          // TODO: maybe weight rests different than zero
+          // rest is weighted zero
         } else {
           pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
         }
@@ -203,6 +221,21 @@
       }
 
       return nGramsArray;
+    },
+
+    /**
+     * Array mapping for note highlighting
+     *
+     * @param {Array} array - The array that should be mapped for highlighting
+     * @returns {Array} - The mapped array
+     */
+    highlightMapping: function(array) {
+      return array.map(function(item) {
+        return {
+          measure: item.measureNumber,
+          note: item.noteNumber
+        };
+      });
     },
 
     /**
@@ -339,7 +372,7 @@
           if (compare(i, j)) {
             matrix[i][j] = matrix[i-1][j-1];
           } else {
-            matrix[i][j] = Math.min( // TODO: reconsider weighting
+            matrix[i][j] = Math.min(
               matrix[i-1][j-1] + weight(i, j, editOperations['SUBSTITUTION']), // substitution
               Math.min(
                 matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
@@ -461,18 +494,7 @@
     distancePitch: function(object, search) {
       var keyAdjust = object.attributes.key.fifths;
       var notes = this.notes(object, false);
-      return this.arrayEditDistance(
-        notes.map(function(item) {
-          return this.base12Pitch(
-            item.pitch.step,
-            keyAdjust,
-            item.pitch.octave,
-            item.pitch.alter,
-            false
-          );
-        }.bind(this)),
-        search
-      );
+      return this.arrayEditDistance(this.pitchValues(notes, keyAdjust), search);
     },
 
     /**
@@ -526,12 +548,7 @@
             }).join(''),
             search
           ),
-          highlight: ngrams[i].map(function(item) {
-            return {
-              measure: item.measureNumber,
-              note: item.noteNumber
-            };
-          })
+          highlight: this.highlightMapping(ngrams[i])
         });
       }
 
@@ -555,24 +572,8 @@
 
       for (var i = 0; i < ngrams.length; i++) {
         costs.push({
-          cost: this.arrayEditDistance(
-            ngrams[i].map(function(item) {
-              return this.base12Pitch(
-                item.pitch.step,
-                keyAdjust,
-                item.pitch.octave,
-                item.pitch.alter,
-                false
-              );
-            }.bind(this)),
-            search
-          ),
-          highlight: ngrams[i].map(function(item) {
-            return {
-              measure: item.measureNumber,
-              note: item.noteNumber
-            };
-          })
+          cost: this.arrayEditDistance(this.pitchValues(ngrams[i], keyAdjust), search),
+          highlight: this.highlightMapping(ngrams[i])
         });
       }
 
@@ -609,12 +610,7 @@
             }),
             search
           ),
-          highlight: ngrams[i].map(function(item) {
-            return {
-              measure: item.measureNumber,
-              note: item.noteNumber
-            };
-          })
+          highlight: this.highlightMapping(ngrams[i])
         });
       }
 
