@@ -31,17 +31,17 @@
    */
   var intervalFactor = [
     0.5,  // 0  =   unison          (perfect consonant)
-    1,  // 1  =   minor second    (dissonant)
-    1,  // 2  =   major second    (dissonant)
-    0.75,  // 3  =   minor third     (imperfect consonant)
-    0.75,  // 4  =   major third     (imperfect consonant)
+    1,    // 1  =   minor second    (dissonant)
+    1,    // 2  =   major second    (dissonant)
+    0.75, // 3  =   minor third     (imperfect consonant)
+    0.75, // 4  =   major third     (imperfect consonant)
     0.5,  // 5  =   perfect fourth  (perfect consonant)
-    1,  // 6  =   minor fifth     (dissonant)
-    0.5,  // 7  =   perfect fourth  (perfect consonant)
-    0.75,  // 8  =   minor sixth     (imperfect consonant)
-    0.75,  // 9  =   major sixth     (imperfect consonant)
-    1,  // 10 =   minor seventh   (dissonant)
-    1,  // 11 =   major seventh   (dissonant)
+    1,    // 6  =   minor fifth     (dissonant)
+    0.5,  // 7  =   perfect fifth   (perfect consonant)
+    0.75, // 8  =   minor sixth     (imperfect consonant)
+    0.75, // 9  =   major sixth     (imperfect consonant)
+    1,    // 10 =   minor seventh   (dissonant)
+    1,    // 11 =   major seventh   (dissonant)
     0.5   // 12 =   octave          (perfect consonant)
   ];
 
@@ -187,7 +187,7 @@
     /**
      * Generates array of ngrams in specified length (based on {@link https://gist.github.com/eranbetzalel/9f16b1216931e20775ad}).
      *
-     * @param {Array} array - An array of notes (returned by function "notes")
+     * @param {Array} array - An array of notes (returned by function 'notes')
      * @param {number} length - The length of n
      * @returns {Array} An Array of ngrams with the given length
      */
@@ -258,7 +258,7 @@
      * Calculates the base 12 represented pitch
      *
      * @param {string} step - The step (c, d, e, f, g, a, b)
-     * @param {number} keyAdjust - The position in circle of fifths of the searched notes
+     * @param {number} keyAdjust - Key position in circle of fifths; if set, the pitch gets transposed to C major
      * @param {number} octave - The octave
      * @param {number} alter - The value for alter (either from accidental or key)
      * @param {boolean} withOctave - When set, the octave is taken into account, otherwise function return relative value (from 1 to 12)
@@ -269,14 +269,39 @@
       if (alter) {
         ret += alter;
       }
-      ret += keyAdjust;
+
+      if (keyAdjust < 0) {
+        ret -= Math.round(Math.abs(keyAdjust) / 2) * 12;
+        while (keyAdjust < 0) {
+          ret += 7;
+          keyAdjust++;
+        }
+      } else {
+        ret += Math.round(Math.abs(keyAdjust) / 2) * 12;
+        while (keyAdjust > 0) {
+          ret -= 7;
+          keyAdjust--;
+        }
+      }
+
+      // base12 "0" = "12"
       if (ret === 0) {
         ret = 12;
         octave--;
       }
+
       if (withOctave) {
         ret += (octave * 12);
+      } else {
+        // reset to relative base12 value
+        while (ret > 12) {
+          ret -= 12;
+        }
+        while (ret < 0) {
+          ret += 12;
+        }
       }
+
 
 
       return ret;
@@ -350,7 +375,7 @@
      * Edit-Distance implmentation from {@link https://gist.github.com/andrei-m/982927}
      *
      * Copyright (c) 2011 Andrei Mackenzie
-     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
      * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
      * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      *

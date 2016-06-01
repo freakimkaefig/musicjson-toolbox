@@ -34,7 +34,7 @@ describe('MusicJsonToolbox Helper Functions', function() {
           noteNumber: 1
         }
       ], 1);
-      expect(output).to.deep.equal([2, 4]);
+      expect(output).to.deep.equal([6, 8]);
     });
   });
 
@@ -99,12 +99,15 @@ describe('MusicJsonToolbox Helper Functions', function() {
       var output;
 
       output = MusicJsonToolbox.base12Pitch('C', -1, 4, 0, true);
-      expect(output).to.equal(48);
+      expect(output).to.equal(44);
 
       output = MusicJsonToolbox.base12Pitch('D', 1, 4, 1, true);
-      expect(output).to.equal(53);
+      expect(output).to.equal(57);
 
       output = MusicJsonToolbox.base12Pitch('E', 0, 3, 0, false);
+      expect(output).to.equal(5);
+
+      output = MusicJsonToolbox.base12Pitch('B', 1, 4, 0, false);
       expect(output).to.equal(5);
     });
   });

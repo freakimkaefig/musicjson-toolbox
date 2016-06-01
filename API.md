@@ -79,7 +79,7 @@ Generates array of ngrams in specified length (based on [https://gist.github.com
 
 | Param | Type | Description |
 | --- | --- | --- |
-| array | <code>Array</code> | An array of notes (returned by function "notes") |
+| array | <code>Array</code> | An array of notes (returned by function 'notes') |
 | length | <code>number</code> | The length of n |
 
 <a name="module_MusicJsonToolbox.pitchValues"></a>
@@ -128,7 +128,7 @@ Calculates the base 12 represented pitch
 | Param | Type | Description |
 | --- | --- | --- |
 | step | <code>string</code> | The step (c, d, e, f, g, a, b) |
-| keyAdjust | <code>number</code> | The position in circle of fifths of the searched notes |
+| keyAdjust | <code>number</code> | Key position in circle of fifths; if set, the pitch gets transposed to C major |
 | octave | <code>number</code> | The octave |
 | alter | <code>number</code> | The value for alter (either from accidental or key) |
 | withOctave | <code>boolean</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
@@ -179,7 +179,7 @@ Calculates weighting value for edit-distance substitutionCalculation is based o
 <a name="module_MusicJsonToolbox.editDistance"></a>
 
 ### MusicJsonToolbox.editDistance(a, b, compare, weight) ⇒ <code>number</code>
-Edit-Distance implmentation from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Edit-Distance implmentation from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The calculated edit distance  
