@@ -139,14 +139,15 @@
     {
       "pitch": {
         "step": "C",
-        "octave": 5,
-        "alter": 0
+        "octave": 4,
+        "alter": 1,
+        "accidental": "sharp"
       },
-      "rest": true,
-      "duration": 2,
-      "type": "eighth",
-      "measureNumber": 0,
-      "noteNumber": 5
+      "rest": false,
+      "duration": 4,
+      "type": "quarter",
+      "measureNumber": 1,
+      "noteNumber": 0
     }
   ],
   [
@@ -173,57 +174,6 @@
       "type": "eighth",
       "measureNumber": 0,
       "noteNumber": 4
-    },
-    {
-      "pitch": {
-        "step": "C",
-        "octave": 5,
-        "alter": 0
-      },
-      "rest": true,
-      "duration": 2,
-      "type": "eighth",
-      "measureNumber": 0,
-      "noteNumber": 5
-    },
-    {
-      "pitch": {
-        "step": "C",
-        "octave": 4,
-        "alter": 1,
-        "accidental": "sharp"
-      },
-      "rest": false,
-      "duration": 4,
-      "type": "quarter",
-      "measureNumber": 1,
-      "noteNumber": 0
-    }
-  ],
-  [
-    {
-      "pitch": {
-        "step": "G",
-        "octave": 4,
-        "alter": 0
-      },
-      "rest": false,
-      "duration": 2,
-      "type": "eighth",
-      "measureNumber": 0,
-      "noteNumber": 4
-    },
-    {
-      "pitch": {
-        "step": "C",
-        "octave": 5,
-        "alter": 0
-      },
-      "rest": true,
-      "duration": 2,
-      "type": "eighth",
-      "measureNumber": 0,
-      "noteNumber": 5
     },
     {
       "pitch": {
@@ -255,15 +205,15 @@
   [
     {
       "pitch": {
-        "step": "C",
-        "octave": 5,
+        "step": "G",
+        "octave": 4,
         "alter": 0
       },
-      "rest": true,
+      "rest": false,
       "duration": 2,
       "type": "eighth",
       "measureNumber": 0,
-      "noteNumber": 5
+      "noteNumber": 4
     },
     {
       "pitch": {

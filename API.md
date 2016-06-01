@@ -34,7 +34,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 <a name="module_MusicJsonToolbox.notes"></a>
 
 ### MusicJsonToolbox.notes(obj, repeat) ⇒ <code>Array</code>
-Returns an array of all notes.Example:[ {pitch: {step, octave, alter, accidental}, rest: false, duration, type}, { ... }, ... ]
+Returns an array of all notes.Removes rests.Example:[ {pitch: {step, octave, alter, accidental}, rest: false, duration, type}, { ... }, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>Array</code> - An array containing all notes of the given object  

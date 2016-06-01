@@ -66,6 +66,7 @@
 
     /**
      * Returns an array of all notes.
+     * Removes rests.
      *
      * Example:
      * [ {pitch: {step, octave, alter, accidental}, rest: false, duration, type}, { ... }, ... ]
@@ -103,6 +104,12 @@
         }
       }
 
+      for (var k = 0; k < tempNotes.length; k++) {
+        if (tempNotes[k].rest) {
+          tempNotes.splice(k, 1);
+        }
+      }
+
       return tempNotes;
     },
 
@@ -126,12 +133,7 @@
       });
 
       for (var i = 1; i < notes.length; i++) {
-        var pitchDiff = 0;
-        if (notes[i].rest) {
-          // set rest to zero
-        } else {
-          pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
-        }
+        var pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
         var tempNote = {
           value: pitchDiff,
           duration: this.durationDifference(notes[i-1].duration, notes[i].duration),
@@ -161,19 +163,16 @@
 
       for (var i = 1; i < notes.length; i++) {
         var parson;
-        if (notes[i].rest) {
+        var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
+        /* istanbul ignore else  */
+        if (pitchDiff === 0) {
           parson = 'r';
-        } else {
-          var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
-          /* istanbul ignore else  */
-          if (pitchDiff === 0) {
-            parson = 'r';
-          } else if (pitchDiff > 0) {
-            parson = 'u';
-          } else if (pitchDiff < 0) {
-            parson = 'd';
-          }
+        } else if (pitchDiff > 0) {
+          parson = 'u';
+        } else if (pitchDiff < 0) {
+          parson = 'd';
         }
+
         tempParsons.push({
           value: parson,
           noteNumber: notes[i].noteNumber,
