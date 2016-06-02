@@ -4,10 +4,10 @@
   "description": "A toolbox for comparing musicjson objects",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/_mocha -R spec",
-    "lint": "node ./node_modules/eslint/bin/eslint.js ./**/*.js",
-    "coverage": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec",
-    "docs": "node ./node_modules/jsdoc-to-markdown/bin/cli.js index.js > API.md"
+    "test": "./node_modules/.bin/mocha -R spec",
+    "lint": "./node_modules/.bin/eslint ./**/*.js",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
+    "docs": "./node_modules/.bin/jsdoc2md index.js > API.md"
   },
   "repository": {
     "type": "git",
