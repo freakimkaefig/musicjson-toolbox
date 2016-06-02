@@ -22,6 +22,19 @@
     'B': 12
   };
 
+  var abcStep = [
+    // 'B,,,,,',
+    // 'C,,,,', '^C,,,,', 'D,,,,', '^D,,,,', 'E,,,,', 'F,,,,', '^F,,,,', 'G,,,,', '^G,,,,', 'A,,,,', '^A,,,,', 'B,,,,',
+    'C,,,', '^C,,,', 'D,,,', '^D,,,', 'E,,,', 'F,,,', '^F,,,', 'G,,,', '^G,,,', 'A,,,', '^A,,,', 'B,,,', // 1
+    'C,,', '^C,,', 'D,,', '^D,,', 'E,,', 'F,,', '^F,,', 'G,,', '^G,,', 'A,,', '^A,,', 'B,,', // 2
+    'C,', '^C,', 'D,', '^D,', 'E,', 'F,', '^F,', 'G,', '^G,', 'A,', '^A,', 'B,', // 3
+    'C', '^C', 'D', '^D', 'E', 'F', '^F', 'G', '^G', 'A', '^A', 'B', // 4
+    'c', '^c', 'd', '^d', 'e', 'f', '^f', 'g', '^g', 'a', '^a', 'b', // 5
+    'c\'', '^c\'', 'd\'', '^d\'', 'e\'', 'f\'', '^f\'', 'g\'', '^g\'', 'a\'', '^a\'', 'b\'', // 6
+    'c\'\'', '^c\'\'', 'd\'\'', '^d\'\'', 'e\'\'', 'f\'\'', '^f\'\'', 'g\'\'', '^g\'\'', 'a\'\'', '^a\'\'', 'b\'\'', // 7
+    'c\'\'\'', '^c\'\'\'', 'd\'\'\'', '^d\'\'\'', 'e\'\'\'', 'f\'\'\'', '^f\'\'\'', 'g\'\'\'', '^g\'\'\'', 'a\'\'\'', '^a\'\'\'', 'b\'\'\'' // 8
+  ];
+
   /**
    * Cost weighting factors for consonant/dissonant intervals
    *
@@ -283,7 +296,7 @@
         }
       }
 
-      // base12 "0" = "12"
+      // base12 '0' = '12'
       if (ret === 0) {
         ret = 12;
         octave--;
@@ -304,6 +317,16 @@
 
 
       return ret;
+    },
+
+    /**
+     * Returns abc note from interval value
+     * @param {number} interval - The interval value
+     * @param {number} base - The base 12 pitch the interval should be added
+     * @returns {string} - The abc note
+     */
+    interval2AbcStep: function(interval, base) {
+      return abcStep[base + interval - 13];
     },
 
     /**
@@ -376,7 +399,7 @@
      * Copyright (c) 2011 Andrei Mackenzie
      * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
      * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+     * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      *
      * @param {string} a - The first string (document)
      * @param {string} b - The second string (query)

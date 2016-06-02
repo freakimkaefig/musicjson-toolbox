@@ -13,6 +13,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.intervalDurationValues(intervals)](#module_MusicJsonToolbox.intervalDurationValues) ⇒ <code>Array</code>
     * [.highlightMapping(array)](#module_MusicJsonToolbox.highlightMapping) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
+    * [.interval2AbcStep(interval, base)](#module_MusicJsonToolbox.interval2AbcStep) ⇒ <code>string</code>
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
     * [.durationDifference(duration1, duration2, absolute)](#module_MusicJsonToolbox.durationDifference) ⇒ <code>number</code>
     * [.intervalWeight(a, b)](#module_MusicJsonToolbox.intervalWeight) ⇒ <code>number</code>
@@ -133,6 +134,19 @@ Calculates the base 12 represented pitch
 | alter | <code>number</code> | The value for alter (either from accidental or key) |
 | withOctave | <code>boolean</code> | When set, the octave is taken into account, otherwise function return relative value (from 1 to 12) |
 
+<a name="module_MusicJsonToolbox.interval2AbcStep"></a>
+
+### MusicJsonToolbox.interval2AbcStep(interval, base) ⇒ <code>string</code>
+Returns abc note from interval value
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>string</code> - - The abc note  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| interval | <code>number</code> | The interval value |
+| base | <code>number</code> | The base 12 pitch the interval should be added |
+
 <a name="module_MusicJsonToolbox.pitchDifference"></a>
 
 ### MusicJsonToolbox.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute) ⇒ <code>number</code>
@@ -179,7 +193,7 @@ Calculates weighting value for edit-distance substitutionCalculation is based o
 <a name="module_MusicJsonToolbox.editDistance"></a>
 
 ### MusicJsonToolbox.editDistance(a, b, compare, weight) ⇒ <code>number</code>
-Edit-Distance implmentation from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Edit-Distance implmentation from [https://gist.github.com/andrei-m/982927](https://gist.github.com/andrei-m/982927)Copyright (c) 2011 Andrei MackenziePermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The calculated edit distance  

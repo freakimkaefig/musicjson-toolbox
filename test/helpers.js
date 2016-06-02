@@ -112,6 +112,37 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
+  describe('.interval2AbcStep', function() {
+    it('converts interval to abc note string', function() {
+      var output;
+
+      output = MusicJsonToolbox.interval2AbcStep(0, 49);
+      expect(output).to.equal('C');
+
+      output = MusicJsonToolbox.interval2AbcStep(1, 49);
+      expect(output).to.equal('^C');
+      output = MusicJsonToolbox.interval2AbcStep(2, 49);
+      expect(output).to.equal('D');
+      output = MusicJsonToolbox.interval2AbcStep(3, 49);
+      expect(output).to.equal('^D');
+      output = MusicJsonToolbox.interval2AbcStep(4, 49);
+      expect(output).to.equal('E');
+      output = MusicJsonToolbox.interval2AbcStep(5, 49);
+      expect(output).to.equal('F');
+
+      output = MusicJsonToolbox.interval2AbcStep(-1, 49);
+      expect(output).to.equal('B,');
+      output = MusicJsonToolbox.interval2AbcStep(-2, 49);
+      expect(output).to.equal('^A,');
+      output = MusicJsonToolbox.interval2AbcStep(-3, 49);
+      expect(output).to.equal('A,');
+      output = MusicJsonToolbox.interval2AbcStep(-4, 49);
+      expect(output).to.equal('^G,');
+      output = MusicJsonToolbox.interval2AbcStep(-5, 49);
+      expect(output).to.equal('G,');
+    });
+  });
+
   describe('.pitchDifference', function() {
     it('calculates difference between pitch objects', function() {
       var output;
