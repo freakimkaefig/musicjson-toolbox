@@ -118,7 +118,7 @@
       }
 
       for (var k = 0; k < tempNotes.length; k++) {
-        if (tempNotes[k].rest) {
+        if (tempNotes[k].rest === true || tempNotes[k].rest === 'true') {
           tempNotes.splice(k, 1);
         }
       }
