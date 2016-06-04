@@ -42,21 +42,21 @@
    * @type {Array}
    * @default
    */
-  var intervalFactor = [
-    0.5,  // 0  =   unison          (perfect consonant)
-    1,    // 1  =   minor second    (dissonant)
-    1,    // 2  =   major second    (dissonant)
-    0.75, // 3  =   minor third     (imperfect consonant)
-    0.75, // 4  =   major third     (imperfect consonant)
-    0.5,  // 5  =   perfect fourth  (perfect consonant)
-    1,    // 6  =   minor fifth     (dissonant)
-    0.5,  // 7  =   perfect fifth   (perfect consonant)
-    0.75, // 8  =   minor sixth     (imperfect consonant)
-    0.75, // 9  =   major sixth     (imperfect consonant)
-    1,    // 10 =   minor seventh   (dissonant)
-    1,    // 11 =   major seventh   (dissonant)
-    0.5   // 12 =   octave          (perfect consonant)
-  ];
+  // var intervalFactor = [
+  //   0.5,  // 0  =   unison          (perfect consonant)
+  //   1,    // 1  =   minor second    (dissonant)
+  //   1,    // 2  =   major second    (dissonant)
+  //   0.75, // 3  =   minor third     (imperfect consonant)
+  //   0.75, // 4  =   major third     (imperfect consonant)
+  //   0.5,  // 5  =   perfect fourth  (perfect consonant)
+  //   1,    // 6  =   minor fifth     (dissonant)
+  //   0.5,  // 7  =   perfect fifth   (perfect consonant)
+  //   0.75, // 8  =   minor sixth     (imperfect consonant)
+  //   0.75, // 9  =   major sixth     (imperfect consonant)
+  //   1,    // 10 =   minor seventh   (dissonant)
+  //   1,    // 11 =   major seventh   (dissonant)
+  //   0.5   // 12 =   octave          (perfect consonant)
+  // ];
 
   /**
    * edit distance operation types
@@ -68,7 +68,9 @@
   var editOperations = {
     'SUBSTITUTION': 'SUBSTITUTION',
     'INSERTION': 'INSERTION',
-    'DELETION': 'DELETION'
+    'DELETION': 'DELETION',
+    'FRAGMENTATION': 'FRAGMENTATION',
+    'CONSOLIDATION': 'CONSOLIDATION'
   };
 
   /**
@@ -222,7 +224,7 @@
     /**
      * Get array of base 12 pitch values from array of notes
      * @param {Array} notes - The array of notes
-     * @param  {number} keyAdjust - Adjusting of key by semitones
+     * @param  {number} keyAdjust - Adjusting of key by circle of fifths
      * @returns {Array} - The array of base 12 pitch values
      */
     pitchValues: function(notes, keyAdjust) {
@@ -239,16 +241,25 @@
 
     /**
      *
-     * @param {Array} intervals - Array of intervals (e.g. returned by  MusicJsonToolbox.intervals)
-     * @returns {Array} - The correctly mapped array with intervals and duration values
+     * @param {Array} notes - Array of notes (e.g. returned by  MusicJsonToolbox.notes)
+     * @param {number} keyAdjust - Adjusting of key by circle of fifths
+     * @param {number} divisions - The divisions of the document
+     * @param {number} beatType - The documents beat type
+     * @returns {Array} - The correctly mapped array with pitch and duration values
      */
-    intervalDurationValues: function(intervals) {
-      return intervals.map(function(item) {
+    pitchDurationValues: function(notes, keyAdjust, divisions, beatType) {
+      return notes.map(function(item) {
         return {
-          value: item.value,
-          duration: item.duration
+          value: this.base12Pitch(
+            item.pitch.step,
+            keyAdjust,
+            item.pitch.octave,
+            item.pitch.alter,
+            true
+          ),
+          duration: item.duration / divisions / beatType
         };
-      });
+      }.bind(this));
     },
 
     /**
@@ -377,23 +388,6 @@
     },
 
     /**
-     * Calculates weighting value for edit-distance substitution
-     * Calculation is based on consonant or dissonant values
-     *
-     * @param {number} a - The first interval
-     * @param {number} b - The second interval
-     * @returns {number} Consonant/Dissonant based weighting value
-     */
-    intervalWeight: function(a, b) {
-      var x = Math.abs(b - a);
-      while (x > 12) {
-        x -= 12;
-      }
-
-      return intervalFactor[x];
-    },
-
-    /**
      * Edit-Distance implmentation from {@link https://gist.github.com/andrei-m/982927}
      *
      * Copyright (c) 2011 Andrei Mackenzie
@@ -437,10 +431,10 @@
           } else {
             matrix[i][j] = Math.min(
               matrix[i-1][j-1] + weight(i, j, editOperations['SUBSTITUTION']), // substitution
-              Math.min(
-                matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
-                matrix[i-1][j] + weight(i, j, editOperations['DELETION'])  // deletion
-              )
+              matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
+              matrix[i-1][j] + weight(i, j, editOperations['DELETION'])  // deletion
+              // ??? //fragmentation
+              // ??? // consolidation
             );
           }
         }
@@ -486,24 +480,6 @@
     },
 
     /**
-     * Calculate edit distance for arrays of interval and duration values
-     *
-     * @param {Array} a - The first interval array (document)
-     * @param {Array} b - The second interval array (query)
-     * @returns {number} The calculated edit distance
-     */
-    intervalDurationsEditDistance: function(a, b) {
-      return this.editDistance(a, b,
-        function(i, j) {
-          return (b[i-1].value === a[j-1].value) && (b[i-1].duration === a[j-1].duration);
-        },
-        function() {
-          return 1;
-        }
-      );
-    },
-
-    /**
      * Calculate weighted edit distance for arrays
      * The function implements improved weighting for interval differences
      * based on consonance / dissonance
@@ -512,7 +488,7 @@
      * @param {Array} b - The second interval array (query)
      * @returns {number} The calculated edit distance
      */
-    arrayWeightedEditDistance: function(a, b) {
+    weightedEditDistance: function(a, b) {
       return this.editDistance(a, b,
         function(i, j) {
           return b[i-1] === a[j-1];
@@ -520,11 +496,11 @@
         function(i, j, operation) {
           switch (operation) {
           case editOperations['SUBSTITUTION']:
-            return this.intervalWeight(a[j-1], b[i-1]);
+            return Math.abs(a[j-1].value - b[i-1].value) + Math.abs((a[j-1].duration * 16) - (b[i-1].duration * 16));
           case editOperations['INSERTION']:
-            return this.intervalWeight(a[j-1], 0);
+            return a[j-1].duration * 16;
           case editOperations['DELETION']:
-            return this.intervalWeight(0, b[i-1]);
+            return b[i-1].duration * 16;
           }
         }.bind(this)
       );
@@ -573,7 +549,7 @@
      * @returns {number} The edit distance between intervals
      */
     distancePitch: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
+      var keyAdjust = parseInt(object.attributes.key.fifths);
       var notes = this.notes(object, false);
       return this.arrayEditDistance(this.pitchValues(notes, keyAdjust), search);
     },
@@ -587,7 +563,7 @@
      * @returns {number} The edit distance between intervals
      */
     distanceIntervals: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
+      var keyAdjust = parseInt(object.attributes.key.fifths);
       var intervals = this.intervals(this.notes(object, false), keyAdjust);
       return this.arrayEditDistance(
         intervals.map(function(item) {
@@ -598,17 +574,23 @@
     },
 
     /**
-     * Returns minimum edit distance between searched notes and the given document.
-     * Calculation based on intervals and duration values
+     * Returns minimum edit-distance between searched notes and the given document.
+     * Calculation is based on pitch and duration values.
      *
      * @param {object} object - The musicjson document
-     * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
-     * @returns {number} The edit distance between intervals
+     * @param {Array} search - An array of pitch and duration values (e.g. [{value: 45, duration: 0.25}, {value: 52, duration: 0.25}, {value: 54, duration: 0.125}]
+     * @returns {number} The edit distance between pitch & duration values
      */
-    distanceIntervalsDurations: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
-      var intervals = this.intervals(this.notes(object, false), keyAdjust);
-      return this.intervalDurationsEditDistance(this.intervalDurationValues(intervals), search);
+    distancePitchDuration: function(object, search) {
+      var keyAdjust = parseInt(object.attributes.key.fifths);
+      var notes = this.notes(object, false);
+      return this.weightedEditDistance(
+        this.pitchDurationValues(
+          notes,
+          keyAdjust,
+          parseInt(object.attributes.divisions),
+          parseInt(object.attributes.time['beat-type'])
+        ), search);
     },
 
     /**
@@ -657,7 +639,7 @@
      * @returns {object} The first finding with minimum cost
      */
     distancePitchNgrams: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
+      var keyAdjust = parseInt(object.attributes.key.fifths);
       var ngrams = this.ngrams(this.notes(object, false), search.length);
       var distances = [];
 
@@ -682,7 +664,7 @@
      * @returns {object} The first finding with minimum cost
      */
     distanceIntervalsNgrams: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
+      var keyAdjust = parseInt(object.attributes.key.fifths);
       var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
       var distances = [];
 
@@ -712,28 +694,36 @@
 
     /**
      * Returns the minimum distance between the searched notes and the corresponding ngrams.
-     * Notes are represented as intervals and duration values.
+     * Notes are represented as pitch and duration values.
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
      * @returns {object} The first finding with minimum cost
      */
-    distanceIntervalsDurationsNgrams: function(object, search) {
-      var keyAdjust = object.attributes.key.fifths;
-      var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
+    distancePitchDurationNgrams: function(object, search) {
+      var divisions = parseInt(object.attributes.divisions);
+      var beatType = parseInt(object.attributes.time['beat-type']);
+      var keyAdjust = parseInt(object.attributes.key.fifths);
+      var ngrams = this.ngrams(this.notes(object, false), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        for (var j = 0; j < ngrams[i].length; j++) {
-          if (j === 0) {
-            // Reset first value of ngram
-            ngrams[i][j].value = '*';
-            ngrams[i][j].duration = '*';
-          }
-        }
+        // for (var j = 0; j < ngrams[i].length; j++) {
+        //   if (j === 0) {
+        //     // Reset first value of ngram
+        //     ngrams[i][j].value = '*';
+        //     ngrams[i][j].duration = '*';
+        //   }
+        // }
 
         distances.push({
-          distance: this.intervalDurationsEditDistance(this.intervalDurationValues(ngrams[i]), search),
+          distance: this.weightedEditDistance(
+            this.pitchDurationValues(
+              ngrams[i],
+              keyAdjust,
+              divisions,
+              beatType
+            ), search),
           highlight: this.highlightMapping(ngrams[i])
         });
       }

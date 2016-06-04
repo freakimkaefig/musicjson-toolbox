@@ -12,12 +12,12 @@ describe('MusicJsonToolbox notes generator', function() {
   describe('.notes', function () {
     it('creates array of notes from musicjson', function () {
       var output = MusicJsonToolbox.notes(musicjson, false);
-      expect(JSON.stringify(output)).to.equal(JSON.stringify(notes));
+      expect(output).to.deep.equal(notes);
     });
 
     it('creates array of repeated notes from musicjson', function () {
       var output = MusicJsonToolbox.notes(musicjson, true);
-      expect(JSON.stringify(output)).to.equal(JSON.stringify(notesRepeated));
+      expect(output).to.deep.equal(notesRepeated);
     });
   });
 

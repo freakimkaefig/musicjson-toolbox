@@ -38,32 +38,56 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('.intervalDurationValues', function() {
+  describe('.pitchDurationValues', function() {
     it('correctly maps interval and duration values from array of intervals', function() {
       var output;
-      output = MusicJsonToolbox.intervalDurationValues([
+      output = MusicJsonToolbox.pitchDurationValues([
         {
-          value: '*',
-          duration: '*',
-          noteNumber: 0,
-          measureNumber: 0
+          pitch: {
+            step: 'C',
+            octave: 4,
+            alter: 0
+          },
+          rest: false,
+          duration: 4,
+          type: 'eighth'
         },
         {
-          value: 2,
-          duration: 0,
-          noteNumber: 1,
-          measureNumber: 0
+          pitch: {
+            step: 'D',
+            octave: 4,
+            alter: 0
+          },
+          rest: false,
+          duration: 4,
+          type: 'eighth'
+        },
+        {
+          pitch: {
+            step: 'E',
+            octave: 4,
+            alter: 0
+          },
+          rest: false,
+          duration: 2,
+          type: 'eighth'
+        },
+        {
+          pitch: {
+            step: 'F',
+            octave: 4,
+            alter: 1
+          },
+          rest: false,
+          duration: 2,
+          type: 'eighth'
         }
-      ]);
+      ], 1, 4, 4);
       expect(output).to.deep.equal([
-        {
-          value: '*',
-          duration: '*'
-        },
-        {
-          value: 2,
-          duration: 0
-        }
+        { value: 54, duration: 0.25},
+        { value: 56, duration: 0.25},
+        { value: 58, duration: 0.125},
+        { value: 60, duration: 0.125}
       ]);
     });
   });
@@ -198,51 +222,6 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('.intervalWeight', function() {
-    it('calculates interval weight for edit-distance', function() {
-      var output;
-
-      output = MusicJsonToolbox.intervalWeight(2, 1);
-      expect(output).to.equal(1);
-
-      output = MusicJsonToolbox.intervalWeight(3, 1);
-      expect(output).to.equal(1);
-
-      output = MusicJsonToolbox.intervalWeight(4, 1);
-      expect(output).to.equal(0.75);
-
-      output = MusicJsonToolbox.intervalWeight(5, 1);
-      expect(output).to.equal(0.75);
-
-      output = MusicJsonToolbox.intervalWeight(6, 1);
-      expect(output).to.equal(0.5);
-
-      output = MusicJsonToolbox.intervalWeight(7, 1);
-      expect(output).to.equal(1);
-
-      output = MusicJsonToolbox.intervalWeight(8, 1);
-      expect(output).to.equal(0.5);
-
-      output = MusicJsonToolbox.intervalWeight(9, 1);
-      expect(output).to.equal(0.75);
-
-      output = MusicJsonToolbox.intervalWeight(10, 1);
-      expect(output).to.equal(0.75);
-
-      output = MusicJsonToolbox.intervalWeight(11, 1);
-      expect(output).to.equal(1);
-
-      output = MusicJsonToolbox.intervalWeight(12, 1);
-      expect(output).to.equal(1);
-
-      output = MusicJsonToolbox.intervalWeight(12, 0);
-      expect(output).to.equal(0.5);
-
-      output = MusicJsonToolbox.intervalWeight(12, -2);
-      expect(output).to.equal(1);
-    });
-  });
-
   describe('.stringEditDistance', function() {
     it('calculates edit distance between two strings', function() {
       var output;
@@ -304,30 +283,104 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
-  describe('.arrayWeightedEditDistance', function() {
-    it('calculates weighted edit distance between two pitch arrays', function() {
+  describe('.weightedEditDistance', function() {
+    it('calculates weighted edit distance between two pitch & duration arrays', function() {
       var output;
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([0, 2, -2, 2], []);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ],
+        []);
       expect(output).to.equal(4);
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([], [0, 2, -2, 2]);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [],
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ]);
       expect(output).to.equal(4);
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([0, 2, -2, 2], [0, 2, -2, 2]);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ],
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ]);
       expect(output).to.equal(0);
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([0, 2, -2, 2], [0, 2, -2, 4]);
-      expect(output).to.equal(1);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ],
+        [
+          {value: 49, duration: 0.25},
+          {value: 54, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ]);
+      expect(output).to.equal(3);
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([0, 2, -2, 2], [0, 2, -2, 5]);
-      expect(output).to.equal(0.75);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ],
+        [
+          {value: 49, duration: 0.25},
+          {value: 54, duration: 0.125},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ]);
+      expect(output).to.equal(5);
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([0, 2, -2, 2], [0, 2, -2, 7]);
-      expect(output).to.equal(0.5);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ],
+        [
+          {value: 49, duration: 0.25},
+          {value: 54, duration: 0.125},
+          {value: 53, duration: 0.125},
+          {value: 49, duration: 0.25}
+        ]);
+      expect(output).to.equal(9);
 
-      output = MusicJsonToolbox.arrayWeightedEditDistance([0, 2, -2, 2], [0, 4, -6, 3]);
-      expect(output).to.equal(2.75);
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 49, duration: 0.25},
+          {value: 51, duration: 0.25},
+          {value: 53, duration: 0.125},
+          {value: 54, duration: 0.125}
+        ],
+        [
+          {value: 56, duration: 0.125},
+          {value: 58, duration: 0.125},
+          {value: 60, duration: 0.25},
+          {value: 61, duration: 0.25}
+        ]);
+      expect(output).to.equal(15);
     });
   });
 

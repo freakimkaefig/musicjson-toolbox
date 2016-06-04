@@ -7,11 +7,11 @@ var musicjson = require('./example.json');
 var searchPitch = [1, 6, 1, 6];
 var searchParsons = '*udu';
 var searchIntervals = ['*', 5, -5, 5];
-var searchIntervalsDurations = [
-  {value: '*', duration: '*'},
-  {value: 5, duration: 0},
-  {value: -5, duration: -2},
-  {value: 5, duration: 0}
+var searchPitchDuration = [
+  {value: 49, duration: 0.25},
+  {value: 54, duration: 0.5},
+  {value: 49, duration: 0.125},
+  {value: 54, duration: 0.125}
 ];
 
 describe('MusicJsonToolbox Distance Functions', function() {
@@ -37,10 +37,10 @@ describe('MusicJsonToolbox Distance Functions', function() {
     });
   });
 
-  describe('.distanceIntervalsDurations', function() {
-    it('calculates edit-distance between interval values', function() {
-      var distancePitch = MusicJsonToolbox.distanceIntervalsDurations(musicjson, searchIntervals);
-      expect(distancePitch).to.be.equal(12);
+  describe('.distancePitchDurations', function() {
+    it('calculates weighted edit-distance between pitch & duration values', function() {
+      var distancePitchDuration = MusicJsonToolbox.distancePitchDuration(musicjson, searchPitchDuration);
+      expect(distancePitchDuration).to.be.equal(16);
     });
   });
 
@@ -68,11 +68,11 @@ describe('MusicJsonToolbox Distance Functions', function() {
     });
   });
 
-  describe('.distanceIntervalsDurationsNgrams', function() {
-    it('calculates edit-distance between ngrams of intervals', function() {
-      var distanceIntervalsNgrams = MusicJsonToolbox.distanceIntervalsDurationsNgrams(musicjson, searchIntervalsDurations);
-      var result = require('./distance_intervals_durations_ngrams.json');
-      expect(distanceIntervalsNgrams).to.deep.equal(result);
+  describe('.distancePitchDurationsNgrams', function() {
+    it('calculates weighted edit-distance between pitch & duration values', function() {
+      var distancePitchDurationNgrams = MusicJsonToolbox.distancePitchDurationNgrams(musicjson, searchPitchDuration);
+      var result = require('./distance_pitch_duration_ngrams.json');
+      expect(distancePitchDurationNgrams).to.deep.equal(result);
     });
   });
 
