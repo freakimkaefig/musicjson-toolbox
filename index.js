@@ -356,7 +356,7 @@
         absolute = false;
       }
 
-      var ret = this.base12Pitch(pitch2.step, keyAdjust, pitch2.octave, pitch2.alter, withOctave) - this.base12Pitch(pitch1.step, keyAdjust, pitch1.octave, pitch1.alter, withOctave);
+      var ret = this.base12Pitch(pitch2.step, keyAdjust, parseInt(pitch2.octave), parseInt(pitch2.alter), withOctave) - this.base12Pitch(pitch1.step, keyAdjust, parseInt(pitch1.octave), parseInt(pitch1.alter), withOctave);
       if (absolute) {
         ret = Math.abs(ret);
       }
