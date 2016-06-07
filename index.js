@@ -325,8 +325,6 @@
         }
       }
 
-
-
       return ret;
     },
 
@@ -433,7 +431,7 @@
               matrix[i-1][j-1] + weight(i, j, editOperations['SUBSTITUTION']), // substitution
               matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
               matrix[i-1][j] + weight(i, j, editOperations['DELETION'])  // deletion
-              // ??? //fragmentation
+              // ??? // fragmentation
               // ??? // consolidation
             );
           }
@@ -528,7 +526,7 @@
      *
      * @param {object} object - A musicjson object to search in
      * @param {string} search - A string in parsons code (e.g. '*udu')
-     * @returns {Number} The edit distance between parsons codes
+     * @returns {number} The edit distance between parsons codes
      */
     distanceParsons: function(object, search) {
       var parsons = this.parsons(this.notes(object, false));
@@ -599,7 +597,7 @@
      *
      * @param {object} object - A musicjson object to search in
      * @param {string} search - A string in parsons code (e.g. '*udu')
-     * @returns {object} The first finding with minimum cost
+     * @returns {Array} The cost for each ngram
      */
     distanceParsonsNgrams: function(object, search) {
       var ngrams = this.ngrams(this.parsons(this.notes(object, false)), search.length);
@@ -625,9 +623,7 @@
         });
       }
 
-      return distances/*.sort(function(a, b) {
-        return a.cost - b.cost;
-      }).shift()*/;
+      return distances;
     },
 
     /**
@@ -636,7 +632,7 @@
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
-     * @returns {object} The first finding with minimum cost
+     * @returns {Array} The cost for each ngram
      */
     distancePitchNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
@@ -650,9 +646,7 @@
         });
       }
 
-      return distances/*.sort(function(a, b) {
-        return a.cost - b.cost;
-      }).shift()*/;
+      return distances;
     },
 
     /**
@@ -661,7 +655,7 @@
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
-     * @returns {object} The first finding with minimum cost
+     * @returns {Array} The cost for each ngram
      */
     distanceIntervalsNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
@@ -687,9 +681,7 @@
         });
       }
 
-      return distances/*.sort(function(a, b) {
-        return a.cost - b.cost;
-      })shift()*/;
+      return distances;
     },
 
     /**
@@ -698,7 +690,7 @@
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
-     * @returns {object} The first finding with minimum cost
+     * @returns {Array} The cost for each ngram
      */
     distancePitchDurationNgrams: function(object, search) {
       var divisions = parseInt(object.attributes.divisions);
@@ -728,9 +720,7 @@
         });
       }
 
-      return distances/*.sort(function(a, b) {
-       return a.cost - b.cost;
-       })shift()*/;
+      return distances;
     }
   };
 
