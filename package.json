@@ -20,7 +20,9 @@
   ],
   "author": "Lukas Lamm <info@lukaslamm.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.13.1"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^2.9.0",

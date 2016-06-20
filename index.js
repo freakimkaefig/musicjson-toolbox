@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  var _ = require('lodash');
+
   /**
    * Pitch values for steps in base 12 system
    * C  |    | D |    | E  | F  |    | G |    | A  |    | B
@@ -22,9 +24,44 @@
     'B': 12
   };
 
+  var degreesFromSemitones = {
+    1: 1,
+    3: 2,
+    5: 3,
+    6: 4,
+    8: 5,
+    10: 6,
+    12: 7
+  };
+
+  var deg = {
+    0: 0,
+    1: 0.9,
+    2: 0.2,
+    3: 0.5,
+    4: 0.1,
+    5: 0.35,
+    6: 0.8
+  };
+
+  var ton = {
+    0: 0.6,
+    1: 2.6,
+    2: 2.3,
+    3: 1,
+    4: 1,
+    5: 1.6,
+    6: 1.8,
+    7: 0.8,
+    8: 1.3,
+    9: 1.3,
+    10: 2.2,
+    11: 2.5
+  };
+
+  var globalK = 0.348;
+
   var abcStep = [
-    // 'B,,,,,',
-    // 'C,,,,', '^C,,,,', 'D,,,,', '^D,,,,', 'E,,,,', 'F,,,,', '^F,,,,', 'G,,,,', '^G,,,,', 'A,,,,', '^A,,,,', 'B,,,,',
     'C,,,', '^C,,,', 'D,,,', '^D,,,', 'E,,,', 'F,,,', '^F,,,', 'G,,,', '^G,,,', 'A,,,', '^A,,,', 'B,,,', // 1
     'C,,', '^C,,', 'D,,', '^D,,', 'E,,', 'F,,', '^F,,', 'G,,', '^G,,', 'A,,', '^A,,', 'B,,', // 2
     'C,', '^C,', 'D,', '^D,', 'E,', 'F,', '^F,', 'G,', '^G,', 'A,', '^A,', 'B,', // 3
@@ -34,44 +71,6 @@
     'c\'\'', '^c\'\'', 'd\'\'', '^d\'\'', 'e\'\'', 'f\'\'', '^f\'\'', 'g\'\'', '^g\'\'', 'a\'\'', '^a\'\'', 'b\'\'', // 7
     'c\'\'\'', '^c\'\'\'', 'd\'\'\'', '^d\'\'\'', 'e\'\'\'', 'f\'\'\'', '^f\'\'\'', 'g\'\'\'', '^g\'\'\'', 'a\'\'\'', '^a\'\'\'', 'b\'\'\'' // 8
   ];
-
-  /**
-   * Cost weighting factors for consonant/dissonant intervals
-   *
-   * @constant
-   * @type {Array}
-   * @default
-   */
-  // var intervalFactor = [
-  //   0.5,  // 0  =   unison          (perfect consonant)
-  //   1,    // 1  =   minor second    (dissonant)
-  //   1,    // 2  =   major second    (dissonant)
-  //   0.75, // 3  =   minor third     (imperfect consonant)
-  //   0.75, // 4  =   major third     (imperfect consonant)
-  //   0.5,  // 5  =   perfect fourth  (perfect consonant)
-  //   1,    // 6  =   minor fifth     (dissonant)
-  //   0.5,  // 7  =   perfect fifth   (perfect consonant)
-  //   0.75, // 8  =   minor sixth     (imperfect consonant)
-  //   0.75, // 9  =   major sixth     (imperfect consonant)
-  //   1,    // 10 =   minor seventh   (dissonant)
-  //   1,    // 11 =   major seventh   (dissonant)
-  //   0.5   // 12 =   octave          (perfect consonant)
-  // ];
-
-  /**
-   * edit distance operation types
-   *
-   * @constant
-   * @type {{SUBSTITUTION: string, INSERTION: string, DELETION: string}}
-   * @default
-   */
-  var editOperations = {
-    'SUBSTITUTION': 'SUBSTITUTION',
-    'INSERTION': 'INSERTION',
-    'DELETION': 'DELETION',
-    'FRAGMENTATION': 'FRAGMENTATION',
-    'CONSOLIDATION': 'CONSOLIDATION'
-  };
 
   /**
    * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
@@ -240,6 +239,8 @@
     },
 
     /**
+     * Generates an array of pitch and duration values for the Mongeau & Sankoff version of melodic edit distance
+     * See Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
      *
      * @param {Array} notes - Array of notes (e.g. returned by  MusicJsonToolbox.notes)
      * @param {number} keyAdjust - Adjusting of key by circle of fifths
@@ -255,9 +256,9 @@
             keyAdjust,
             item.pitch.octave,
             item.pitch.alter,
-            true
+            false
           ),
-          duration: item.duration / divisions / beatType
+          duration: (item.duration / divisions / beatType) * 16
         };
       }.bind(this));
     },
@@ -431,8 +432,6 @@
               matrix[i-1][j-1] + weight(i, j, editOperations['SUBSTITUTION']), // substitution
               matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
               matrix[i-1][j] + weight(i, j, editOperations['DELETION'])  // deletion
-              // ??? // fragmentation
-              // ??? // consolidation
             );
           }
         }
@@ -487,21 +486,154 @@
      * @returns {number} The calculated edit distance
      */
     weightedEditDistance: function(a, b) {
-      return this.editDistance(a, b,
-        function(i, j) {
-          return b[i-1] === a[j-1];
-        },
-        function(i, j, operation) {
-          switch (operation) {
-          case editOperations['SUBSTITUTION']:
-            return Math.abs(a[j-1].value - b[i-1].value) + Math.abs((a[j-1].duration * 16) - (b[i-1].duration * 16));
-          case editOperations['INSERTION']:
-            return a[j-1].duration * 16;
-          case editOperations['DELETION']:
-            return b[i-1].duration * 16;
+      var matrix = [];
+
+      // increment along the first column of each row
+      var i;
+      for (i = 0; i <= a.length; i++) {
+        // console.log(i, a[i+1].duration);
+        if (i > 0) {
+          matrix[i] = [parseFloat(matrix[i-1]) + this.weightDeletion(a, i)];
+        } else {
+          matrix[i] = [i];
+        }
+
+      }
+
+      // increment each column in the first row
+      var j;
+      for (j = 0; j <= b.length; j++) {
+        if (j > 0) {
+          matrix[0][j] = parseFloat(matrix[0][j-1]) + this.weightInsertion(b, j);
+        } else {
+          matrix[0][j] = j;
+        }
+      }
+
+      // Fill in the rest of the matrix
+      for (i = 1; i <= a.length; i++) {
+        for (j = 1; j <= b.length; j++) {
+          if (a[i-1].value === b[j-1].value && a[i-1].duration === b[j-1].duration) {
+            // Set weight to zero if note is the same
+            matrix[i][j] = matrix[i-1][j-1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i-1][j-1] + this.weightSubstitution(a, b, i, j), // substitution
+              matrix[i][j-1] + this.weightInsertion(b, j), // insertion
+              matrix[i-1][j] + this.weightDeletion(a, i), // deletion
+              this.weightFragmentation(matrix, a, b, i, j), // fragmentation
+              this.weightConsolidation(matrix, a, b, i, j) // consolidation
+            );
           }
-        }.bind(this)
-      );
+        }
+      }
+
+      for (i = 0; i <= a.length; i++) {
+        console.log(matrix[i].join(' | '));
+      }
+      // console.log(matrix);
+
+      return matrix[a.length][b.length];
+    },
+
+    weightSubstitution: function(a, b, i, j) {
+      return this.weightInterval(a[i-1].value, b[j-1].value) + (globalK * this.weightLenght(a[i-1].duration, b[j-1].duration));
+    },
+
+    weightInsertion: function(b, j) {
+      return (globalK * b[j-1].duration);
+    },
+
+    weightDeletion: function(a, i) {
+      return (globalK * a[i-1].duration);
+    },
+
+    weightFragmentation: function(matrix, a, b, i, j) {
+      var x, k;
+      var maxDurationA = 0;
+      var minDurationB = Math.max(a.length, b.length);
+      for (x = 0; x < a.length; x++) {
+        if (maxDurationA < a[x].duration) {
+          maxDurationA = a[x].duration;
+        }
+      }
+      for (x = 0; x < b.length; x++) {
+        if (minDurationB > b[x].duration) {
+          minDurationB = b[x].duration;
+        }
+      }
+      var f = maxDurationA / minDurationB;
+      var min = Math.max(a.length, b.length);
+      for (x = 2; x <= Math.min(j, f); x++) {
+        k = x;
+        var weight = matrix[i-1][j-k];
+        while (k < Math.min(j, f)) {
+          k++;
+          weight += this.weightInterval(a[i-1].value, b[j-k].value) + (globalK * this.weightLenght(a[i-1].duration, b[j-k].duration));
+        }
+        if (min > weight) {
+          min = weight;
+        }
+      }
+
+      return min;
+    },
+
+    weightConsolidation: function(matrix, a, b, i, j) {
+      var x, k;
+      var maxDurationB = 0;
+      var minDurationA = Math.max(a.length, b.length);
+      for (x = 0; x < b.length; x++) {
+        if (maxDurationB < b[x].duration) {
+          maxDurationB = b[x].duration;
+        }
+      }
+      for (x = 0; x < a.length; x++) {
+        if (minDurationA > a[x].duration) {
+          minDurationA = a[x].duration;
+        }
+      }
+      var c = maxDurationB / minDurationA;
+      var min = Math.max(a.length, b.length);
+      for (x = 2; x <= Math.min(i, c); x++) {
+        k = x;
+        var weight = matrix[i-k][j-1];
+        while (k < Math.min(i, c)) {
+          k++;
+          weight += this.weightInterval(a[i-k].value, b[j-1].value) + (globalK * this.weightLenght(a[i-k].duration, b[j-1].duration));
+        }
+        if (min > weight) {
+          min = weight;
+        }
+      }
+
+      return min;
+    },
+
+    weightInterval: function(a, b) {
+      var base12Inverted = _.invert(base12);
+      var baseA = a;
+      while (baseA > 12) {
+        baseA -= 12;
+      }
+      var baseB = b;
+      while (baseB > 12) {
+        baseB -= 12;
+      }
+
+      if (typeof base12Inverted[baseA] !== 'undefined' && typeof base12Inverted[baseB] !== 'undefined') {
+        // use deg(n(m))
+        var degreeA = degreesFromSemitones[baseA];
+        var degreeB = degreesFromSemitones[baseB];
+        return deg[Math.abs(degreeA - degreeB)];
+      } else {
+        // use ton(m)
+        return ton[Math.abs(baseA - baseB)];
+      }
+    },
+
+    weightLenght: function(a, b) {
+      return Math.abs(a - b);
     },
 
     /**
