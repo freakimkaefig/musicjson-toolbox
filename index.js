@@ -73,6 +73,21 @@
   ];
 
   /**
+   * edit distance operation types
+   *
+   * @constant
+   * @type {{SUBSTITUTION: string, INSERTION: string, DELETION: string}}
+   * @default
+   */
+  var editOperations = {
+    'SUBSTITUTION': 'SUBSTITUTION',
+    'INSERTION': 'INSERTION',
+    'DELETION': 'DELETION',
+    'FRAGMENTATION': 'FRAGMENTATION',
+    'CONSOLIDATION': 'CONSOLIDATION'
+  };
+
+  /**
    * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
    * @exports MusicJsonToolbox
    */
@@ -488,6 +503,18 @@
     weightedEditDistance: function(a, b) {
       var matrix = [];
 
+      console.log('a:', a.map(function(item) {
+        return '(' + item.value + '|' + item.duration + ')';
+      }).join(', '));
+
+      console.log('b:', b.map(function(item) {
+        return '(' + item.value + '|' + item.duration + ')';
+      }).join(', '));
+
+      console.log('');
+      console.log('======================================================================');
+      console.log('');
+
       // increment along the first column of each row
       var i;
       for (i = 0; i <= a.length; i++) {
@@ -513,18 +540,48 @@
       // Fill in the rest of the matrix
       for (i = 1; i <= a.length; i++) {
         for (j = 1; j <= b.length; j++) {
+          console.log('i:', i-1, ', j:', j-1, a[i-1].value + '|' + a[i-1].duration, b[j-1].value + '|' + b[j-1].duration);
           if (a[i-1].value === b[j-1].value && a[i-1].duration === b[j-1].duration) {
             // Set weight to zero if note is the same
+            console.log('weight:', 0);
             matrix[i][j] = matrix[i-1][j-1];
           } else {
-            matrix[i][j] = Math.min(
-              matrix[i-1][j-1] + this.weightSubstitution(a, b, i, j), // substitution
-              matrix[i][j-1] + this.weightInsertion(b, j), // insertion
-              matrix[i-1][j] + this.weightDeletion(a, i), // deletion
-              this.weightFragmentation(matrix, a, b, i, j), // fragmentation
-              this.weightConsolidation(matrix, a, b, i, j) // consolidation
+
+            console.log('substitution:');
+            var substitution = matrix[i-1][j-1] + this.weightSubstitution(a, b, i, j);
+            console.log('    weight:', substitution);
+
+            console.log('insertion:');
+            var insertion = matrix[i][j-1] + this.weightInsertion(b, j);
+            console.log('    weight:', insertion);
+
+            console.log('deletion:');
+            var deletion = matrix[i-1][j] + this.weightDeletion(a, i);
+            console.log('    weight:', deletion);
+
+            console.log('fragmentation:');
+            var fragmentation = this.weightFragmentation(matrix, a, b, i, j);
+            console.log('    weight:', fragmentation);
+
+            console.log('consolidation:');
+            var consolidation = this.weightConsolidation(matrix, a, b, i, j);
+            console.log('    weight:', consolidation);
+
+            var minWeight = Math.min(
+              substitution,
+              insertion,
+              deletion,
+              fragmentation,
+              consolidation
             );
+
+            console.log('weight:', minWeight);
+            matrix[i][j] = minWeight;
           }
+
+          console.log('');
+          console.log('----------------------------------------------------------------------');
+          console.log('');
         }
       }
 
@@ -537,7 +594,15 @@
     },
 
     weightSubstitution: function(a, b, i, j) {
-      return this.weightInterval(a[i-1].value, b[j-1].value) + (globalK * this.weightLenght(a[i-1].duration, b[j-1].duration));
+      var weightInterval = this.weightInterval(a[i-1].value, b[j-1].value);
+      var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
+      var weight = weightInterval + (globalK * weightLength);
+
+      console.log('    W(interval):', this.weightInterval(a[i-1].value, b[j-1].value));
+      console.log('    W(length):', this.weightLength(a[i-1].duration, b[j-1].duration));
+      console.log('    ' + weightInterval + ' + ' + globalK + ' * ' + weightLength + ' = ' + weight);
+
+      return weight;
     },
 
     weightInsertion: function(b, j) {
@@ -551,7 +616,7 @@
     weightFragmentation: function(matrix, a, b, i, j) {
       var x, k;
       var maxDurationA = 0;
-      var minDurationB = Math.max(a.length, b.length);
+      var minDurationB = Infinity;
       for (x = 0; x < a.length; x++) {
         if (maxDurationA < a[x].duration) {
           maxDurationA = a[x].duration;
@@ -563,26 +628,43 @@
         }
       }
       var f = maxDurationA / minDurationB;
-      var min = Math.max(a.length, b.length);
-      for (x = 2; x <= Math.min(j, f); x++) {
+      var min = 2;
+      var max = Math.min(j-1, f);
+      console.log('    F:', f);
+      console.log('    min(j,F):', max);
+      var minWeight = Infinity;
+      for (x = min; x <= max; x++) {
         k = x;
-        var weight = matrix[i-1][j-k];
-        while (k < Math.min(j, f)) {
+
+        console.log('    └- k:', x);
+        console.log('       └- d(i-1,j-k):', matrix[i-1][j-k]);
+
+        var weight = 0;
+        while (k >= min && k <= max) {
+          console.log('       └-> loop:', k);
+          console.log('         notes:', '(' + a[i-1].value + '|' + a[i-1].duration + '), (' + b[j-k].value + '|' + b[j-k].duration + ')');
+
+          var weightInterval = this.weightInterval(a[i-1].value, b[j-k].value);
+          var weightLength = this.weightLength(a[i-1].duration, b[j-k].duration);
+          console.log('         matrix[i-1][j-k]:', matrix[i-1][j-k]);
+          console.log('         w(interval):', weightInterval);
+          console.log('         w(length):', weightLength);
+          weight += matrix[i-1][j-k] + weightInterval + (globalK * weightLength);
           k++;
-          weight += this.weightInterval(a[i-1].value, b[j-k].value) + (globalK * this.weightLenght(a[i-1].duration, b[j-k].duration));
         }
-        if (min > weight) {
-          min = weight;
+        console.log('       └-> weight:', weight);
+        if (minWeight > weight) {
+          minWeight = weight;
         }
       }
 
-      return min;
+      return minWeight;
     },
 
     weightConsolidation: function(matrix, a, b, i, j) {
       var x, k;
       var maxDurationB = 0;
-      var minDurationA = Math.max(a.length, b.length);
+      var minDurationA = Infinity;
       for (x = 0; x < b.length; x++) {
         if (maxDurationB < b[x].duration) {
           maxDurationB = b[x].duration;
@@ -594,20 +676,37 @@
         }
       }
       var c = maxDurationB / minDurationA;
-      var min = Math.max(a.length, b.length);
-      for (x = 2; x <= Math.min(i, c); x++) {
+      var min = 2;
+      var max = Math.min(i-1, c);
+      console.log('    C:', c);
+      console.log('    min(i,C):', max);
+      var minWeight = Infinity;
+      for (x = min; x <= max; x++) {
         k = x;
-        var weight = matrix[i-k][j-1];
-        while (k < Math.min(i, c)) {
+
+        console.log('    └- k:', k);
+        console.log('       └- d(i-k,j-1):', matrix[i-k][j-1]);
+
+        var weight = 0;
+        while (k >= min && k <= max) {
+          console.log('       └-> loop:', k);
+          console.log('         notes:', '(' + a[i-k].value + '|' + a[i-k].duration + '), (' + b[j-1].value + '|' + b[j-1].duration + ')');
+
+          var weightInterval = this.weightInterval(a[i-k].value, b[j-1].value);
+          var weightLength = this.weightLength(a[i-k].duration, b[j-1].duration);
+          console.log('         matrix[i-k][j-1]:', matrix[i-k][j-1]);
+          console.log('         w(interval):', weightInterval);
+          console.log('         w(length):', weightLength);
+          weight += matrix[i-k][j-1] + weightInterval + (globalK * weightLength);
           k++;
-          weight += this.weightInterval(a[i-k].value, b[j-1].value) + (globalK * this.weightLenght(a[i-k].duration, b[j-1].duration));
         }
-        if (min > weight) {
-          min = weight;
+        console.log('       └-> weight:', weight);
+        if (minWeight > weight) {
+          minWeight = weight;
         }
       }
 
-      return min;
+      return minWeight;
     },
 
     weightInterval: function(a, b) {
@@ -632,7 +731,7 @@
       }
     },
 
-    weightLenght: function(a, b) {
+    weightLength: function(a, b) {
       return Math.abs(a - b);
     },
 
