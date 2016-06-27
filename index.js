@@ -24,6 +24,8 @@
     'B': 12
   };
 
+  var base12Inverted = _.invert(base12);
+
   var degreesFromSemitones = {
     1: 1,
     3: 2,
@@ -404,6 +406,22 @@
     },
 
     /**
+     * Returns only unique array values
+     * @param {Array} array - The array with possible duplicate values
+     * @returns {Array} Array with only unique values
+     */
+    uniques: function(array) {
+      var a = [];
+      for (var i=0, l=array.length; i<l; i++) {
+        if (a.indexOf(array[i]) === -1 && array[i] !== '') {
+          a.push(array[i]);
+        }
+      }
+
+      return a;
+    },
+
+    /**
      * Edit-Distance implmentation from {@link https://gist.github.com/andrei-m/982927}
      *
      * Copyright (c) 2011 Andrei Mackenzie
@@ -411,8 +429,8 @@
      * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
      * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      *
-     * @param {string} a - The first string (document)
-     * @param {string} b - The second string (query)
+     * @param {string|Array} a - The first string (document)
+     * @param {string|Array} b - The second string (query)
      * @param {boolean} compare - The compare function which returns boolean value between two items
      * @param {number} weight - The weight function which returns numeric for weighting operations
      * @returns {number} The calculated edit distance
@@ -738,22 +756,6 @@
 
     weightLength: function(a, b) {
       return Math.abs(a - b);
-    },
-
-    /**
-     * Returns only unique array values
-     * @param {Array} array - The array with possible duplicate values
-     * @returns {Array} Array with only unique values
-     */
-    uniques: function(array) {
-      var a = [];
-      for (var i=0, l=array.length; i<l; i++) {
-        if (a.indexOf(array[i]) === -1 && array[i] !== '') {
-          a.push(array[i]);
-        }
-      }
-
-      return a;
     },
 
     /**
