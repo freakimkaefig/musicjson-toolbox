@@ -6,7 +6,7 @@ var MusicJsonToolbox = require('../index');
 var a = [
   { value: 1, rest: false, duration: 4},
   { value: 3, rest: false, duration: 4},
-  { value: 5, rest: false, duration: 2},
+  { value: 5, rest: true, duration: 2},
   { value: 6, rest: false, duration: 2}
 ];
 var b = [
@@ -20,31 +20,98 @@ var b = [
 describe('MusicJsonToolbox Functions for Mongeau-Sankoff-Measure', function() {
 
   describe('.weightInterval', function() {
-    it('calculates weight for intervals', function() {
-      // deg
-      expect(MusicJsonToolbox.weightInterval(1, 1)).to.equal(0);
-      expect(MusicJsonToolbox.weightInterval(1, 3)).to.equal(0.9);
-      expect(MusicJsonToolbox.weightInterval(1, 5)).to.equal(0.2);
-      expect(MusicJsonToolbox.weightInterval(1, 6)).to.equal(0.5);
-      expect(MusicJsonToolbox.weightInterval(1, 8)).to.equal(0.1);
-      expect(MusicJsonToolbox.weightInterval(1, 10)).to.equal(0.35);
-      expect(MusicJsonToolbox.weightInterval(1, 12)).to.equal(0.8);
+    it('calculates interval weight when rest', function() {
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 1, rest: true, duration: 4}
+      )).to.equal(0.1);
+    });
 
-      expect(MusicJsonToolbox.weightInterval(54, 48)).to.equal(0.5);
-      expect(MusicJsonToolbox.weightInterval(48, 54)).to.equal(0.5);
+    it('calculates interval weight for pitch values in the tonic (deg(n))', function() {
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 1, rest: false, duration: 4}
+      )).to.equal(0);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 3, rest: false, duration: 4}
+      )).to.equal(0.9);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 5, rest: false, duration: 4}
+      )).to.equal(0.2);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 6, rest: false, duration: 4}
+      )).to.equal(0.5);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 8, rest: false, duration: 4}
+      )).to.equal(0.1);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 10, rest: false, duration: 4}
+      )).to.equal(0.35);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 1, rest: false, duration: 4},
+        {value: 12, rest: false, duration: 4}
+      )).to.equal(0.8);
 
-      // ton
-      expect(MusicJsonToolbox.weightInterval(2, 2)).to.equal(0.6);
-      expect(MusicJsonToolbox.weightInterval(2, 3)).to.equal(2.6);
-      expect(MusicJsonToolbox.weightInterval(2, 4)).to.equal(2.3);
-      expect(MusicJsonToolbox.weightInterval(2, 5)).to.equal(1);
-      expect(MusicJsonToolbox.weightInterval(2, 6)).to.equal(1);
-      expect(MusicJsonToolbox.weightInterval(2, 7)).to.equal(1.6);
-      expect(MusicJsonToolbox.weightInterval(2, 8)).to.equal(1.8);
-      expect(MusicJsonToolbox.weightInterval(2, 9)).to.equal(0.8);
-      expect(MusicJsonToolbox.weightInterval(2, 10)).to.equal(1.3);
-      expect(MusicJsonToolbox.weightInterval(2, 11)).to.equal(1.3);
-      expect(MusicJsonToolbox.weightInterval(2, 12)).to.equal(2.2);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 54, rest: false, duration: 4},
+        {value: 48, rest: false, duration: 4}
+      )).to.equal(0.5);
+      expect(MusicJsonToolbox.weightInterval(
+        {value: 48, rest: false, duration: 4},
+        {value: 54, rest: false, duration: 4}
+      )).to.equal(0.5);
+    });
+
+    it('calculates interval weight for pitch values not in the tonic (ton(m))', function() {
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 2, rest: false, duration: 4}
+      )).to.equal(0.6);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 3, rest: false, duration: 4}
+      )).to.equal(2.6);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 4, rest: false, duration: 4}
+      )).to.equal(2.3);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 5, rest: false, duration: 4}
+      )).to.equal(1);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 6, rest: false, duration: 4}
+      )).to.equal(1);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 7, rest: false, duration: 4}
+      )).to.equal(1.6);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 8, rest: false, duration: 4}
+      )).to.equal(1.8);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 9, rest: false, duration: 4}
+      )).to.equal(0.8);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 10, rest: false, duration: 4}
+      )).to.equal(1.3);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 11, rest: false, duration: 4}
+      )).to.equal(1.3);
+      expect(MusicJsonToolbox.weightInterval(
+        { value: 2, rest: false, duration: 4},
+        { value: 12, rest: false, duration: 4}
+      )).to.equal(2.2);
     });
   });
 

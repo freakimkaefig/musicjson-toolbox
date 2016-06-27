@@ -102,9 +102,10 @@
      *
      * @param {object} obj - The musicjson object
      * @param {boolean} repeat - If set to true, repeated measures are also repeated in notes output
+     * @param {boolean} rests - If set to true, the resulting notes include rests
      * @returns {Array} An array containing all notes of the given object
      */
-    notes: function(obj, repeat) {
+    notes: function(obj, repeat, rests) {
       var tempNotes = [];
       var repeatStart = -1;
 
@@ -134,7 +135,7 @@
       }
 
       for (var k = 0; k < tempNotes.length; k++) {
-        if (tempNotes[k].rest === true || tempNotes[k].rest === 'true') {
+        if ((tempNotes[k].rest === true || tempNotes[k].rest === 'true') && rests === false) {
           tempNotes.splice(k, 1);
         }
       }
@@ -273,6 +274,7 @@
             item.pitch.alter,
             false
           ),
+          rest: item.rest,
           duration: (item.duration / divisions / beatType) * 16
         };
       }.bind(this));
@@ -541,7 +543,7 @@
       for (i = 1; i <= a.length; i++) {
         for (j = 1; j <= b.length; j++) {
           console.log('i:', i-1, ', j:', j-1, a[i-1].value + '|' + a[i-1].duration, b[j-1].value + '|' + b[j-1].duration);
-          if (a[i-1].value === b[j-1].value && a[i-1].duration === b[j-1].duration) {
+          if (a[i-1].value === b[j-1].value && a[i-1].rest === b[j-1].rest && a[i-1].duration === b[j-1].duration) {
             // Set weight to zero if note is the same
             console.log('weight:', 0);
             matrix[i][j] = matrix[i-1][j-1];
@@ -594,11 +596,11 @@
     },
 
     weightSubstitution: function(a, b, i, j) {
-      var weightInterval = this.weightInterval(a[i-1].value, b[j-1].value);
+      var weightInterval = this.weightInterval(a[i-1], b[j-1]);
       var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
       var weight = weightInterval + (globalK * weightLength);
 
-      console.log('    W(interval):', this.weightInterval(a[i-1].value, b[j-1].value));
+      console.log('    W(interval):', this.weightInterval(a[i-1], b[j-1]));
       console.log('    W(length):', this.weightLength(a[i-1].duration, b[j-1].duration));
       console.log('    ' + weightInterval + ' + ' + globalK + ' * ' + weightLength + ' = ' + weight);
 
@@ -644,7 +646,7 @@
           console.log('       └-> loop:', k);
           console.log('         notes:', '(' + a[i-1].value + '|' + a[i-1].duration + '), (' + b[j-k].value + '|' + b[j-k].duration + ')');
 
-          var weightInterval = this.weightInterval(a[i-1].value, b[j-k].value);
+          var weightInterval = this.weightInterval(a[i-1], b[j-k]);
           var weightLength = this.weightLength(a[i-1].duration, b[j-k].duration);
           console.log('         matrix[i-1][j-k]:', matrix[i-1][j-k]);
           console.log('         w(interval):', weightInterval);
@@ -692,7 +694,7 @@
           console.log('       └-> loop:', k);
           console.log('         notes:', '(' + a[i-k].value + '|' + a[i-k].duration + '), (' + b[j-1].value + '|' + b[j-1].duration + ')');
 
-          var weightInterval = this.weightInterval(a[i-k].value, b[j-1].value);
+          var weightInterval = this.weightInterval(a[i-k], b[j-1]);
           var weightLength = this.weightLength(a[i-k].duration, b[j-1].duration);
           console.log('         matrix[i-k][j-1]:', matrix[i-k][j-1]);
           console.log('         w(interval):', weightInterval);
@@ -710,14 +712,17 @@
     },
 
     weightInterval: function(a, b) {
-      var base12Inverted = _.invert(base12);
-      var baseA = a;
-      while (baseA > 12) {
-        baseA -= 12;
+      if (a.rest || b.rest) {
+        return 0.1;
       }
-      var baseB = b;
-      while (baseB > 12) {
-        baseB -= 12;
+      
+      var baseA = a.value % 12;
+      if (baseA === 0) {
+        baseA = 12;
+      }
+      var baseB = b.value % 12;
+      if (baseB === 0) {
+        baseB = 12;
       }
 
       if (typeof base12Inverted[baseA] !== 'undefined' && typeof base12Inverted[baseB] !== 'undefined') {
@@ -760,7 +765,7 @@
      * @returns {number} The edit distance between parsons codes
      */
     distanceParsons: function(object, search) {
-      var parsons = this.parsons(this.notes(object, false));
+      var parsons = this.parsons(this.notes(object, false, false));
       return this.stringEditDistance(
         parsons.map(function(item) {
           return item.value;
@@ -779,7 +784,7 @@
      */
     distancePitch: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false);
+      var notes = this.notes(object, false, false);
       return this.arrayEditDistance(this.pitchValues(notes, keyAdjust), search);
     },
 
@@ -793,7 +798,7 @@
      */
     distanceIntervals: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var intervals = this.intervals(this.notes(object, false), keyAdjust);
+      var intervals = this.intervals(this.notes(object, false, false), keyAdjust);
       return this.arrayEditDistance(
         intervals.map(function(item) {
           return item.value;
@@ -812,7 +817,7 @@
      */
     distancePitchDuration: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false);
+      var notes = this.notes(object, false, false);
       return this.weightedEditDistance(
         this.pitchDurationValues(
           notes,
@@ -831,7 +836,7 @@
      * @returns {Array} The cost for each ngram
      */
     distanceParsonsNgrams: function(object, search) {
-      var ngrams = this.ngrams(this.parsons(this.notes(object, false)), search.length);
+      var ngrams = this.ngrams(this.parsons(this.notes(object, false, false)), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -867,7 +872,7 @@
      */
     distancePitchNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false), search.length);
+      var ngrams = this.ngrams(this.notes(object, false, false), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -890,7 +895,7 @@
      */
     distanceIntervalsNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
+      var ngrams = this.ngrams(this.intervals(this.notes(object, false, false), keyAdjust), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -927,7 +932,7 @@
       var divisions = parseInt(object.attributes.divisions);
       var beatType = parseInt(object.attributes.time['beat-type']);
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false), search.length);
+      var ngrams = this.ngrams(this.notes(object, false, false), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
