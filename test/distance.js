@@ -37,12 +37,12 @@ describe('MusicJsonToolbox Distance Functions', function() {
     });
   });
 
-  describe('.distancePitchDurations', function() {
-    it('calculates weighted edit-distance between pitch & duration values', function() {
-      var distancePitchDuration = MusicJsonToolbox.distancePitchDuration(musicjson, searchPitchDuration);
-      expect(distancePitchDuration).to.be.equal(16);
-    });
-  });
+  // describe('.distancePitchDurations', function() {
+  //   it('calculates weighted edit-distance between pitch & duration values', function() {
+  //     var distancePitchDuration = MusicJsonToolbox.distancePitchDuration(musicjson, searchPitchDuration);
+  //     expect(distancePitchDuration).to.be.equal(16);
+  //   });
+  // });
 
   describe('.distanceParsonsNgrams', function() {
     it('calculates edit-distance between ngrams of parsons code strings', function() {
@@ -68,12 +68,12 @@ describe('MusicJsonToolbox Distance Functions', function() {
     });
   });
 
-  describe('.distancePitchDurationsNgrams', function() {
-    it('calculates weighted edit-distance between pitch & duration values', function() {
-      var distancePitchDurationNgrams = MusicJsonToolbox.distancePitchDurationNgrams(musicjson, searchPitchDuration);
-      var result = require('./distance_pitch_duration_ngrams.json');
-      expect(distancePitchDurationNgrams).to.deep.equal(result);
-    });
-  });
+  // describe('.distancePitchDurationsNgrams', function() {
+  //   it('calculates weighted edit-distance between pitch & duration values', function() {
+  //     var distancePitchDurationNgrams = MusicJsonToolbox.distancePitchDurationNgrams(musicjson, searchPitchDuration);
+  //     var result = require('./distance_pitch_duration_ngrams.json');
+  //     expect(distancePitchDurationNgrams).to.deep.equal(result);
+  //   });
+  // });
 
 });
