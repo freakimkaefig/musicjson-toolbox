@@ -513,11 +513,12 @@
 
     /**
      * Calculate weighted edit distance for arrays
-     * The function implements improved weighting for interval differences
-     * based on consonance / dissonance
+     * The function implements improved weighting for interval differences based on consonance / dissonance
      *
-     * @param {Array} a - The first interval array (document)
-     * @param {Array} b - The second interval array (query)
+     * Concepts are taken from Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
+     *
+     * @param {Array} a - The first notes array (document), format: output of MusicJsonToolbox.pitchDurationValues
+     * @param {Array} b - The second notes array (query), format: output of MusicJsonToolbox.pitchDurationValues
      * @returns {number} The calculated edit distance
      */
     weightedEditDistance: function(a, b) {
@@ -557,13 +558,43 @@
         }
       }
 
+      // Calculate constant F
+      var maxDurationA = 0;
+      var minDurationB = Infinity;
+      for (i = 0; i < a.length; i++) {
+        if (maxDurationA < a[i].duration) {
+          maxDurationA = a[i].duration;
+        }
+      }
+      for (j = 0; j < b.length; j++) {
+        if (minDurationB > b[j].duration) {
+          minDurationB = b[j].duration;
+        }
+      }
+      var f = maxDurationA / minDurationB;
+
+      // Calculate constant C
+      var maxDurationB = 0;
+      var minDurationA = Infinity;
+      for (j = 0; j < b.length; j++) {
+        if (maxDurationB < b[j].duration) {
+          maxDurationB = b[j].duration;
+        }
+      }
+      for (i = 0; i < a.length; i++) {
+        if (minDurationA > a[i].duration) {
+          minDurationA = a[i].duration;
+        }
+      }
+      var c = maxDurationB / minDurationA;
+
       // Fill in the rest of the matrix
       for (i = 1; i <= a.length; i++) {
         for (j = 1; j <= b.length; j++) {
           console.log('i:', i-1, ', j:', j-1, a[i-1].value + '|' + a[i-1].duration, b[j-1].value + '|' + b[j-1].duration);
           if (a[i-1].value === b[j-1].value && a[i-1].rest === b[j-1].rest && a[i-1].duration === b[j-1].duration) {
             // Set weight to zero if note is the same
-            console.log('weight:', 0);
+            // console.log('weight:', 0);
             matrix[i][j] = matrix[i-1][j-1];
           } else {
 
@@ -580,11 +611,11 @@
             console.log('    weight:', deletion);
 
             console.log('fragmentation:');
-            var fragmentation = this.weightFragmentation(matrix, a, b, i, j);
+            var fragmentation = this.weightFragmentation(matrix, a, b, i, j, f);
             console.log('    weight:', fragmentation);
 
             console.log('consolidation:');
-            var consolidation = this.weightConsolidation(matrix, a, b, i, j);
+            var consolidation = this.weightConsolidation(matrix, a, b, i, j, c);
             console.log('    weight:', consolidation);
 
             var minWeight = Math.min(
@@ -618,9 +649,9 @@
       var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
       var weight = weightInterval + (globalK * weightLength);
 
-      console.log('    W(interval):', this.weightInterval(a[i-1], b[j-1]));
-      console.log('    W(length):', this.weightLength(a[i-1].duration, b[j-1].duration));
-      console.log('    ' + weightInterval + ' + ' + globalK + ' * ' + weightLength + ' = ' + weight);
+      // console.log('    W(interval):', this.weightInterval(a[i-1], b[j-1]));
+      // console.log('    W(length):', this.weightLength(a[i-1].duration, b[j-1].duration));
+      // console.log('    ' + weightInterval + ' + ' + globalK + ' * ' + weightLength + ' = ' + weight);
 
       return weight;
     },
@@ -633,21 +664,8 @@
       return (globalK * a[i-1].duration);
     },
 
-    weightFragmentation: function(matrix, a, b, i, j) {
+    weightFragmentation: function(matrix, a, b, i, j, f) {
       var x, k;
-      var maxDurationA = 0;
-      var minDurationB = Infinity;
-      for (x = 0; x < a.length; x++) {
-        if (maxDurationA < a[x].duration) {
-          maxDurationA = a[x].duration;
-        }
-      }
-      for (x = 0; x < b.length; x++) {
-        if (minDurationB > b[x].duration) {
-          minDurationB = b[x].duration;
-        }
-      }
-      var f = maxDurationA / minDurationB;
       var min = 2;
       var max = Math.min(j-1, f);
       console.log('    F:', f);
@@ -658,21 +676,19 @@
 
         console.log('    └- k:', x);
         console.log('       └- d(i-1,j-k):', matrix[i-1][j-k]);
-
-        var weight = 0;
-        while (k >= min && k <= max) {
+        var weight = matrix[i-1][j-k];
+        while (k > 0) {
           console.log('       └-> loop:', k);
           console.log('         notes:', '(' + a[i-1].value + '|' + a[i-1].duration + '), (' + b[j-k].value + '|' + b[j-k].duration + ')');
-
           var weightInterval = this.weightInterval(a[i-1], b[j-k]);
           var weightLength = this.weightLength(a[i-1].duration, b[j-k].duration);
-          console.log('         matrix[i-1][j-k]:', matrix[i-1][j-k]);
           console.log('         w(interval):', weightInterval);
           console.log('         w(length):', weightLength);
-          weight += matrix[i-1][j-k] + weightInterval + (globalK * weightLength);
-          k++;
+          weight += weightInterval + (globalK * weightLength);
+          k--;
         }
-        console.log('       └-> weight:', weight);
+
+        console.log('       └-> min:', weight);
         if (minWeight > weight) {
           minWeight = weight;
         }
@@ -681,21 +697,8 @@
       return minWeight;
     },
 
-    weightConsolidation: function(matrix, a, b, i, j) {
+    weightConsolidation: function(matrix, a, b, i, j, c) {
       var x, k;
-      var maxDurationB = 0;
-      var minDurationA = Infinity;
-      for (x = 0; x < b.length; x++) {
-        if (maxDurationB < b[x].duration) {
-          maxDurationB = b[x].duration;
-        }
-      }
-      for (x = 0; x < a.length; x++) {
-        if (minDurationA > a[x].duration) {
-          minDurationA = a[x].duration;
-        }
-      }
-      var c = maxDurationB / minDurationA;
       var min = 2;
       var max = Math.min(i-1, c);
       console.log('    C:', c);
@@ -706,20 +709,18 @@
 
         console.log('    └- k:', k);
         console.log('       └- d(i-k,j-1):', matrix[i-k][j-1]);
-
-        var weight = 0;
-        while (k >= min && k <= max) {
+        var weight = matrix[i-k][j-1];
+        while (k > 0) {
           console.log('       └-> loop:', k);
           console.log('         notes:', '(' + a[i-k].value + '|' + a[i-k].duration + '), (' + b[j-1].value + '|' + b[j-1].duration + ')');
-
           var weightInterval = this.weightInterval(a[i-k], b[j-1]);
           var weightLength = this.weightLength(a[i-k].duration, b[j-1].duration);
-          console.log('         matrix[i-k][j-1]:', matrix[i-k][j-1]);
           console.log('         w(interval):', weightInterval);
           console.log('         w(length):', weightLength);
-          weight += matrix[i-k][j-1] + weightInterval + (globalK * weightLength);
-          k++;
+          weight += weightInterval + (globalK * weightLength);
+          k--;
         }
+
         console.log('       └-> weight:', weight);
         if (minWeight > weight) {
           minWeight = weight;
@@ -730,10 +731,10 @@
     },
 
     weightInterval: function(a, b) {
-      if (a.rest || b.rest) {
+      if ((a.rest === 'true' || a.rest === true) || (b.rest === 'true' || b.rest === true)) {
         return 0.1;
       }
-      
+
       var baseA = a.value % 12;
       if (baseA === 0) {
         baseA = 12;
@@ -814,12 +815,12 @@
      * Calculation is based on pitch and duration values.
      *
      * @param {object} object - The musicjson document
-     * @param {Array} search - An array of pitch and duration values (e.g. [{value: 45, duration: 0.25}, {value: 52, duration: 0.25}, {value: 54, duration: 0.125}]
+     * @param {Array} search - An array of pitch and duration values (e.g. [{value: 9, rest: false, duration: 4}, {value: 4, rest: false, duration: 4}, {value: 6, rest: false, duration: 2}]
      * @returns {number} The edit distance between pitch & duration values
      */
     distancePitchDuration: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false, false);
+      var notes = this.notes(object, false, true);
       return this.weightedEditDistance(
         this.pitchDurationValues(
           notes,

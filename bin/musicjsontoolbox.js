@@ -16,13 +16,13 @@ var searchPitch = [1, 6, 1, 6];
 var searchParsons = '*uuruddrdrr';
 var searchIntervals = ['*', 5, -5, 5];
 var searchIntervalsDuration = [
-  {value: 49, duration: 0.25},
-  {value: 54, duration: 0.25},
-  {value: 49, duration: 0.125},
-  {value: 54, duration: 0.125}
+  {value: 12, rest: false, duration: 4},
+  {value: 7, rest: false, duration: 4},
+  {value: 12, rest: false, duration: 2},
+  {value: 7, rest: false, duration: 1}
 ];
 
-// var notes = MusicJsonToolbox.notes(doc, false);
+// var notes = MusicJsonToolbox.notes(doc, false, false);
 // var parsons = MusicJsonToolbox.parsons(notes);
 // var intervals = MusicJsonToolbox.intervals(MusicJsonToolbox.notes(doc, false), doc.attributes.key.fifths);
 // var ngrams = MusicJsonToolbox.ngrams(notes, searchPitch.length);
@@ -43,27 +43,32 @@ var searchIntervalsDuration = [
 // var distance = MusicJsonToolbox.distanceIntervals(doc, searchIntervals);
 // var distance = MusicJsonToolbox.distanceIntervalsNgrams(doc, searchIntervals);
 
-// var distance = MusicJsonToolbox.distancePitchDuration(doc, searchIntervalsDuration);
+var distance = MusicJsonToolbox.distancePitchDuration(doc, searchIntervalsDuration);
 // var distance = MusicJsonToolbox.distancePitchDurationNgrams(doc, searchIntervalsDuration);
+
+console.log(distance);
+
+// console.log(MusicJsonToolbox.notes(doc, false, true));
+// console.log(MusicJsonToolbox.pitchDurationValues(MusicJsonToolbox.notes(doc, false, true), -1, 4, 4));
 
 // console.log(MusicJsonToolbox.weightInterval(
 //   { value: 11, duration: 4},
 //   { value: 2, duration: 4}
 // ));
-var output = MusicJsonToolbox.weightedEditDistance(
-  [
-    {value: 1, duration: 4},
-    {value: 3, duration: 4},
-    {value: 5, duration: 2},
-    {value: 6, duration: 2}
-  ],
-  [
-    {value: 1, duration: 4},
-    {value: 6, duration: 4},
-    {value: 5, duration: 2},
-    {value: 6, duration: 1},
-    {value: 6, duration: 1}
-  ]);
+// var output = MusicJsonToolbox.weightedEditDistance(
+//   [
+//     {value: 1, duration: 4},
+//     {value: 3, duration: 4},
+//     {value: 5, duration: 2},
+//     {value: 6, duration: 2}
+//   ],
+//   [
+//     {value: 1, duration: 4},
+//     {value: 6, duration: 4},
+//     {value: 5, duration: 2},
+//     {value: 6, duration: 1},
+//     {value: 6, duration: 1}
+//   ]);
 
 // for (var i=0; i<distance.length; i++) {
 //   console.log(parsons.map(function(item) {
