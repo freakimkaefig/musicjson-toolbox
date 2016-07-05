@@ -24,6 +24,8 @@
     'B': 12
   };
 
+  var base12Inverted = _.invert(base12);
+
   var degreesFromSemitones = {
     1: 1,
     3: 2,
@@ -73,6 +75,21 @@
   ];
 
   /**
+   * edit distance operation types
+   *
+   * @constant
+   * @type {{SUBSTITUTION: string, INSERTION: string, DELETION: string}}
+   * @default
+   */
+  var editOperations = {
+    'SUBSTITUTION': 'SUBSTITUTION',
+    'INSERTION': 'INSERTION',
+    'DELETION': 'DELETION',
+    'FRAGMENTATION': 'FRAGMENTATION',
+    'CONSOLIDATION': 'CONSOLIDATION'
+  };
+
+  /**
    * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
    * @exports MusicJsonToolbox
    */
@@ -87,9 +104,10 @@
      *
      * @param {object} obj - The musicjson object
      * @param {boolean} repeat - If set to true, repeated measures are also repeated in notes output
+     * @param {boolean} rests - If set to true, the resulting notes include rests
      * @returns {Array} An array containing all notes of the given object
      */
-    notes: function(obj, repeat) {
+    notes: function(obj, repeat, rests) {
       var tempNotes = [];
       var repeatStart = -1;
 
@@ -119,7 +137,7 @@
       }
 
       for (var k = 0; k < tempNotes.length; k++) {
-        if (tempNotes[k].rest === true || tempNotes[k].rest === 'true') {
+        if ((tempNotes[k].rest === true || tempNotes[k].rest === 'true') && rests === false) {
           tempNotes.splice(k, 1);
         }
       }
@@ -258,6 +276,7 @@
             item.pitch.alter,
             false
           ),
+          rest: item.rest,
           duration: (item.duration / divisions / beatType) * 16
         };
       }.bind(this));
@@ -387,6 +406,22 @@
     },
 
     /**
+     * Returns only unique array values
+     * @param {Array} array - The array with possible duplicate values
+     * @returns {Array} Array with only unique values
+     */
+    uniques: function(array) {
+      var a = [];
+      for (var i=0, l=array.length; i<l; i++) {
+        if (a.indexOf(array[i]) === -1 && array[i] !== '') {
+          a.push(array[i]);
+        }
+      }
+
+      return a;
+    },
+
+    /**
      * Edit-Distance implmentation from {@link https://gist.github.com/andrei-m/982927}
      *
      * Copyright (c) 2011 Andrei Mackenzie
@@ -394,8 +429,8 @@
      * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
      * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      *
-     * @param {string} a - The first string (document)
-     * @param {string} b - The second string (query)
+     * @param {string|Array} a - The first string (document)
+     * @param {string|Array} b - The second string (query)
      * @param {boolean} compare - The compare function which returns boolean value between two items
      * @param {number} weight - The weight function which returns numeric for weighting operations
      * @returns {number} The calculated edit distance
@@ -478,11 +513,12 @@
 
     /**
      * Calculate weighted edit distance for arrays
-     * The function implements improved weighting for interval differences
-     * based on consonance / dissonance
+     * The function implements improved weighting for interval differences based on consonance / dissonance
      *
-     * @param {Array} a - The first interval array (document)
-     * @param {Array} b - The second interval array (query)
+     * Concepts are taken from Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
+     *
+     * @param {Array} a - The first notes array (document), format: output of MusicJsonToolbox.pitchDurationValues
+     * @param {Array} b - The second notes array (query), format: output of MusicJsonToolbox.pitchDurationValues
      * @returns {number} The calculated edit distance
      */
     weightedEditDistance: function(a, b) {
@@ -510,115 +546,186 @@
         }
       }
 
+      // Calculate constant F
+      var maxDurationA = 0;
+      var minDurationB = Infinity;
+      for (i = 0; i < a.length; i++) {
+        if (maxDurationA < a[i].duration) {
+          maxDurationA = a[i].duration;
+        }
+      }
+      for (j = 0; j < b.length; j++) {
+        if (minDurationB > b[j].duration) {
+          minDurationB = b[j].duration;
+        }
+      }
+      var f = maxDurationA / minDurationB;
+
+      // Calculate constant C
+      var maxDurationB = 0;
+      var minDurationA = Infinity;
+      for (j = 0; j < b.length; j++) {
+        if (maxDurationB < b[j].duration) {
+          maxDurationB = b[j].duration;
+        }
+      }
+      for (i = 0; i < a.length; i++) {
+        if (minDurationA > a[i].duration) {
+          minDurationA = a[i].duration;
+        }
+      }
+      var c = maxDurationB / minDurationA;
+
       // Fill in the rest of the matrix
       for (i = 1; i <= a.length; i++) {
         for (j = 1; j <= b.length; j++) {
-          if (a[i-1].value === b[j-1].value && a[i-1].duration === b[j-1].duration) {
+          if (a[i-1].value === b[j-1].value && a[i-1].rest === b[j-1].rest && a[i-1].duration === b[j-1].duration) {
             // Set weight to zero if note is the same
             matrix[i][j] = matrix[i-1][j-1];
           } else {
-            matrix[i][j] = Math.min(
-              matrix[i-1][j-1] + this.weightSubstitution(a, b, i, j), // substitution
-              matrix[i][j-1] + this.weightInsertion(b, j), // insertion
-              matrix[i-1][j] + this.weightDeletion(a, i), // deletion
-              this.weightFragmentation(matrix, a, b, i, j), // fragmentation
-              this.weightConsolidation(matrix, a, b, i, j) // consolidation
+
+            var substitution = matrix[i-1][j-1] + this.weightSubstitution(a, b, i, j);
+            var insertion = matrix[i][j-1] + this.weightInsertion(b, j);
+            var deletion = matrix[i-1][j] + this.weightDeletion(a, i);
+            var fragmentation = this.weightFragmentation(matrix, a, b, i, j, f);
+            var consolidation = this.weightConsolidation(matrix, a, b, i, j, c);
+            var minWeight = Math.min(
+              substitution,
+              insertion,
+              deletion,
+              fragmentation,
+              consolidation
             );
+
+            matrix[i][j] = minWeight;
           }
         }
       }
 
-      for (i = 0; i <= a.length; i++) {
-        console.log(matrix[i].join(' | '));
-      }
-      // console.log(matrix);
-
       return matrix[a.length][b.length];
     },
 
+    /**
+     * Calculates weight for substitution of two notes
+     * @param {Array} a - First array of notes (document)
+     * @param {Array} b - Second array of notes (search)
+     * @param {number} i - Position to compare in a (1-based)
+     * @param {number} j - Position to compare in a (1-based)
+     * @returns {number} Resulting weight
+     */
     weightSubstitution: function(a, b, i, j) {
-      return this.weightInterval(a[i-1].value, b[j-1].value) + (globalK * this.weightLenght(a[i-1].duration, b[j-1].duration));
+      var weightInterval = this.weightInterval(a[i-1], b[j-1]);
+      var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
+
+      return weightInterval + (globalK * weightLength);
     },
 
+    /**
+     * Calculates weight for insertion of a note
+     * @param {Array} b - The array where the note should be inserted from
+     * @param {number} j - The position of the note that should be inserted
+     * @returns {number} Resulting weight
+     */
     weightInsertion: function(b, j) {
       return (globalK * b[j-1].duration);
     },
 
+    /**
+     * Calculates weight for insertion of a note
+     * @param {Array} a - The array where the note should be deleted from
+     * @param {number} i - The position of the note that should be deleted
+     * @returns {number} Resulting weight
+     */
     weightDeletion: function(a, i) {
       return (globalK * a[i-1].duration);
     },
 
-    weightFragmentation: function(matrix, a, b, i, j) {
+    /**
+     * Calculates weight for fragmentation of one note in to several others
+     * @param {Array} matrix - The current calculated matrix
+     * @param {Array} a - First array of notes (document)
+     * @param {Array} b - Second array of notes (search)
+     * @param {number} i - Current position in a
+     * @param {number} j - Current position in b
+     * @param {number} f - Constant parameter F (calculated by length of notes in both arrays)
+     * @returns {number} The resulting weight
+     */
+    weightFragmentation: function(matrix, a, b, i, j, f) {
       var x, k;
-      var maxDurationA = 0;
-      var minDurationB = Math.max(a.length, b.length);
-      for (x = 0; x < a.length; x++) {
-        if (maxDurationA < a[x].duration) {
-          maxDurationA = a[x].duration;
-        }
-      }
-      for (x = 0; x < b.length; x++) {
-        if (minDurationB > b[x].duration) {
-          minDurationB = b[x].duration;
-        }
-      }
-      var f = maxDurationA / minDurationB;
-      var min = Math.max(a.length, b.length);
-      for (x = 2; x <= Math.min(j, f); x++) {
+      var min = 2;
+      var max = Math.min(j-1, f);
+      var minWeight = Infinity;
+      for (x = min; x <= max; x++) {
         k = x;
+
         var weight = matrix[i-1][j-k];
-        while (k < Math.min(j, f)) {
-          k++;
-          weight += this.weightInterval(a[i-1].value, b[j-k].value) + (globalK * this.weightLenght(a[i-1].duration, b[j-k].duration));
+        while (k > 0) {
+          var weightInterval = this.weightInterval(a[i-1], b[j-k]);
+          var weightLength = this.weightLength(a[i-1].duration, b[j-k].duration);
+          weight += weightInterval + (globalK * weightLength);
+          k--;
         }
-        if (min > weight) {
-          min = weight;
+
+        if (minWeight > weight) {
+          minWeight = weight;
         }
       }
 
-      return min;
+      return minWeight;
     },
 
-    weightConsolidation: function(matrix, a, b, i, j) {
+    /**
+     * Calculates weight for fragmentation of one several notes to one
+     * @param {Array} matrix - The current calculated matrix
+     * @param {Array} a - First array of notes (document)
+     * @param {Array} b - Second array of notes (search)
+     * @param {number} i - Current position in a
+     * @param {number} j - Current position in b
+     * @param {number} c - Constant parameter C (calculated by length of notes in both arrays)
+     * @returns {number} The resulting weight
+     */
+    weightConsolidation: function(matrix, a, b, i, j, c) {
       var x, k;
-      var maxDurationB = 0;
-      var minDurationA = Math.max(a.length, b.length);
-      for (x = 0; x < b.length; x++) {
-        if (maxDurationB < b[x].duration) {
-          maxDurationB = b[x].duration;
-        }
-      }
-      for (x = 0; x < a.length; x++) {
-        if (minDurationA > a[x].duration) {
-          minDurationA = a[x].duration;
-        }
-      }
-      var c = maxDurationB / minDurationA;
-      var min = Math.max(a.length, b.length);
-      for (x = 2; x <= Math.min(i, c); x++) {
+      var min = 2;
+      var max = Math.min(i-1, c);
+      var minWeight = Infinity;
+      for (x = min; x <= max; x++) {
         k = x;
+
         var weight = matrix[i-k][j-1];
-        while (k < Math.min(i, c)) {
-          k++;
-          weight += this.weightInterval(a[i-k].value, b[j-1].value) + (globalK * this.weightLenght(a[i-k].duration, b[j-1].duration));
+        while (k > 0) {
+          var weightInterval = this.weightInterval(a[i-k], b[j-1]);
+          var weightLength = this.weightLength(a[i-k].duration, b[j-1].duration);
+          weight += weightInterval + (globalK * weightLength);
+          k--;
         }
-        if (min > weight) {
-          min = weight;
+
+        if (minWeight > weight) {
+          minWeight = weight;
         }
       }
 
-      return min;
+      return minWeight;
     },
 
+    /**
+     * Calculates weight for difference of pitch values
+     * @param {object} a - First note object (from document)
+     * @param {object} b - Second note object (from search)
+     * @returns {number} The resulting weight
+     */
     weightInterval: function(a, b) {
-      var base12Inverted = _.invert(base12);
-      var baseA = a;
-      while (baseA > 12) {
-        baseA -= 12;
+      if ((a.rest === 'true' || a.rest === true) || (b.rest === 'true' || b.rest === true)) {
+        return 0.1;
       }
-      var baseB = b;
-      while (baseB > 12) {
-        baseB -= 12;
+
+      var baseA = a.value % 12;
+      if (baseA === 0) {
+        baseA = 12;
+      }
+      var baseB = b.value % 12;
+      if (baseB === 0) {
+        baseB = 12;
       }
 
       if (typeof base12Inverted[baseA] !== 'undefined' && typeof base12Inverted[baseB] !== 'undefined') {
@@ -632,24 +739,14 @@
       }
     },
 
-    weightLenght: function(a, b) {
-      return Math.abs(a - b);
-    },
-
     /**
-     * Returns only unique array values
-     * @param {Array} array - The array with possible duplicate values
-     * @returns {Array} Array with only unique values
+     * Calculates weight for difference of length
+     * @param {number} a - The first notes length
+     * @param {number} b - The second notes length
+     * @returns {number} The resulting weight
      */
-    uniques: function(array) {
-      var a = [];
-      for (var i=0, l=array.length; i<l; i++) {
-        if (a.indexOf(array[i]) === -1 && array[i] !== '') {
-          a.push(array[i]);
-        }
-      }
-
-      return a;
+    weightLength: function(a, b) {
+      return Math.abs(a - b);
     },
 
     /**
@@ -661,7 +758,7 @@
      * @returns {number} The edit distance between parsons codes
      */
     distanceParsons: function(object, search) {
-      var parsons = this.parsons(this.notes(object, false));
+      var parsons = this.parsons(this.notes(object, false, false));
       return this.stringEditDistance(
         parsons.map(function(item) {
           return item.value;
@@ -680,7 +777,7 @@
      */
     distancePitch: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false);
+      var notes = this.notes(object, false, false);
       return this.arrayEditDistance(this.pitchValues(notes, keyAdjust), search);
     },
 
@@ -694,7 +791,7 @@
      */
     distanceIntervals: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var intervals = this.intervals(this.notes(object, false), keyAdjust);
+      var intervals = this.intervals(this.notes(object, false, false), keyAdjust);
       return this.arrayEditDistance(
         intervals.map(function(item) {
           return item.value;
@@ -708,12 +805,12 @@
      * Calculation is based on pitch and duration values.
      *
      * @param {object} object - The musicjson document
-     * @param {Array} search - An array of pitch and duration values (e.g. [{value: 45, duration: 0.25}, {value: 52, duration: 0.25}, {value: 54, duration: 0.125}]
+     * @param {Array} search - An array of pitch and duration values (e.g. [{value: 9, rest: false, duration: 4}, {value: 4, rest: false, duration: 4}, {value: 6, rest: false, duration: 2}]
      * @returns {number} The edit distance between pitch & duration values
      */
     distancePitchDuration: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false);
+      var notes = this.notes(object, false, true);
       return this.weightedEditDistance(
         this.pitchDurationValues(
           notes,
@@ -732,7 +829,7 @@
      * @returns {Array} The cost for each ngram
      */
     distanceParsonsNgrams: function(object, search) {
-      var ngrams = this.ngrams(this.parsons(this.notes(object, false)), search.length);
+      var ngrams = this.ngrams(this.parsons(this.notes(object, false, false)), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -768,7 +865,7 @@
      */
     distancePitchNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false), search.length);
+      var ngrams = this.ngrams(this.notes(object, false, false), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -791,7 +888,7 @@
      */
     distanceIntervalsNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.intervals(this.notes(object, false), keyAdjust), search.length);
+      var ngrams = this.ngrams(this.intervals(this.notes(object, false, false), keyAdjust), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
@@ -828,17 +925,10 @@
       var divisions = parseInt(object.attributes.divisions);
       var beatType = parseInt(object.attributes.time['beat-type']);
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false), search.length);
+      var ngrams = this.ngrams(this.notes(object, false, true), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        // for (var j = 0; j < ngrams[i].length; j++) {
-        //   if (j === 0) {
-        //     // Reset first value of ngram
-        //     ngrams[i][j].value = '*';
-        //     ngrams[i][j].duration = '*';
-        //   }
-        // }
 
         distances.push({
           distance: this.weightedEditDistance(

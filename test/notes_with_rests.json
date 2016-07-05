@@ -1,0 +1,161 @@
+[
+  {
+    "pitch": {
+      "step": "C",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 0,
+    "noteNumber": 0
+  },
+  {
+    "pitch": {
+      "step": "D",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 0,
+    "noteNumber": 1
+  },
+  {
+    "pitch": {
+      "step": "E",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 0,
+    "noteNumber": 2
+  },
+  {
+    "pitch": {
+      "step": "F",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 0,
+    "noteNumber": 3
+  },
+  {
+    "pitch": {
+      "step": "G",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 0,
+    "noteNumber": 4
+  },
+  {
+    "pitch": {
+      "step": "C",
+      "octave": 5,
+      "alter": 0
+    },
+    "rest": true,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 0,
+    "noteNumber": 5
+  },
+  {
+    "pitch": {
+      "step": "C",
+      "octave": 4,
+      "alter": 1,
+      "accidental": "sharp"
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 1,
+    "noteNumber": 0
+  },
+  {
+    "pitch": {
+      "step": "D",
+      "octave": 4,
+      "alter": -1,
+      "accidental": "flat"
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 1,
+    "noteNumber": 1
+  },
+  {
+    "pitch": {
+      "step": "B",
+      "octave": 4,
+      "alter": 0,
+      "accidental": "natural"
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 1,
+    "noteNumber": 2
+  },
+  {
+    "pitch": {
+      "step": "E",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 2,
+    "noteNumber": 0
+  },
+  {
+    "pitch": {
+      "step": "A",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 4,
+    "type": "quarter",
+    "measureNumber": 2,
+    "noteNumber": 1
+  },
+  {
+    "pitch": {
+      "step": "E",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 2,
+    "noteNumber": 2
+  },
+  {
+    "pitch": {
+      "step": "A",
+      "octave": 4,
+      "alter": 0
+    },
+    "rest": false,
+    "duration": 2,
+    "type": "eighth",
+    "measureNumber": 2,
+    "noteNumber": 3
+  }
+]

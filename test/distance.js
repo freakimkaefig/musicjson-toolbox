@@ -1,17 +1,21 @@
 'use strict';
 
-var expect = require('chai').expect;
+var chai = require('chai');
+var chaiStats = require('chai-stats');
 var MusicJsonToolbox = require('../index');
+
+chai.use(chaiStats);
+var expect = chai.expect;
 
 var musicjson = require('./example.json');
 var searchPitch = [1, 6, 1, 6];
 var searchParsons = '*udu';
 var searchIntervals = ['*', 5, -5, 5];
 var searchPitchDuration = [
-  {value: 49, duration: 0.25},
-  {value: 54, duration: 0.5},
-  {value: 49, duration: 0.125},
-  {value: 54, duration: 0.125}
+  {value: 12, rest: false, duration: 4},
+  {value: 7, rest: false, duration: 4},
+  {value: 12, rest: false, duration: 2},
+  {value: 7, rest: false, duration: 1}
 ];
 
 describe('MusicJsonToolbox Distance Functions', function() {
@@ -37,10 +41,10 @@ describe('MusicJsonToolbox Distance Functions', function() {
     });
   });
 
-  describe('.distancePitchDurations', function() {
+  describe('.distancePitchDuration', function() {
     it('calculates weighted edit-distance between pitch & duration values', function() {
       var distancePitchDuration = MusicJsonToolbox.distancePitchDuration(musicjson, searchPitchDuration);
-      expect(distancePitchDuration).to.be.equal(16);
+      expect(distancePitchDuration).to.almost.equal(9.408);
     });
   });
 
@@ -68,11 +72,16 @@ describe('MusicJsonToolbox Distance Functions', function() {
     });
   });
 
-  describe('.distancePitchDurationsNgrams', function() {
+  describe('.distancePitchDurationNgrams', function() {
     it('calculates weighted edit-distance between pitch & duration values', function() {
       var distancePitchDurationNgrams = MusicJsonToolbox.distancePitchDurationNgrams(musicjson, searchPitchDuration);
       var result = require('./distance_pitch_duration_ngrams.json');
-      expect(distancePitchDurationNgrams).to.deep.equal(result);
+      expect(distancePitchDurationNgrams.length).to.be.equal(result.length);
+      for (var i = 0; i < distancePitchDurationNgrams.length; i++) {
+        expect(distancePitchDurationNgrams[i].distance).to.almost.equal(result[i].distance);
+        expect(distancePitchDurationNgrams[i].measure).to.be.equal(result[i].measure);
+        expect(distancePitchDurationNgrams[i].note).to.be.equal(result[i].note);
+      }
     });
   });
 

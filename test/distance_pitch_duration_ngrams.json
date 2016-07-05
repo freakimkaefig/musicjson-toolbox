@@ -1,6 +1,6 @@
 [
   {
-    "distance": 10,
+    "distance": 3.636,
     "highlight": [
       {
         "measure": 0,
@@ -21,7 +21,7 @@
     ]
   },
   {
-    "distance": 9,
+    "distance": 4.178,
     "highlight": [
       {
         "measure": 0,
@@ -42,7 +42,7 @@
     ]
   },
   {
-    "distance": 11,
+    "distance": 3.332,
     "highlight": [
       {
         "measure": 0,
@@ -57,13 +57,13 @@
         "note": 4
       },
       {
-        "measure": 1,
-        "note": 0
+        "measure": 0,
+        "note": 5
       }
     ]
   },
   {
-    "distance": 13,
+    "distance": 4.378,
     "highlight": [
       {
         "measure": 0,
@@ -74,23 +74,44 @@
         "note": 4
       },
       {
-        "measure": 1,
-        "note": 0
+        "measure": 0,
+        "note": 5
       },
       {
         "measure": 1,
-        "note": 1
+        "note": 0
       }
     ]
   },
   {
-    "distance": 15,
+    "distance": 5.074,
     "highlight": [
       {
         "measure": 0,
         "note": 4
       },
       {
+        "measure": 0,
+        "note": 5
+      },
+      {
+        "measure": 1,
+        "note": 0
+      },
+      {
+        "measure": 1,
+        "note": 1
+      }
+    ]
+  },
+  {
+    "distance": 3.74,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 5
+      },
+      {
         "measure": 1,
         "note": 0
       },
@@ -105,7 +126,7 @@
     ]
   },
   {
-    "distance": 15,
+    "distance": 3.436,
     "highlight": [
       {
         "measure": 1,
@@ -126,7 +147,7 @@
     ]
   },
   {
-    "distance": 12,
+    "distance": 3.436,
     "highlight": [
       {
         "measure": 1,
@@ -147,7 +168,7 @@
     ]
   },
   {
-    "distance": 10,
+    "distance": 3.232,
     "highlight": [
       {
         "measure": 1,
@@ -168,7 +189,7 @@
     ]
   },
   {
-    "distance": 8,
+    "distance": 2.748,
     "highlight": [
       {
         "measure": 2,
