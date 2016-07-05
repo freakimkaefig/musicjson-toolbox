@@ -935,17 +935,10 @@
       var divisions = parseInt(object.attributes.divisions);
       var beatType = parseInt(object.attributes.time['beat-type']);
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false, false), search.length);
+      var ngrams = this.ngrams(this.notes(object, false, true), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        // for (var j = 0; j < ngrams[i].length; j++) {
-        //   if (j === 0) {
-        //     // Reset first value of ngram
-        //     ngrams[i][j].value = '*';
-        //     ngrams[i][j].duration = '*';
-        //   }
-        // }
 
         distances.push({
           distance: this.weightedEditDistance(

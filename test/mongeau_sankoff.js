@@ -1,7 +1,11 @@
 'use strict';
 
-var expect = require('chai').expect;
+var chai = require('chai');
+var chaiStats = require('chai-stats');
 var MusicJsonToolbox = require('../index');
+
+chai.use(chaiStats);
+var expect = chai.expect;
 
 var a = [
   { value: 1, rest: false, duration: 4},
@@ -144,117 +148,149 @@ describe('MusicJsonToolbox Functions for Mongeau-Sankoff-Measure', function() {
     });
   });
 
-  // describe('.weightFragmentation', function() {
-  //   it('calculates weight for fragment operation', function() {
-  //
-  //   });
-  // });
-  //
-  // describe('.weightConsolidation', function() {
-  //   it('calculates weight for consolidate operation', function() {
-  //
-  //   });
-  // });
+  describe('.weightFragmentation', function() {
+    it('calculates weight for fragment operation', function() {
+      expect(MusicJsonToolbox.weightFragmentation([
+        [0, 1.392, 2.784, 3.48, 3.828],
+        [0.696, 0.896, 2.288, 2.984, 3.332],
+        [1.392, 1.592, 2.592, 3.188, 3.536],
+        [2.088, 2.088, 3.288, 2.592, 2.94],
+        [2.784, 2.784, 3.984, 3.288, 3.636]
+      ], [
+        { value: 8, rest: false, duration: 2 },
+        { value: 10, rest: false, duration: 2 },
+        { value: 12, rest: false, duration: 2 },
+        { value: 1, rest: false, duration: 2 }
+      ], [
+        { value: 12, rest: false, duration: 4},
+        { value: 7, rest: false, duration: 4},
+        { value: 12, rest: false, duration: 2},
+        { value: 7, rest: false, duration: 1}
+      ], 1, 4, 4)).to.almost.equal(5.932);
+    });
+  });
 
-  // describe('.weightedEditDistance', function() {
-  //   it('calculates weighted edit distance between two pitch & duration arrays', function() {
-  //     var output;
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ],
-  //       []);
-  //     expect(output).to.equal(4);
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [],
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ]);
-  //     expect(output).to.equal(4);
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ],
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ]);
-  //     expect(output).to.equal(0);
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ],
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 6, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ]);
-  //     expect(output).to.equal(0.2);
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ],
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 6, duration: 2},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ]);
-  //     expect(output).to.equal(0.8959999999999999);
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ],
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 6, duration: 2},
-  //         {value: 5, duration: 2},
-  //         {value: 1, duration: 4}
-  //       ]);
-  //     expect(output).to.equal(9);
-  //
-  //     output = MusicJsonToolbox.weightedEditDistance(
-  //       [
-  //         {value: 1, duration: 4},
-  //         {value: 3, duration: 4},
-  //         {value: 5, duration: 2},
-  //         {value: 6, duration: 2}
-  //       ],
-  //       [
-  //         {value: 8, duration: 2},
-  //         {value: 10, duration: 2},
-  //         {value: 12, duration: 4},
-  //         {value: 1, duration: 4}
-  //       ]);
-  //     expect(output).to.equal(15);
-  //   });
-  // });
+  describe('.weightConsolidation', function() {
+    it('calculates weight for consolidate operation', function() {
+      expect(MusicJsonToolbox.weightConsolidation([
+        [0, 1.392, 2.784, 3.48, 3.828],
+        [0.348, 1.244, 2.636, 3.332, 3.68],
+        [1.044, 1.94, 2.94, 3.536, 3.884],
+        [1.74, 1.74, 3.132, 2.94, 3.288],
+        [3.132, 2.54, 3.54, 4.236, 4.584]
+      ], [
+        { value: 8, rest: false, duration: 1 },
+        { value: 10, rest: false, duration: 2 },
+        { value: 12, rest: false, duration: 2 },
+        { value: 1, rest: false, duration: 4 }
+      ], [
+        { value: 12, rest: false, duration: 4},
+        { value: 7, rest: false, duration: 4},
+        { value: 12, rest: false, duration: 2},
+        { value: 7, rest: false, duration: 1}
+      ], 4, 4, 4)).to.almost.equal(8.328);
+    });
+  });
+
+  describe('.weightedEditDistance', function() {
+    it('calculates weighted edit distance between two pitch & duration arrays', function() {
+      var output;
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ],
+        []);
+      expect(output).to.almost.equal(4.176);
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [],
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ]);
+      expect(output).to.almost.equal(4.176);
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ],
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ]);
+      expect(output).to.equal(0);
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ],
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 6, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ]);
+      expect(output).to.equal(0.2);
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ],
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 6, rest: false, duration: 2},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ]);
+      expect(output).to.equal(0.8959999999999999);
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ],
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 6, rest: false, duration: 2},
+          {value: 5, rest: false, duration: 2},
+          {value: 1, rest: false, duration: 4}
+        ]);
+      expect(output).to.almost.equal(2.092);
+
+      output = MusicJsonToolbox.weightedEditDistance(
+        [
+          {value: 1, rest: false, duration: 4},
+          {value: 3, rest: false, duration: 4},
+          {value: 5, rest: false, duration: 2},
+          {value: 6, rest: false, duration: 2}
+        ],
+        [
+          {value: 8, rest: false, duration: 2},
+          {value: 10, rest: false, duration: 2},
+          {value: 12, rest: false, duration: 4},
+          {value: 1, rest: false, duration: 4}
+        ]);
+      expect(output).to.almost.equal(3.434);
+    });
+  });
 
 });
