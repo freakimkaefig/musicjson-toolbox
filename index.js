@@ -644,6 +644,14 @@
       return matrix[a.length][b.length];
     },
 
+    /**
+     * Calculates weight for substitution of two notes
+     * @param {Array} a - First array of notes (document)
+     * @param {Array} b - Second array of notes (search)
+     * @param {number} i - Position to compare in a (1-based)
+     * @param {number} j - Position to compare in a (1-based)
+     * @returns {number} Resulting weight
+     */
     weightSubstitution: function(a, b, i, j) {
       var weightInterval = this.weightInterval(a[i-1], b[j-1]);
       var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
@@ -656,14 +664,36 @@
       return weight;
     },
 
+    /**
+     * Calculates weight for insertion of a note
+     * @param {Array} b - The array where the note should be inserted from
+     * @param {number} j - The position of the note that should be inserted
+     * @returns {number} Resulting weight
+     */
     weightInsertion: function(b, j) {
       return (globalK * b[j-1].duration);
     },
 
+    /**
+     * Calculates weight for insertion of a note
+     * @param {Array} a - The array where the note should be deleted from
+     * @param {number} i - The position of the note that should be deleted
+     * @returns {number} Resulting weight
+     */
     weightDeletion: function(a, i) {
       return (globalK * a[i-1].duration);
     },
 
+    /**
+     * Calculates weight for fragmentation of one note in to several others
+     * @param {Array} matrix - The current calculated matrix
+     * @param {Array} a - First array of notes (document)
+     * @param {Array} b - Second array of notes (search)
+     * @param {number} i - Current position in a
+     * @param {number} j - Current position in b
+     * @param {number} f - Constant parameter F (calculated by length of notes in both arrays)
+     * @returns {number} The resulting weight
+     */
     weightFragmentation: function(matrix, a, b, i, j, f) {
       var x, k;
       var min = 2;
@@ -697,6 +727,16 @@
       return minWeight;
     },
 
+    /**
+     * Calculates weight for fragmentation of one several notes to one
+     * @param {Array} matrix - The current calculated matrix
+     * @param {Array} a - First array of notes (document)
+     * @param {Array} b - Second array of notes (search)
+     * @param {number} i - Current position in a
+     * @param {number} j - Current position in b
+     * @param {number} c - Constant parameter C (calculated by length of notes in both arrays)
+     * @returns {number} The resulting weight
+     */
     weightConsolidation: function(matrix, a, b, i, j, c) {
       var x, k;
       var min = 2;
@@ -730,6 +770,12 @@
       return minWeight;
     },
 
+    /**
+     * Calculates weight for difference of pitch values
+     * @param {object} a - First note object (from document)
+     * @param {object} b - Second note object (from search)
+     * @returns {number} The resulting weight
+     */
     weightInterval: function(a, b) {
       if ((a.rest === 'true' || a.rest === true) || (b.rest === 'true' || b.rest === true)) {
         return 0.1;
@@ -755,6 +801,12 @@
       }
     },
 
+    /**
+     * Calculates weight for difference of length
+     * @param {number} a - The first notes length
+     * @param {number} b - The second notes length
+     * @returns {number} The resulting weight
+     */
     weightLength: function(a, b) {
       return Math.abs(a - b);
     },
