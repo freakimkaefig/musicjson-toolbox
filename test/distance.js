@@ -44,7 +44,7 @@ describe('MusicJsonToolbox Distance Functions', function() {
   describe('.distancePitchDuration', function() {
     it('calculates weighted edit-distance between pitch & duration values', function() {
       var distancePitchDuration = MusicJsonToolbox.distancePitchDuration(musicjson, searchPitchDuration);
-      expect(distancePitchDuration).to.almost.equal(9.408);
+      expect(distancePitchDuration).to.almost.equal(9.846);
     });
   });
 

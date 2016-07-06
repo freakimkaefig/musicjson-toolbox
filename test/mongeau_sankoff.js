@@ -154,8 +154,8 @@ describe('MusicJsonToolbox Functions for Mongeau-Sankoff-Measure', function() {
         [0, 1.392, 2.784, 3.48, 3.828],
         [0.696, 0.896, 2.288, 2.984, 3.332],
         [1.392, 1.592, 2.592, 3.188, 3.536],
-        [2.088, 2.088, 3.288, 2.592, 2.94],
-        [2.784, 2.784, 3.984, 3.288, 3.636]
+        [2.088, 1.596, 2.988, 2.592, 2.94],
+        [2.784, 2.192, 3.584, 3.288, 3.636]
       ], [
         { value: 8, rest: false, duration: 2 },
         { value: 10, rest: false, duration: 2 },
@@ -174,10 +174,10 @@ describe('MusicJsonToolbox Functions for Mongeau-Sankoff-Measure', function() {
     it('calculates weight for consolidate operation', function() {
       expect(MusicJsonToolbox.weightConsolidation([
         [0, 1.392, 2.784, 3.48, 3.828],
-        [0.348, 1.244, 2.636, 3.332, 3.68],
-        [1.044, 1.94, 2.94, 3.536, 3.884],
-        [1.74, 1.74, 3.132, 2.94, 3.288],
-        [3.132, 2.54, 3.54, 4.236, 4.584]
+        [0.696, 0.896, 2.288, 2.984, 3.332],
+        [1.392, 1.592, 2.592, 3.188, 3.536],
+        [2.088, 1.596, 2.988, 2.592, 2.94],
+        [2.784, 2.192, 3.584, 3.288, 3.636]
       ], [
         { value: 8, rest: false, duration: 1 },
         { value: 10, rest: false, duration: 2 },
@@ -274,7 +274,7 @@ describe('MusicJsonToolbox Functions for Mongeau-Sankoff-Measure', function() {
           {value: 5, rest: false, duration: 2},
           {value: 1, rest: false, duration: 4}
         ]);
-      expect(output).to.almost.equal(2.092);
+      expect(output).to.almost.equal(1.8);
 
       output = MusicJsonToolbox.weightedEditDistance(
         [
@@ -289,7 +289,7 @@ describe('MusicJsonToolbox Functions for Mongeau-Sankoff-Measure', function() {
           {value: 12, rest: false, duration: 4},
           {value: 1, rest: false, duration: 4}
         ]);
-      expect(output).to.almost.equal(3.434);
+      expect(output).to.almost.equal(2.542);
     });
   });
 

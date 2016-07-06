@@ -616,8 +616,10 @@
     weightSubstitution: function(a, b, i, j) {
       var weightInterval = this.weightInterval(a[i-1], b[j-1]);
       var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
+      var weight = weightInterval + (globalK * weightLength);
 
-      return weightInterval + (globalK * weightLength);
+
+      return weight;
     },
 
     /**
@@ -659,12 +661,15 @@
         k = x;
 
         var weight = matrix[i-1][j-k];
+        var durations = 0;
         while (k > 0) {
           var weightInterval = this.weightInterval(a[i-1], b[j-k]);
-          var weightLength = this.weightLength(a[i-1].duration, b[j-k].duration);
-          weight += weightInterval + (globalK * weightLength);
+          weight += weightInterval;
+          durations += b[j-k].duration;
           k--;
         }
+        var weightLength = this.weightLength(a[i-1].duration, durations);
+        weight += (globalK * weightLength);
 
         if (minWeight > weight) {
           minWeight = weight;
@@ -693,12 +698,15 @@
         k = x;
 
         var weight = matrix[i-k][j-1];
+        var durations = 0;
         while (k > 0) {
           var weightInterval = this.weightInterval(a[i-k], b[j-1]);
-          var weightLength = this.weightLength(a[i-k].duration, b[j-1].duration);
-          weight += weightInterval + (globalK * weightLength);
+          weight += weightInterval;
+          durations += a[i-k].duration;
           k--;
         }
+        var weightLength = this.weightLength(durations, b[j-1].duration);
+        weight += (globalK * weightLength);
 
         if (minWeight > weight) {
           minWeight = weight;
