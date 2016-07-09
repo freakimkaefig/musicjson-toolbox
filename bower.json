@@ -1,0 +1,22 @@
+{
+  "name": "musicjson-toolbox",
+  "description": "A toolbox for comparing musicjson objects",
+  "main": "musicjson-toolbox.js",
+  "authors": [
+    "Lukas Lamm <info@lukaslamm.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "musicjson",
+    "toolbox",
+    "similarity"
+  ],
+  "homepage": "https://github.com/freakimkaefig/musicjson-toolbox",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

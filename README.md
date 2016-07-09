@@ -16,6 +16,11 @@ The module is preferably installed as node package via npm:
 $ npm install --save musicjson-toolbox
 ```
 
+Or install via bower:
+```
+$ bower install --save musicjson-toolbox
+```
+
 Example
 ---------------------------------------------------------------------------
 

@@ -16,6 +16,7 @@ ratings:
 exclude_paths:
 - test/
 - node_modules/
+- dist/
 - "API.md"
 - "LICENSE"
 - "README.md"
