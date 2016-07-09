@@ -14,6 +14,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.highlightMapping(array)](#module_MusicJsonToolbox.highlightMapping) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.interval2AbcStep(interval, base)](#module_MusicJsonToolbox.interval2AbcStep) ⇒ <code>string</code>
+    * [.pitchDuration2AbcStep(item, prevItem)](#module_MusicJsonToolbox.pitchDuration2AbcStep) ⇒ <code>string</code>
     * [.pitchDifference(pitch1, keyAdjust, pitch2, withOctave, absolute)](#module_MusicJsonToolbox.pitchDifference) ⇒ <code>number</code>
     * [.durationDifference(duration1, duration2, absolute)](#module_MusicJsonToolbox.durationDifference) ⇒ <code>number</code>
     * [.uniques(array)](#module_MusicJsonToolbox.uniques) ⇒ <code>Array</code>
@@ -157,6 +158,19 @@ Returns abc note from interval value
 | --- | --- | --- |
 | interval | <code>number</code> | The interval value |
 | base | <code>number</code> | The base 12 pitch the interval should be added |
+
+<a name="module_MusicJsonToolbox.pitchDuration2AbcStep"></a>
+
+### MusicJsonToolbox.pitchDuration2AbcStep(item, prevItem) ⇒ <code>string</code>
+Return abc note from json note object
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>string</code> - The abc note  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>object</code> | The item which should be converted to abc |
+| prevItem | <code>object</code> &#124; <code>null</code> | The previous item or null |
 
 <a name="module_MusicJsonToolbox.pitchDifference"></a>
 

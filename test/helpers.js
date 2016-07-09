@@ -167,6 +167,48 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
+  describe('.pitchDuration2AbcStep', function() {
+    it('converts note item to abc note string', function() {
+      var notes = [
+        {pitch: {step: 'C', octave: 4, alter: 0}, rest: false, duration: 8,type: 'eighth'},
+        {pitch: {step: 'D', octave: 4, alter: 0}, rest: false, duration: 8,type: 'eighth'},
+        {pitch: {step: 'E', octave: 4, alter: 0}, rest: false, duration: 8,type: 'eighth'},
+        {pitch: {step: 'F', octave: 4, alter: 0}, rest: false, duration: 8,type: 'eighth'},
+        {pitch: {step: 'G', octave: 4, alter: 0}, rest: false, duration: 8,type: 'eighth'},
+        {pitch: {step: 'C', octave: 5, alter: 0}, rest: true, duration: 8,type: 'eighth'},
+        {pitch: {step: 'C', octave: 4, alter: 1, accidental: 'sharp'}, rest: false,duration: 16, type: 'quarter'},
+        {pitch: {step: 'D', octave: 4, alter: 0, accidental: 'natural'}, rest: false,duration: 16, type: 'quarter'},
+        {pitch: {step: 'B', octave: 4, alter: -1, accidental: 'flat'}, rest: false,duration: 16, type: 'quarter'},
+        {pitch: {step: 'E', octave: 4, alter: 0}, rest: false, duration: 16, type: 'quarter'},
+        {pitch: {step: 'A', octave: 5, alter: 0}, rest: false, duration: 16, type: 'quarter'},
+        {pitch: {step: 'E', octave: 4, alter: 0}, rest: false, duration: 12, type: 'eighth', dot: true},
+        {pitch: {step: 'A', octave: 5, alter: 0}, rest: false, duration: 8, type: 'eighth'}
+      ];
+      var results = [
+        'C8',
+        'D8',
+        'E8',
+        'F8',
+        'G8',
+        'z8',
+        '^C16',
+        '=D16',
+        '_B16',
+        'E16',
+        'a16',
+        'E8>',
+        'a16'
+      ];
+      for (var i = 0; i < notes.length; i++) {
+        var prevItem = null;
+        if (i > 0) {
+          prevItem = notes[i-1];
+        }
+        expect(MusicJsonToolbox.pitchDuration2AbcStep(notes[i], prevItem)).to.equal(results[i]);
+      }
+    });
+  });
+
   describe('.pitchDifference', function() {
     it('calculates difference between pitch objects', function() {
       var output;

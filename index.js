@@ -74,6 +74,16 @@
     'c\'\'\'', '^c\'\'\'', 'd\'\'\'', '^d\'\'\'', 'e\'\'\'', 'f\'\'\'', '^f\'\'\'', 'g\'\'\'', '^g\'\'\'', 'a\'\'\'', '^a\'\'\'', 'b\'\'\'' // 8
   ];
 
+  var abcAccidental = {
+    'flat-flat': '__',
+    'flat': '_',
+    'natural': '=',
+    'sharp': '^',
+    'sharp-sharp': '^^',
+    'undefined': '',
+    '': ''
+  };
+
   /**
    * edit distance operation types
    *
@@ -356,6 +366,35 @@
      */
     interval2AbcStep: function(interval, base) {
       return abcStep[base + interval - 13];
+    },
+
+    /**
+     * Return abc note from json note object
+     *
+     * @param {object} item - The item which should be converted to abc
+     * @param {object|null} prevItem - The previous item or null
+     * @returns {string} The abc note
+     */
+    pitchDuration2AbcStep: function(item, prevItem) {
+      var accidental = abcAccidental[item.pitch.accidental];
+      var pitch = abcStep[this.base12Pitch(item.pitch.step, 0, item.pitch.octave, 0, true) - 13];
+      var duration = item.duration;
+      if (prevItem !== null) {
+        if (prevItem.dot) {
+          duration = duration * 2;
+        }
+      }
+      var dotted = '';
+      if (item.dot) {
+        duration = duration / 1.5;
+        dotted = '>';
+      }
+
+      if (item.rest) {
+        return 'z' + duration + dotted;
+      } else {
+        return accidental + pitch + duration + dotted;
+      }
     },
 
     /**
