@@ -94,9 +94,7 @@
   var editOperations = {
     'SUBSTITUTION': 'SUBSTITUTION',
     'INSERTION': 'INSERTION',
-    'DELETION': 'DELETION',
-    'FRAGMENTATION': 'FRAGMENTATION',
-    'CONSOLIDATION': 'CONSOLIDATION'
+    'DELETION': 'DELETION'
   };
 
   /**
@@ -250,9 +248,10 @@
 
     /**
      * Get array of base 12 pitch values from array of notes
+     *
      * @param {Array} notes - The array of notes
      * @param  {number} keyAdjust - Adjusting of key by circle of fifths
-     * @returns {Array} - The array of base 12 pitch values
+     * @returns {Array} The array of base 12 pitch values
      */
     pitchValues: function(notes, keyAdjust) {
       return notes.map(function(item) {
@@ -274,7 +273,7 @@
      * @param {number} keyAdjust - Adjusting of key by circle of fifths
      * @param {number} divisions - The divisions of the document
      * @param {number} beatType - The documents beat type
-     * @returns {Array} - The correctly mapped array with pitch and duration values
+     * @returns {Array} The correctly mapped array with pitch and duration values
      */
     pitchDurationValues: function(notes, keyAdjust, divisions, beatType) {
       return notes.map(function(item) {
@@ -314,7 +313,7 @@
      * Array mapping for note highlighting
      *
      * @param {Array} array - The array that should be mapped for highlighting
-     * @returns {Array} - The mapped array
+     * @returns {Array} The mapped array
      */
     highlightMapping: function(array) {
       return array.map(function(item) {
@@ -378,9 +377,10 @@
 
     /**
      * Returns abc note from interval value
+     *
      * @param {number} interval - The interval value
      * @param {number} base - The base 12 pitch the interval should be added
-     * @returns {string} - The abc note
+     * @returns {string} The abc note
      */
     interval2AbcStep: function(interval, base) {
       return abcStep[base + interval - 13];
@@ -464,6 +464,7 @@
 
     /**
      * Returns only unique array values
+     *
      * @param {Array} array - The array with possible duplicate values
      * @returns {Array} Array with only unique values
      */
@@ -664,6 +665,7 @@
 
     /**
      * Calculates weight for substitution of two notes
+     *
      * @param {Array} a - First array of notes (document)
      * @param {Array} b - Second array of notes (search)
      * @param {number} i - Position to compare in a (1-based)
@@ -681,6 +683,7 @@
 
     /**
      * Calculates weight for insertion of a note
+     *
      * @param {Array} b - The array where the note should be inserted from
      * @param {number} j - The position of the note that should be inserted
      * @returns {number} Resulting weight
@@ -691,6 +694,7 @@
 
     /**
      * Calculates weight for insertion of a note
+     *
      * @param {Array} a - The array where the note should be deleted from
      * @param {number} i - The position of the note that should be deleted
      * @returns {number} Resulting weight
@@ -701,6 +705,7 @@
 
     /**
      * Calculates weight for fragmentation of one note in to several others
+     *
      * @param {Array} matrix - The current calculated matrix
      * @param {Array} a - First array of notes (document)
      * @param {Array} b - Second array of notes (search)
@@ -738,6 +743,7 @@
 
     /**
      * Calculates weight for fragmentation of one several notes to one
+     *
      * @param {Array} matrix - The current calculated matrix
      * @param {Array} a - First array of notes (document)
      * @param {Array} b - Second array of notes (search)
@@ -775,6 +781,7 @@
 
     /**
      * Calculates weight for difference of pitch values
+     *
      * @param {object} a - First note object (from document)
      * @param {object} b - Second note object (from search)
      * @returns {number} The resulting weight
@@ -806,6 +813,7 @@
 
     /**
      * Calculates weight for difference of length
+     *
      * @param {number} a - The first notes length
      * @param {number} b - The second notes length
      * @returns {number} The resulting weight
@@ -870,7 +878,7 @@
      * Calculation is based on pitch and duration values.
      *
      * @param {object} object - The musicjson document
-     * @param {Array} search - An array of pitch and duration values (e.g. [{value: 9, rest: false, duration: 4}, {value: 4, rest: false, duration: 4}, {value: 6, rest: false, duration: 2}]
+     * @param {Array} search - An array of notes (duration with divisions 16, e.g. eighth=8, quarter=16)
      * @returns {number} The edit distance between pitch & duration values
      */
     distancePitchDuration: function(object, search) {
@@ -983,7 +991,7 @@
      * Notes are represented as pitch and duration values.
      *
      * @param {object} object - A musicjson object to search in
-     * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
+     * @param {Array} search - An array of notes ((duration with divisions 16, e.g. eighth=8, quarter=16)
      * @returns {Array} The cost for each ngram
      */
     distancePitchDurationNgrams: function(object, search) {

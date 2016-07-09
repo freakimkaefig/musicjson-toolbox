@@ -97,7 +97,7 @@ Generates array of ngrams in specified length (based on [https://gist.github.com
 Get array of base 12 pitch values from array of notes
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - - The array of base 12 pitch values  
+**Returns**: <code>Array</code> - The array of base 12 pitch values  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -110,7 +110,7 @@ Get array of base 12 pitch values from array of notes
 Generates an array of pitch and duration values for the Mongeau & Sankoff version of melodic edit distanceSee Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - - The correctly mapped array with pitch and duration values  
+**Returns**: <code>Array</code> - The correctly mapped array with pitch and duration values  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -138,7 +138,7 @@ Adjust tempo in array of notes
 Array mapping for note highlighting
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - - The mapped array  
+**Returns**: <code>Array</code> - The mapped array  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -166,7 +166,7 @@ Calculates the base 12 represented pitch
 Returns abc note from interval value
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>string</code> - - The abc note  
+**Returns**: <code>string</code> - The abc note  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -433,7 +433,7 @@ Returns minimum edit-distance between searched notes and the given document.Cal
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | The musicjson document |
-| search | <code>Array</code> | An array of pitch and duration values (e.g. [{value: 9, rest: false, duration: 4}, {value: 4, rest: false, duration: 4}, {value: 6, rest: false, duration: 2}] |
+| search | <code>Array</code> | An array of notes (duration with divisions 16, e.g. eighth=8, quarter=16) |
 
 <a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
 
@@ -485,5 +485,5 @@ Returns the minimum distance between the searched notes and the corresponding ng
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | A musicjson object to search in |
-| search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
+| search | <code>Array</code> | An array of notes ((duration with divisions 16, e.g. eighth=8, quarter=16) |
 
