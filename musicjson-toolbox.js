@@ -343,7 +343,6 @@
      * @returns {Array} The resulting array with adjusted tempo
      */
     tempoAdjust: function(notes, adjust) {
-      // TODO: unit test
       var adjustedNotes = [];
       for (var i = 0; i < notes.length; i++) {
         var tempNote = notes[i];
