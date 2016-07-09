@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MusicJson-Toolbox Demo</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+<div id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Hello MusicJson-Toolbox Demo!</h1>
+                <p>
+                    This demo page showcases some of the features supported by MusicJson-Toolbox.<br />
+                    For full documentation, have a look at:<br />
+                    <a href="https://github.com/freakimkaefig/musicjson-toolbox">Project on GitHub</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h2>Example MusicJSON</h2>
+                <pre id="example-json"></pre>
+            </div>
+            <div class="col">
+                <h2>Operations</h2>
+                <div class="button-row">
+                    <label>Basic transformations:</label><br />
+                    <button type="button" id="btn-notes">Extract notes</button>
+                    <button type="button" id="btn-intervals">Extract intervals</button>
+                    <button type="button" id="btn-parsons">Extract parsons code</button>
+                </div>
+                <div class="button-row">
+                    <label>Extract ngrams:</label><br />
+                    Length: <input type="number" id="input-length" min="2" max="10" value="2"/><br />
+                    <button type="button" id="btn-intervals-ngrams">Interval ngrams</button>
+                    <button type="button" id="btn-parsons-ngrams">Parson code ngrams</button>
+                </div>
+                <div class="button-row">
+                    <label>Distance:</label><br />
+                    Intervals: <input type="text" id="input-intervals" placeholder="Intervals (e.g. * 2 -3 4 0)"/><button type="button" id="btn-intervals-distance">Calculate</button><br />
+                    Parsons Code: <input type="text" id="input-parsons-code" placeholder="Parsons code (e.g. *udur)"/><button type="button" id="btn-parsons-distance">Calculate</button>
+                </div>
+                <pre id="output"></pre>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div id="footer">
+                    MusicJson-Toolbox. Project licensed under MIT Open Source license.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="musicjson-toolbox.min.js"></script>
+<script type="text/javascript">
+    (function() {
+        var musicjson = {
+            "id": "example",
+            "attributes": {
+                "divisions": 4,
+                "clef": {
+                    "line": 2,
+                    "sign": "G"
+                },
+                "key": {
+                    "fifths": -1
+                },
+                "time": {
+                    "beats": "3",
+                    "beat-type": "4"
+                }
+            },
+            "measures": [
+                {
+                    "attributes": {
+                        "repeat": {
+                            "left": false,
+                            "right": false
+                        }
+                    },
+                    "notes": [
+                        {
+                            "pitch": {
+                                "step": "C",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        },
+                        {
+                            "pitch": {
+                                "step": "D",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        },
+                        {
+                            "pitch": {
+                                "step": "E",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        },
+                        {
+                            "pitch": {
+                                "step": "F",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        },
+                        {
+                            "pitch": {
+                                "step": "G",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        },
+                        {
+                            "pitch": {
+                                "step": "C",
+                                "octave": 5,
+                                "alter": 0
+                            },
+                            "rest": true,
+                            "duration": 2,
+                            "type": "eighth"
+                        }
+                    ]
+                },
+                {
+                    "attributes": {
+                        "repeat": {
+                            "left": false,
+                            "right": false
+                        }
+                    },
+                    "notes": [
+                        {
+                            "pitch": {
+                                "step": "C",
+                                "octave": 4,
+                                "alter": 1,
+                                "accidental": "sharp"
+                            },
+                            "rest": false,
+                            "duration": 4,
+                            "type": "quarter"
+                        },
+                        {
+                            "pitch": {
+                                "step": "D",
+                                "octave": 4,
+                                "alter": -1,
+                                "accidental": "flat"
+                            },
+                            "rest": false,
+                            "duration": 4,
+                            "type": "quarter"
+                        },
+                        {
+                            "pitch": {
+                                "step": "B",
+                                "octave": 4,
+                                "alter": 0,
+                                "accidental": "natural"
+                            },
+                            "rest": false,
+                            "duration": 4,
+                            "type": "quarter"
+                        }
+                    ]
+                },
+                {
+                    "attributes": {
+                        "repeat": {
+                            "left": true,
+                            "right": true
+                        }
+                    },
+                    "notes": [
+                        {
+                            "pitch": {
+                                "step": "E",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 4,
+                            "type": "quarter"
+                        },
+                        {
+                            "pitch": {
+                                "step": "A",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 4,
+                            "type": "quarter"
+                        },
+                        {
+                            "pitch": {
+                                "step": "E",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        },
+                        {
+                            "pitch": {
+                                "step": "A",
+                                "octave": 4,
+                                "alter": 0
+                            },
+                            "rest": false,
+                            "duration": 2,
+                            "type": "eighth"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var example = document.getElementById('example-json');
+        var output = document.getElementById('output');
+        var btnNotes = document.getElementById('btn-notes');
+        var btnIntervals = document.getElementById('btn-intervals');
+        var btnParsons = document.getElementById('btn-parsons');
+
+        var inputLength = document.getElementById('input-length');
+        var btnIntervalsNgrams = document.getElementById('btn-intervals-ngrams');
+        var btnParsonsNgrams = document.getElementById('btn-parsons-ngrams');
+
+        var inputIntervals = document.getElementById('input-intervals');
+        var btnIntervalsDistance = document.getElementById('btn-intervals-distance');
+        var inputParsonsCode = document.getElementById('input-parsons-code');
+        var btnParsonsDistance = document.getElementById('btn-parsons-distance');
+
+        // Render musicjson example
+        example.innerHTML = JSON.stringify(musicjson, null, '    ');
+
+        // Attach button click listeners
+        btnNotes.addEventListener('click', function() {
+            output.innerHTML = JSON.stringify(MusicJsonToolbox.notes(musicjson, false, true), null, '    ');
+        });
+        btnIntervals.addEventListener('click', function() {
+            output.innerHTML = MusicJsonToolbox.intervals(MusicJsonToolbox.notes(musicjson, false, false)).map(function (item) {
+                return item.value;
+            }).join(' ');
+        });
+        btnParsons.addEventListener('click', function() {
+            output.innerHTML = MusicJsonToolbox.parsons(MusicJsonToolbox.notes(musicjson, false, false)).map(function (item) {
+                return item.value;
+            }).join('');
+        });
+
+        btnIntervalsNgrams.addEventListener('click', function() {
+            output.innerHTML = MusicJsonToolbox.ngrams(MusicJsonToolbox.intervals(MusicJsonToolbox.notes(musicjson, false, false)), inputLength.value).map(function (ngram) {
+                return ngram.map(function (item) {
+                    return item.value;
+                }).join(' ');
+            }).join('\n');
+        });
+        btnParsonsNgrams.addEventListener('click', function() {
+            output.innerHTML = MusicJsonToolbox.ngrams(MusicJsonToolbox.parsons(MusicJsonToolbox.notes(musicjson, false, false)), inputLength.value).map(function (ngram) {
+                return ngram.map(function (item) {
+                    return item.value;
+                }).join('');
+            }).join('\n');
+        });
+
+        btnIntervalsDistance.addEventListener('click', function() {
+            output.innerHTML = MusicJsonToolbox.distanceIntervals(musicjson, inputIntervals.value.split(' ').map(function (item) {
+                if (item !== '*') {
+                    return parseInt(item);
+                } else {
+                    return item;
+                }
+            }));
+        });
+        btnParsonsDistance.addEventListener('click', function() {
+            output.innerHTML = MusicJsonToolbox.distanceParsons(musicjson, inputParsonsCode.value);
+        });
+    })();
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 var chai = require('chai');
 var chaiStats = require('chai-stats');
-var MusicJsonToolbox = require('../index');
+var MusicJsonToolbox = require('../musicjson-toolbox');
 
 chai.use(chaiStats);
 var expect = chai.expect;

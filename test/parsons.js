@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect;
-var MusicJsonToolbox = require('../index');
+var MusicJsonToolbox = require('../musicjson-toolbox');
 
 var notes = require('./notes.json');
 var parsons = require('./parsons.json');

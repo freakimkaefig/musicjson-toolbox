@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: stretch;
+}
+.row > .col {
+    flex: 1;
+    padding: 0 15px;
+}
+
+#example-json,
+#output {
+    overflow-y: scroll;
+}
+
+label,
+input,
+button {
+    margin-bottom: 5px;
+}
+
+label {
+    font-weight: bold;
+}
+.button-row {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 15px;
+}
+
+#footer {
+    padding: 10px 15px;
+    border-top: 2px solid #000;
+}

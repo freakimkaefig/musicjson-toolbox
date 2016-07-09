@@ -5,6 +5,14 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
 
 
 * [MusicJsonToolbox](#module_MusicJsonToolbox)
+    * [.base12](#module_MusicJsonToolbox.base12) : <code>object</code>
+    * [.base12Inverted](#module_MusicJsonToolbox.base12Inverted) : <code>object</code>
+    * [.degreesFromSemitones](#module_MusicJsonToolbox.degreesFromSemitones) : <code>object</code>
+    * [.deg](#module_MusicJsonToolbox.deg) : <code>object</code>
+    * [.ton](#module_MusicJsonToolbox.ton) : <code>object</code>
+    * [.globalK](#module_MusicJsonToolbox.globalK) : <code>number</code>
+    * [.abcStep](#module_MusicJsonToolbox.abcStep) : <code>Array</code>
+    * [.abcAccidental](#module_MusicJsonToolbox.abcAccidental) : <code>object</code>
     * [.notes(obj, repeat, rests)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
     * [.intervals(notes, keyAdjust)](#module_MusicJsonToolbox.intervals) ⇒ <code>Array</code>
     * [.parsons(notes)](#module_MusicJsonToolbox.parsons) ⇒ <code>Array</code>
@@ -39,6 +47,54 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.distanceIntervalsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsNgrams) ⇒ <code>Array</code>
     * [.distancePitchDurationNgrams(object, search)](#module_MusicJsonToolbox.distancePitchDurationNgrams) ⇒ <code>Array</code>
 
+<a name="module_MusicJsonToolbox.base12"></a>
+
+### MusicJsonToolbox.base12 : <code>object</code>
+Pitch values for steps in base 12 system<pre><code>C  |    | D |    | E  | F  |    | G |    | A  |    | BB# | C# |   | D# |    | E# | F# |   | G# |    | A# |   | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12</code></pre>
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.base12Inverted"></a>
+
+### MusicJsonToolbox.base12Inverted : <code>object</code>
+Inverted [base12](base12)
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.degreesFromSemitones"></a>
+
+### MusicJsonToolbox.degreesFromSemitones : <code>object</code>
+Degrees by number of semitones (for major scale)
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.deg"></a>
+
+### MusicJsonToolbox.deg : <code>object</code>
+Weights for deg(n)-function of Mongeau-Sankoff-Measure.n = number of degrees
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.ton"></a>
+
+### MusicJsonToolbox.ton : <code>object</code>
+Weights for ton(m)-function of Mongeau-Sankoff-Measure.m = number of semitones
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.globalK"></a>
+
+### MusicJsonToolbox.globalK : <code>number</code>
+Parameter k of Mongeau-Sankoff-Measure.Represents the relative contribution of w_length and w_intervalCan be set via:<pre><code>  MusicJsonToolbox.globalK = 0.456;</pre></code>
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.abcStep"></a>
+
+### MusicJsonToolbox.abcStep : <code>Array</code>
+Holds abc steps for conversion from base12 pitch values (including octaves).
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.abcAccidental"></a>
+
+### MusicJsonToolbox.abcAccidental : <code>object</code>
+Holds abc accidental symbols for conversion from music json.
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 <a name="module_MusicJsonToolbox.notes"></a>
 
 ### MusicJsonToolbox.notes(obj, repeat, rests) ⇒ <code>Array</code>

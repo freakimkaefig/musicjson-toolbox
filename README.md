@@ -1,4 +1,5 @@
-# musicjson-toolbox
+musicjson-toolbox
+===========================================================================
 
 [![Build Status](https://travis-ci.org/freakimkaefig/musicjson-toolbox.svg?branch=master)](https://travis-ci.org/freakimkaefig/musicjson-toolbox)
 [![Test Coverage](https://codeclimate.com/github/freakimkaefig/musicjson-toolbox/badges/coverage.svg)](https://codeclimate.com/github/freakimkaefig/musicjson-toolbox/coverage)
@@ -8,7 +9,20 @@ The project is still under construction.
 
 The plan is to create a node toolbox for comparing musicJSON objects.
 
-## Example
+Installation
+---------------------------------------------------------------------------
+The module is preferably installed as node package via npm:
+```
+$ npm install --save musicjson-toolbox
+```
+
+Example
+---------------------------------------------------------------------------
+
+For usage in browser, have a look at [demo page](http://musicjson-toolbox.lukaslamm.com/).
+
+For use as node module refer to the following:
+
 ```javascript
 var MusicJsonToolbox = require('musicjson-toolbox');
 
@@ -51,12 +65,16 @@ var musicjson = {
   ]
 }
 
-var notes = MusicJsonToolbox.notes(musicjson);
-var ngrams = MusicJsonToolbox.ngrams(notes);
+var notes = MusicJsonToolbox.notes(musicjson, false, true); // outputs array of notes (cleared measure "lines")
+var intervals = MusicJsonToolbox.intervals(notes); // outputs array of intervals
+var parsons = MusicJsonToolbox.parsons(notes); // outputs array of parsons code
+var ngrams = MusicJsonToolbox.ngrams(notes, 4); // generates ngrams of defined length from an array
 ```
 
-## API Documentation
+API Documentation
+---------------------------------------------------------------------------
 For full API documentation have a look at [API.md](API.md).
 
-## License
+License
+---------------------------------------------------------------------------
 Licensed under the MIT License. See [LICENSE](LICENSE) for further information.

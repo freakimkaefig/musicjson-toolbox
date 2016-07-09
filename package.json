@@ -2,12 +2,13 @@
   "name": "musicjson-toolbox",
   "version": "0.0.8",
   "description": "A toolbox for comparing musicjson objects",
-  "main": "index.js",
+  "main": "musicjson-toolbox.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec",
     "lint": "./node_modules/.bin/eslint ./**/*.js",
     "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
-    "docs": "./node_modules/.bin/jsdoc2md index.js > API.md"
+    "docs": "./node_modules/.bin/jsdoc2md musicjson-toolbox.js > API.md",
+    "dist": "./node_modules/.bin/minify --output dist/musicjson-toolbox.min.js musicjson-toolbox.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "eslint": "^2.9.0",
     "istanbul": "^0.4.3",
     "jsdoc-to-markdown": "^1.3.6",
+    "minifier": "^0.7.1",
     "mocha": "^2.4.5"
   }
 }

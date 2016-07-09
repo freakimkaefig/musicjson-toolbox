@@ -1,107 +1,151 @@
 (function() {
   'use strict';
 
-  var _ = require('lodash');
-
-  /**
-   * Pitch values for steps in base 12 system
-   * C  |    | D |    | E  | F  |    | G |    | A  |    | B
-   * B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
-   *    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
-   * 1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12
-   *
-   * @constant
-   * @type {object}
-   * @default
-   */
-  var base12 = {
-    'C': 1,
-    'D': 3,
-    'E': 5,
-    'F': 6,
-    'G': 8,
-    'A': 10,
-    'B': 12
-  };
-
-  var base12Inverted = _.invert(base12);
-
-  var degreesFromSemitones = {
-    1: 1,
-    3: 2,
-    5: 3,
-    6: 4,
-    8: 5,
-    10: 6,
-    12: 7
-  };
-
-  var deg = {
-    0: 0,
-    1: 0.9,
-    2: 0.2,
-    3: 0.5,
-    4: 0.1,
-    5: 0.35,
-    6: 0.8
-  };
-
-  var ton = {
-    0: 0.6,
-    1: 2.6,
-    2: 2.3,
-    3: 1,
-    4: 1,
-    5: 1.6,
-    6: 1.8,
-    7: 0.8,
-    8: 1.3,
-    9: 1.3,
-    10: 2.2,
-    11: 2.5
-  };
-
-  var globalK = 0.348;
-
-  var abcStep = [
-    'C,,,', '^C,,,', 'D,,,', '^D,,,', 'E,,,', 'F,,,', '^F,,,', 'G,,,', '^G,,,', 'A,,,', '^A,,,', 'B,,,', // 1
-    'C,,', '^C,,', 'D,,', '^D,,', 'E,,', 'F,,', '^F,,', 'G,,', '^G,,', 'A,,', '^A,,', 'B,,', // 2
-    'C,', '^C,', 'D,', '^D,', 'E,', 'F,', '^F,', 'G,', '^G,', 'A,', '^A,', 'B,', // 3
-    'C', '^C', 'D', '^D', 'E', 'F', '^F', 'G', '^G', 'A', '^A', 'B', // 4
-    'c', '^c', 'd', '^d', 'e', 'f', '^f', 'g', '^g', 'a', '^a', 'b', // 5
-    'c\'', '^c\'', 'd\'', '^d\'', 'e\'', 'f\'', '^f\'', 'g\'', '^g\'', 'a\'', '^a\'', 'b\'', // 6
-    'c\'\'', '^c\'\'', 'd\'\'', '^d\'\'', 'e\'\'', 'f\'\'', '^f\'\'', 'g\'\'', '^g\'\'', 'a\'\'', '^a\'\'', 'b\'\'', // 7
-    'c\'\'\'', '^c\'\'\'', 'd\'\'\'', '^d\'\'\'', 'e\'\'\'', 'f\'\'\'', '^f\'\'\'', 'g\'\'\'', '^g\'\'\'', 'a\'\'\'', '^a\'\'\'', 'b\'\'\'' // 8
-  ];
-
-  var abcAccidental = {
-    'flat-flat': '__',
-    'flat': '_',
-    'natural': '=',
-    'sharp': '^',
-    'sharp-sharp': '^^',
-    'undefined': '',
-    '': ''
-  };
-
-  /**
-   * edit distance operation types
-   *
-   * @constant
-   * @type {{SUBSTITUTION: string, INSERTION: string, DELETION: string}}
-   * @default
-   */
-  var editOperations = {
-    'SUBSTITUTION': 'SUBSTITUTION',
-    'INSERTION': 'INSERTION',
-    'DELETION': 'DELETION'
-  };
-
   /**
    * The MusicJsonToolbox class implements static functions to operate with musicjson objects.
    * @exports MusicJsonToolbox
    */
   var MusicJsonToolbox = {
+
+    /**
+     * Pitch values for steps in base 12 system
+     * <pre><code>
+     * C  |    | D |    | E  | F  |    | G |    | A  |    | B
+     * B# | C# |   | D# |    | E# | F# |   | G# |    | A# |
+     *    | Db |   | Eb | Fb |    | Gb |   | Ab |    | Bb | Cb
+     * 1  | 2  | 3 | 4  | 5  | 6  | 7  | 8 | 9  | 10 | 11 | 12
+     * </code></pre>
+     *
+     * @constant
+     * @type {object}
+     */
+    base12: {
+      'C': 1,
+      'D': 3,
+      'E': 5,
+      'F': 6,
+      'G': 8,
+      'A': 10,
+      'B': 12
+    },
+
+    /**
+     * Inverted {@link base12}
+     *
+     * @constant
+     * @type {object}
+     */
+    base12Inverted: {
+      1: 'C',
+      3: 'D',
+      5: 'E',
+      6: 'F',
+      8: 'G',
+      10: 'A',
+      12: 'B'
+    },
+
+    /**
+     * Degrees by number of semitones (for major scale)
+     *
+     * @constant
+     * @type {object}
+     */
+    degreesFromSemitones: {
+      1: 1,
+      3: 2,
+      5: 3,
+      6: 4,
+      8: 5,
+      10: 6,
+      12: 7
+    },
+
+    /**
+     * Weights for deg(n)-function of Mongeau-Sankoff-Measure.
+     * n = number of degrees
+     *
+     * @constant
+     * @type {object}
+     */
+    deg: {
+      0: 0,
+      1: 0.9,
+      2: 0.2,
+      3: 0.5,
+      4: 0.1,
+      5: 0.35,
+      6: 0.8
+    },
+
+    /**
+     * Weights for ton(m)-function of Mongeau-Sankoff-Measure.
+     * m = number of semitones
+     *
+     * @constant
+     * @type {object}
+     */
+    ton: {
+      0: 0.6,
+      1: 2.6,
+      2: 2.3,
+      3: 1,
+      4: 1,
+      5: 1.6,
+      6: 1.8,
+      7: 0.8,
+      8: 1.3,
+      9: 1.3,
+      10: 2.2,
+      11: 2.5
+    },
+
+    /**
+     * Parameter k of Mongeau-Sankoff-Measure.
+     * Represents the relative contribution of w_length and w_interval
+     *
+     * Can be set via:
+     * <pre><code>
+     *   MusicJsonToolbox.globalK = 0.456;
+     * </pre></code>
+     *
+     * @constant
+     * @type {number}
+     */
+    globalK: 0.348,
+
+    /**
+     * Holds abc steps for conversion from base12 pitch values (including octaves).
+     *
+     * @constant
+     * @type {Array}
+     */
+    abcStep: [
+      'C,,,', '^C,,,', 'D,,,', '^D,,,', 'E,,,', 'F,,,', '^F,,,', 'G,,,', '^G,,,', 'A,,,', '^A,,,', 'B,,,', // 1
+      'C,,', '^C,,', 'D,,', '^D,,', 'E,,', 'F,,', '^F,,', 'G,,', '^G,,', 'A,,', '^A,,', 'B,,', // 2
+      'C,', '^C,', 'D,', '^D,', 'E,', 'F,', '^F,', 'G,', '^G,', 'A,', '^A,', 'B,', // 3
+      'C', '^C', 'D', '^D', 'E', 'F', '^F', 'G', '^G', 'A', '^A', 'B', // 4
+      'c', '^c', 'd', '^d', 'e', 'f', '^f', 'g', '^g', 'a', '^a', 'b', // 5
+      'c\'', '^c\'', 'd\'', '^d\'', 'e\'', 'f\'', '^f\'', 'g\'', '^g\'', 'a\'', '^a\'', 'b\'', // 6
+      'c\'\'', '^c\'\'', 'd\'\'', '^d\'\'', 'e\'\'', 'f\'\'', '^f\'\'', 'g\'\'', '^g\'\'', 'a\'\'', '^a\'\'', 'b\'\'', // 7
+      'c\'\'\'', '^c\'\'\'', 'd\'\'\'', '^d\'\'\'', 'e\'\'\'', 'f\'\'\'', '^f\'\'\'', 'g\'\'\'', '^g\'\'\'', 'a\'\'\'', '^a\'\'\'', 'b\'\'\'' // 8
+    ],
+
+    /**
+     * Holds abc accidental symbols for conversion from music json.
+     *
+     * @constant
+     * @type {object}
+     */
+    abcAccidental: {
+      'flat-flat': '__',
+      'flat': '_',
+      'natural': '=',
+      'sharp': '^',
+      'sharp-sharp': '^^',
+      'undefined': '',
+      '': ''
+    },
 
     /**
      * Returns an array of all notes.
@@ -162,7 +206,7 @@
      * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @returns {Array} An array of notes as contour
      */
-    intervals: function(notes, keyAdjust) {
+    intervals: function(notes) {
       var tempIntervals = [];
 
       tempIntervals.push({
@@ -173,7 +217,7 @@
       });
 
       for (var i = 1; i < notes.length; i++) {
-        var pitchDiff = this.pitchDifference(notes[i-1].pitch, keyAdjust, notes[i].pitch, true, false);
+        var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
         var tempNote = {
           value: pitchDiff,
           duration: this.durationDifference(notes[i-1].duration, notes[i].duration),
@@ -335,7 +379,7 @@
      * @returns {number} The base12 pitch number
      */
     base12Pitch: function(step, keyAdjust, octave, alter, withOctave) {
-      var ret = base12[step];
+      var ret = this.base12[step];
       if (alter) {
         ret += alter;
       }
@@ -383,7 +427,7 @@
      * @returns {string} The abc note
      */
     interval2AbcStep: function(interval, base) {
-      return abcStep[base + interval - 13];
+      return this.abcStep[base + interval - 13];
     },
 
     /**
@@ -394,8 +438,8 @@
      * @returns {string} The abc note
      */
     pitchDuration2AbcStep: function(item, prevItem) {
-      var accidental = abcAccidental[item.pitch.accidental];
-      var pitch = abcStep[this.base12Pitch(item.pitch.step, 0, item.pitch.octave, 0, true) - 13];
+      var accidental = this.abcAccidental[item.pitch.accidental];
+      var pitch = this.abcStep[this.base12Pitch(item.pitch.step, 0, item.pitch.octave, 0, true) - 13];
       var duration = item.duration;
       if (prevItem !== null) {
         if (prevItem.dot) {
@@ -522,9 +566,9 @@
             matrix[i][j] = matrix[i-1][j-1];
           } else {
             matrix[i][j] = Math.min(
-              matrix[i-1][j-1] + weight(i, j, editOperations['SUBSTITUTION']), // substitution
-              matrix[i][j-1] + weight(i, j, editOperations['INSERTION']), // insertion
-              matrix[i-1][j] + weight(i, j, editOperations['DELETION'])  // deletion
+              matrix[i-1][j-1] + weight(i, j), // substitution
+              matrix[i][j-1] + weight(i, j), // insertion
+              matrix[i-1][j] + weight(i, j)  // deletion
             );
           }
         }
@@ -675,7 +719,7 @@
     weightSubstitution: function(a, b, i, j) {
       var weightInterval = this.weightInterval(a[i-1], b[j-1]);
       var weightLength = this.weightLength(a[i-1].duration, b[j-1].duration);
-      var weight = weightInterval + (globalK * weightLength);
+      var weight = weightInterval + (this.globalK * weightLength);
 
 
       return weight;
@@ -689,7 +733,7 @@
      * @returns {number} Resulting weight
      */
     weightInsertion: function(b, j) {
-      return (globalK * b[j-1].duration);
+      return (this.globalK * b[j-1].duration);
     },
 
     /**
@@ -700,7 +744,7 @@
      * @returns {number} Resulting weight
      */
     weightDeletion: function(a, i) {
-      return (globalK * a[i-1].duration);
+      return (this.globalK * a[i-1].duration);
     },
 
     /**
@@ -731,7 +775,7 @@
           k--;
         }
         var weightLength = this.weightLength(a[i-1].duration, durations);
-        weight += (globalK * weightLength);
+        weight += (this.globalK * weightLength);
 
         if (minWeight > weight) {
           minWeight = weight;
@@ -769,7 +813,7 @@
           k--;
         }
         var weightLength = this.weightLength(durations, b[j-1].duration);
-        weight += (globalK * weightLength);
+        weight += (this.globalK * weightLength);
 
         if (minWeight > weight) {
           minWeight = weight;
@@ -800,14 +844,14 @@
         baseB = 12;
       }
 
-      if (typeof base12Inverted[baseA] !== 'undefined' && typeof base12Inverted[baseB] !== 'undefined') {
+      if (typeof this.base12Inverted[baseA] !== 'undefined' && typeof this.base12Inverted[baseB] !== 'undefined') {
         // use deg(n(m))
-        var degreeA = degreesFromSemitones[baseA];
-        var degreeB = degreesFromSemitones[baseB];
-        return deg[Math.abs(degreeA - degreeB)];
+        var degreeA = this.degreesFromSemitones[baseA];
+        var degreeB = this.degreesFromSemitones[baseB];
+        return this.deg[Math.abs(degreeA - degreeB)];
       } else {
         // use ton(m)
-        return ton[Math.abs(baseA - baseB)];
+        return this.ton[Math.abs(baseA - baseB)];
       }
     },
 
@@ -863,8 +907,7 @@
      * @returns {number} The edit distance between intervals
      */
     distanceIntervals: function(object, search) {
-      var keyAdjust = parseInt(object.attributes.key.fifths);
-      var intervals = this.intervals(this.notes(object, false, false), keyAdjust);
+      var intervals = this.intervals(this.notes(object, false, false));
       return this.arrayEditDistance(
         intervals.map(function(item) {
           return item.value;
@@ -960,8 +1003,7 @@
      * @returns {Array} The cost for each ngram
      */
     distanceIntervalsNgrams: function(object, search) {
-      var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.intervals(this.notes(object, false, false), keyAdjust), search.length);
+      var ngrams = this.ngrams(this.intervals(this.notes(object, false, false)), search.length);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {
