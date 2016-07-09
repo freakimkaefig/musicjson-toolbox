@@ -92,6 +92,64 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
+  describe('.tempoAdjust', function() {
+    it('correctly adjusts tempo', function() {
+      expect(MusicJsonToolbox.tempoAdjust([
+        {
+          pitch: {
+            step: 'C',
+            octave: 4,
+            alter: 0
+          },
+          rest: false,
+          duration: 2,
+          type: 'eighth',
+          measureNumber: 0,
+          noteNumber: 0
+        },
+        {
+          pitch: {
+            step: 'D',
+            octave: 5,
+            alter: 0
+          },
+          rest: false,
+          duration: 4,
+          type: 'quarter',
+          measureNumber: 0,
+          noteNumber: 1
+        }
+      ], function(duration) {
+        return duration * 4;
+      })).to.deep.equal([
+        {
+          pitch: {
+            step: 'C',
+            octave: 4,
+            alter: 0
+          },
+          rest: false,
+          duration: 8,
+          type: 'eighth',
+          measureNumber: 0,
+          noteNumber: 0
+        },
+        {
+          pitch: {
+            step: 'D',
+            octave: 5,
+            alter: 0
+          },
+          rest: false,
+          duration: 16,
+          type: 'quarter',
+          measureNumber: 0,
+          noteNumber: 1
+        }
+      ]);
+    });
+  });
+
   describe('.highlightMapping', function() {
     it('correctly maps highlighting measures', function() {
       var output;

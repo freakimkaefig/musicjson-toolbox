@@ -293,6 +293,24 @@
     },
 
     /**
+     * Adjust tempo in array of notes
+     *
+     * @param {Array} notes - The array of notes where tempo should be adjusted
+     * @param {number} adjust - Function that returns new duration (e.g. `function(duration) { return duration * 2; }` )
+     * @returns {Array} The resulting array with adjusted tempo
+     */
+    tempoAdjust: function(notes, adjust) {
+      // TODO: unit test
+      var adjustedNotes = [];
+      for (var i = 0; i < notes.length; i++) {
+        var tempNote = notes[i];
+        tempNote.duration = adjust(tempNote.duration);
+        adjustedNotes.push(tempNote);
+      }
+      return adjustedNotes;
+    },
+
+    /**
      * Array mapping for note highlighting
      *
      * @param {Array} array - The array that should be mapped for highlighting

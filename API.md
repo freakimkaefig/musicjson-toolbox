@@ -11,6 +11,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.ngrams(array, length)](#module_MusicJsonToolbox.ngrams) ⇒ <code>Array</code>
     * [.pitchValues(notes, keyAdjust)](#module_MusicJsonToolbox.pitchValues) ⇒ <code>Array</code>
     * [.pitchDurationValues(notes, keyAdjust, divisions, beatType)](#module_MusicJsonToolbox.pitchDurationValues) ⇒ <code>Array</code>
+    * [.tempoAdjust(notes, adjust)](#module_MusicJsonToolbox.tempoAdjust) ⇒ <code>Array</code>
     * [.highlightMapping(array)](#module_MusicJsonToolbox.highlightMapping) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.interval2AbcStep(interval, base)](#module_MusicJsonToolbox.interval2AbcStep) ⇒ <code>string</code>
@@ -117,6 +118,19 @@ Generates an array of pitch and duration values for the Mongeau & Sankoff versio
 | keyAdjust | <code>number</code> | Adjusting of key by circle of fifths |
 | divisions | <code>number</code> | The divisions of the document |
 | beatType | <code>number</code> | The documents beat type |
+
+<a name="module_MusicJsonToolbox.tempoAdjust"></a>
+
+### MusicJsonToolbox.tempoAdjust(notes, adjust) ⇒ <code>Array</code>
+Adjust tempo in array of notes
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Array</code> - The resulting array with adjusted tempo  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| notes | <code>Array</code> | The array of notes where tempo should be adjusted |
+| adjust | <code>number</code> | Function that returns new duration (e.g. `function(duration) { return duration * 2; }` ) |
 
 <a name="module_MusicJsonToolbox.highlightMapping"></a>
 
