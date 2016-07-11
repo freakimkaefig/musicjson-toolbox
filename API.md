@@ -20,6 +20,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.pitchValues(notes, keyAdjust)](#module_MusicJsonToolbox.pitchValues) ⇒ <code>Array</code>
     * [.pitchDurationValues(notes, keyAdjust, divisions, beatType)](#module_MusicJsonToolbox.pitchDurationValues) ⇒ <code>Array</code>
     * [.tempoAdjust(notes, adjust)](#module_MusicJsonToolbox.tempoAdjust) ⇒ <code>Array</code>
+    * [.valueMapping(array)](#module_MusicJsonToolbox.valueMapping) ⇒ <code>Array</code>
     * [.highlightMapping(array)](#module_MusicJsonToolbox.highlightMapping) ⇒ <code>Array</code>
     * [.base12Pitch(step, keyAdjust, octave, alter, withOctave)](#module_MusicJsonToolbox.base12Pitch) ⇒ <code>number</code>
     * [.interval2AbcStep(interval, base)](#module_MusicJsonToolbox.interval2AbcStep) ⇒ <code>string</code>
@@ -39,9 +40,13 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.weightInterval(a, b)](#module_MusicJsonToolbox.weightInterval) ⇒ <code>number</code>
     * [.weightLength(a, b)](#module_MusicJsonToolbox.weightLength) ⇒ <code>number</code>
     * [.distanceParsons(object, search)](#module_MusicJsonToolbox.distanceParsons) ⇒ <code>number</code>
+    * [.parsonSimilarity(object1, object2)](#module_MusicJsonToolbox.parsonSimilarity) ⇒ <code>number</code>
     * [.distancePitch(object, search)](#module_MusicJsonToolbox.distancePitch) ⇒ <code>number</code>
+    * [.pitchSimilarity(object1, object2)](#module_MusicJsonToolbox.pitchSimilarity) ⇒ <code>number</code>
     * [.distanceIntervals(object, search)](#module_MusicJsonToolbox.distanceIntervals) ⇒ <code>number</code>
+    * [.intervalSimilarity(object1, object2)](#module_MusicJsonToolbox.intervalSimilarity) ⇒ <code>number</code>
     * [.distancePitchDuration(object, search)](#module_MusicJsonToolbox.distancePitchDuration) ⇒ <code>number</code>
+    * [.pitchDurationSimilarity(object1, object2)](#module_MusicJsonToolbox.pitchDurationSimilarity) ⇒ <code>number</code>
     * [.distanceParsonsNgrams(object, search)](#module_MusicJsonToolbox.distanceParsonsNgrams) ⇒ <code>Array</code>
     * [.distancePitchNgrams(object, search)](#module_MusicJsonToolbox.distancePitchNgrams) ⇒ <code>Array</code>
     * [.distanceIntervalsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsNgrams) ⇒ <code>Array</code>
@@ -187,6 +192,18 @@ Adjust tempo in array of notes
 | --- | --- | --- |
 | notes | <code>Array</code> | The array of notes where tempo should be adjusted |
 | adjust | <code>number</code> | Function that returns new duration (e.g. `function(duration) { return duration * 2; }` ) |
+
+<a name="module_MusicJsonToolbox.valueMapping"></a>
+
+### MusicJsonToolbox.valueMapping(array) ⇒ <code>Array</code>
+Returns array of item values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>Array</code> - The mapped array  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| array | <code>Array</code> | The array that should be mapped |
 
 <a name="module_MusicJsonToolbox.highlightMapping"></a>
 
@@ -452,18 +469,44 @@ Returns minimum edit distance between searched notes and the given document.Cal
 | object | <code>object</code> | A musicjson object to search in |
 | search | <code>string</code> | A string in parsons code (e.g. '*udu') |
 
+<a name="module_MusicJsonToolbox.parsonSimilarity"></a>
+
+### MusicJsonToolbox.parsonSimilarity(object1, object2) ⇒ <code>number</code>
+Returns minimum edit distance between two document.Calculation based on parsons code strings
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between parsons codes  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object1 | <code>object</code> | The first musicjson object |
+| object2 | <code>object</code> | The second musicjson object |
+
 <a name="module_MusicJsonToolbox.distancePitch"></a>
 
 ### MusicJsonToolbox.distancePitch(object, search) ⇒ <code>number</code>
 Returns minimum edit distance between searched notes and the given document.Calculation based on pitch values
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between intervals  
+**Returns**: <code>number</code> - The edit distance between pitch values  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | object | <code>object</code> | The document |
 | search | <code>Array</code> | An array of pitch values (e.g. [1, 6, 1, 6]) |
+
+<a name="module_MusicJsonToolbox.pitchSimilarity"></a>
+
+### MusicJsonToolbox.pitchSimilarity(object1, object2) ⇒ <code>number</code>
+Returns minimum edit distance between two document.Calculation based on pitch values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between pitch values  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object1 | <code>object</code> | The first musicjson object |
+| object2 | <code>object</code> | The second musicjson object |
 
 <a name="module_MusicJsonToolbox.distanceIntervals"></a>
 
@@ -478,6 +521,19 @@ Returns minimum edit distance between searched notes and the given document.Cal
 | object | <code>object</code> | The musicjson document |
 | search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
 
+<a name="module_MusicJsonToolbox.intervalSimilarity"></a>
+
+### MusicJsonToolbox.intervalSimilarity(object1, object2) ⇒ <code>number</code>
+Returns minimum edit distance between two document.Calculation based on intervals
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between intervals  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object1 | <code>object</code> | The first musicjson object |
+| object2 | <code>object</code> | The second musicjson object |
+
 <a name="module_MusicJsonToolbox.distancePitchDuration"></a>
 
 ### MusicJsonToolbox.distancePitchDuration(object, search) ⇒ <code>number</code>
@@ -490,6 +546,19 @@ Returns minimum edit-distance between searched notes and the given document.Cal
 | --- | --- | --- |
 | object | <code>object</code> | The musicjson document |
 | search | <code>Array</code> | An array of notes (duration with divisions 16, e.g. eighth=8, quarter=16) |
+
+<a name="module_MusicJsonToolbox.pitchDurationSimilarity"></a>
+
+### MusicJsonToolbox.pitchDurationSimilarity(object1, object2) ⇒ <code>number</code>
+Returns minimum edit distance between two document.Calculation based on pitch and duration values
+
+**Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+**Returns**: <code>number</code> - The edit distance between pitch and duration values  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object1 | <code>object</code> | The first musicjson object |
+| object2 | <code>object</code> | The second musicjson object |
 
 <a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
 

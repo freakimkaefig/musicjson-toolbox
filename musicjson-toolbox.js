@@ -353,6 +353,18 @@
     },
 
     /**
+     * Returns array of item values
+     *
+     * @param {Array} array - The array that should be mapped
+     * @returns {Array} The mapped array
+     */
+    valueMapping: function(array) {
+      return array.map(function(item) {
+        return item.value;
+      });
+    },
+
+    /**
      * Array mapping for note highlighting
      *
      * @param {Array} array - The array that should be mapped for highlighting
@@ -874,12 +886,26 @@
      * @returns {number} The edit distance between parsons codes
      */
     distanceParsons: function(object, search) {
-      var parsons = this.parsons(this.notes(object, false, false));
       return this.stringEditDistance(
-        parsons.map(function(item) {
-          return item.value;
-        }).join(''),
+        this.valueMapping(
+          this.parsons(this.notes(object, false, false))
+        ).join(''),
         search
+      );
+    },
+
+    /**
+     * Returns minimum edit distance between two document.
+     * Calculation based on parsons code strings
+     *
+     * @param {object} object1 - The first musicjson object
+     * @param {object} object2 - The second musicjson object
+     * @returns {number} The edit distance between parsons codes
+     */
+    parsonSimilarity: function(object1, object2) {
+      return this.distanceParsons(
+        object1,
+        this.valueMapping(this.parsons(this.notes(object2, false, false))).join('')
       );
     },
 
@@ -889,12 +915,31 @@
      *
      * @param {object} object - The document
      * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
-     * @returns {number} The edit distance between intervals
+     * @returns {number} The edit distance between pitch values
      */
     distancePitch: function(object, search) {
-      var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false, false);
-      return this.arrayEditDistance(this.pitchValues(notes, keyAdjust), search);
+      return this.arrayEditDistance(
+        this.pitchValues(
+          this.notes(object, false, false),
+          parseInt(object.attributes.key.fifths)
+        ),
+        search
+      );
+    },
+
+    /**
+     * Returns minimum edit distance between two document.
+     * Calculation based on pitch values
+     *
+     * @param {object} object1 - The first musicjson object
+     * @param {object} object2 - The second musicjson object
+     * @returns {number} The edit distance between pitch values
+     */
+    pitchSimilarity: function(object1, object2) {
+      return this.distancePitch(
+        object1,
+        this.pitchValues(this.notes(object2, false, false), parseInt(object2.attributes.key.fifths))
+      );
     },
 
     /**
@@ -906,12 +951,24 @@
      * @returns {number} The edit distance between intervals
      */
     distanceIntervals: function(object, search) {
-      var intervals = this.intervals(this.notes(object, false, false));
       return this.arrayEditDistance(
-        intervals.map(function(item) {
-          return item.value;
-        }),
+        this.valueMapping(this.intervals(this.notes(object, false, false))),
         search
+      );
+    },
+
+    /**
+     * Returns minimum edit distance between two document.
+     * Calculation based on intervals
+     *
+     * @param {object} object1 - The first musicjson object
+     * @param {object} object2 - The second musicjson object
+     * @returns {number} The edit distance between intervals
+     */
+    intervalSimilarity: function(object1, object2) {
+      return this.distanceIntervals(
+        object1,
+        this.valueMapping(this.intervals(this.notes(object2, false, false)))
       );
     },
 
@@ -924,15 +981,33 @@
      * @returns {number} The edit distance between pitch & duration values
      */
     distancePitchDuration: function(object, search) {
-      var keyAdjust = parseInt(object.attributes.key.fifths);
-      var notes = this.notes(object, false, true);
       return this.weightedEditDistance(
         this.pitchDurationValues(
-          notes,
-          keyAdjust,
+          this.notes(object, false, true),
+          parseInt(object.attributes.key.fifths),
           parseInt(object.attributes.divisions),
           parseInt(object.attributes.time['beat-type'])
         ), search);
+    },
+
+    /**
+     * Returns minimum edit distance between two document.
+     * Calculation based on pitch and duration values
+     *
+     * @param {object} object1 - The first musicjson object
+     * @param {object} object2 - The second musicjson object
+     * @returns {number} The edit distance between pitch and duration values
+     */
+    pitchDurationSimilarity: function(object1, object2) {
+      return this.distancePitchDuration(
+        object1,
+        this.pitchDurationValues(
+          this.notes(object2, false, true),
+          parseInt(object2.attributes.key.fifths),
+          parseInt(object2.attributes.divisions),
+          parseInt(object2.attributes.time['beat-type'])
+        )
+      );
     },
 
     /**
@@ -958,9 +1033,7 @@
 
         distances.push({
           distance: this.stringEditDistance(
-            ngrams[i].map(function(item) {
-              return item.value;
-            }).join(''),
+            this.valueMapping(ngrams[i]).join(''),
             search
           ),
           highlight: this.highlightMapping(ngrams[i])
@@ -1015,9 +1088,7 @@
 
         distances.push({
           distance: this.arrayEditDistance(
-            ngrams[i].map(function(item) {
-              return item.value;
-            }),
+            this.valueMapping(ngrams[i]),
             search
           ),
           highlight: this.highlightMapping(ngrams[i])

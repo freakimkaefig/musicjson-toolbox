@@ -150,6 +150,25 @@ describe('MusicJsonToolbox Helper Functions', function() {
     });
   });
 
+  describe('.valueMapping', function() {
+    it('correctly maps array values', function() {
+      expect(MusicJsonToolbox.valueMapping([
+        {value: 1, measureNumber: 0},
+        {value: 2, measureNumber: 0},
+        {value: 3, measureNumber: 0},
+        {value: 4, measureNumber: 0},
+        {value: 5, measureNumber: 0}
+      ])).to.deep.equal([1, 2, 3, 4, 5]);
+
+      expect(MusicJsonToolbox.valueMapping([
+        {value: '*', measureNumber: 0},
+        {value: 'u', measureNumber: 0},
+        {value: 'd', measureNumber: 0},
+        {value: 'r', measureNumber: 0}
+      ])).to.deep.equal(['*', 'u', 'd', 'r']);
+    });
+  });
+
   describe('.highlightMapping', function() {
     it('correctly maps highlighting measures', function() {
       var output;
