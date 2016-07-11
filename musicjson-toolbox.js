@@ -203,7 +203,6 @@
      * Example:
      * [ {0}, {2}, {-2}, {5}, ... ]
      * @param {Array} notes - Array of notes for which the contour should be created
-     * @param {number} keyAdjust - The position in circle of fifths of the searched notes
      * @returns {Array} An array of notes as contour
      */
     intervals: function(notes) {
@@ -218,9 +217,10 @@
 
       for (var i = 1; i < notes.length; i++) {
         var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
+        var durationDiff = this.durationDifference(notes[i-1].duration, notes[i].duration, false);
         var tempNote = {
           value: pitchDiff,
-          duration: this.durationDifference(notes[i-1].duration, notes[i].duration),
+          duration: durationDiff,
           noteNumber: notes[i].noteNumber,
           measureNumber: notes[i].measureNumber
         };
@@ -321,14 +321,15 @@
      */
     pitchDurationValues: function(notes, keyAdjust, divisions, beatType) {
       return notes.map(function(item) {
+        var base12Pitch = this.base12Pitch(
+          item.pitch.step,
+          keyAdjust,
+          item.pitch.octave,
+          item.pitch.alter,
+          false
+        );
         return {
-          value: this.base12Pitch(
-            item.pitch.step,
-            keyAdjust,
-            item.pitch.octave,
-            item.pitch.alter,
-            false
-          ),
+          value: base12Pitch,
           rest: item.rest,
           duration: (item.duration / divisions / beatType) * 16
         };

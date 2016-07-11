@@ -14,7 +14,7 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.abcStep](#module_MusicJsonToolbox.abcStep) : <code>Array</code>
     * [.abcAccidental](#module_MusicJsonToolbox.abcAccidental) : <code>object</code>
     * [.notes(obj, repeat, rests)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
-    * [.intervals(notes, keyAdjust)](#module_MusicJsonToolbox.intervals) ⇒ <code>Array</code>
+    * [.intervals(notes)](#module_MusicJsonToolbox.intervals) ⇒ <code>Array</code>
     * [.parsons(notes)](#module_MusicJsonToolbox.parsons) ⇒ <code>Array</code>
     * [.ngrams(array, length)](#module_MusicJsonToolbox.ngrams) ⇒ <code>Array</code>
     * [.pitchValues(notes, keyAdjust)](#module_MusicJsonToolbox.pitchValues) ⇒ <code>Array</code>
@@ -116,7 +116,7 @@ Returns an array of all notes.Removes rests.Example:[ {pitch: {step, octave,
 
 <a name="module_MusicJsonToolbox.intervals"></a>
 
-### MusicJsonToolbox.intervals(notes, keyAdjust) ⇒ <code>Array</code>
+### MusicJsonToolbox.intervals(notes) ⇒ <code>Array</code>
 Returns an array of intervals from an array of notesExample:[ {0}, {2}, {-2}, {5}, ... ]
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -125,7 +125,6 @@ Returns an array of intervals from an array of notesExample:[ {0}, {2}, {-2},
 | Param | Type | Description |
 | --- | --- | --- |
 | notes | <code>Array</code> | Array of notes for which the contour should be created |
-| keyAdjust | <code>number</code> | The position in circle of fifths of the searched notes |
 
 <a name="module_MusicJsonToolbox.parsons"></a>
 
