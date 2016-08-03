@@ -1,6 +1,6 @@
 [
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 0,
@@ -21,7 +21,7 @@
     ]
   },
   {
-    "distance": 3,
+    "distance": 0.25,
     "highlight": [
       {
         "measure": 0,
@@ -42,7 +42,7 @@
     ]
   },
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 0,
@@ -63,7 +63,7 @@
     ]
   },
   {
-    "distance": 3,
+    "distance": 0.25,
     "highlight": [
       {
         "measure": 0,
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 0,
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 1,
@@ -126,7 +126,7 @@
     ]
   },
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 1,
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 1,
@@ -168,7 +168,7 @@
     ]
   },
   {
-    "distance": 4,
+    "distance": 0,
     "highlight": [
       {
         "measure": 2,

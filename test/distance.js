@@ -23,28 +23,28 @@ describe('MusicJsonToolbox Distance Functions', function() {
   describe('.distanceParsons', function() {
     it('calculates edit-distance between parsons code strings', function() {
       var distanceParsons = MusicJsonToolbox.distanceParsons(musicjson, searchParsons);
-      expect(distanceParsons).to.be.equal(8);
+      expect(distanceParsons).to.almost.equal(0.3333333);
     });
   });
 
   describe('.distancePitch', function() {
     it('calculates edit-distance between pitch values', function() {
       var distancePitch = MusicJsonToolbox.distancePitch(musicjson, searchPitch);
-      expect(distancePitch).to.be.equal(11);
+      expect(distancePitch).to.almost.equal(0.0833333);
     });
   });
 
   describe('.distanceIntervals', function() {
     it('calculates edit-distance between interval values', function() {
       var distancePitch = MusicJsonToolbox.distanceIntervals(musicjson, searchIntervals);
-      expect(distancePitch).to.be.equal(8);
+      expect(distancePitch).to.almost.equal(0.3333333);
     });
   });
 
   describe('.distancePitchDuration', function() {
     it('calculates weighted edit-distance between pitch & duration values', function() {
       var distancePitchDuration = MusicJsonToolbox.distancePitchDuration(musicjson, searchPitchDuration);
-      expect(distancePitchDuration).to.almost.equal(9.846);
+      expect(distancePitchDuration).to.almost.equal(0.21408045977);
     });
   });
 

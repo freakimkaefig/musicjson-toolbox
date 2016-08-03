@@ -458,10 +458,10 @@ Calculates weight for difference of length
 <a name="module_MusicJsonToolbox.distanceParsons"></a>
 
 ### MusicJsonToolbox.distanceParsons(object, search) ⇒ <code>number</code>
-Returns minimum edit distance between searched notes and the given document.Calculation based on parsons code strings
+Returns the fine score for similarity between searched notes and the given document.Calculation based on parsons code strings
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between parsons codes  
+**Returns**: <code>number</code> - The fine score for similarity between parsons codes (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -471,10 +471,10 @@ Returns minimum edit distance between searched notes and the given document.Cal
 <a name="module_MusicJsonToolbox.parsonSimilarity"></a>
 
 ### MusicJsonToolbox.parsonSimilarity(object1, object2) ⇒ <code>number</code>
-Returns minimum edit distance between two document.Calculation based on parsons code strings
+Returns the fine score for similarity between two document.Calculation based on parsons code strings
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between parsons codes  
+**Returns**: <code>number</code> - The fine score for similarity between parsons codes (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -484,10 +484,10 @@ Returns minimum edit distance between two document.Calculation based on parsons
 <a name="module_MusicJsonToolbox.distancePitch"></a>
 
 ### MusicJsonToolbox.distancePitch(object, search) ⇒ <code>number</code>
-Returns minimum edit distance between searched notes and the given document.Calculation based on pitch values
+Returns the fine score for similarity between searched notes and the given document.Calculation based on pitch values
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between pitch values  
+**Returns**: <code>number</code> - The fine score for similarity between pitch values (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -497,10 +497,10 @@ Returns minimum edit distance between searched notes and the given document.Cal
 <a name="module_MusicJsonToolbox.pitchSimilarity"></a>
 
 ### MusicJsonToolbox.pitchSimilarity(object1, object2) ⇒ <code>number</code>
-Returns minimum edit distance between two document.Calculation based on pitch values
+Returns the fine score for similarity between two document.Calculation based on pitch values
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between pitch values  
+**Returns**: <code>number</code> - The fine score for similarity between pitch values (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -510,10 +510,10 @@ Returns minimum edit distance between two document.Calculation based on pitch v
 <a name="module_MusicJsonToolbox.distanceIntervals"></a>
 
 ### MusicJsonToolbox.distanceIntervals(object, search) ⇒ <code>number</code>
-Returns minimum edit distance between searched notes and the given document.Calculation based on intervals
+Returns the fine score for similarity between searched notes and the given document.Calculation based on intervals
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between intervals  
+**Returns**: <code>number</code> - The fine score for similarity between intervals (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -523,10 +523,10 @@ Returns minimum edit distance between searched notes and the given document.Cal
 <a name="module_MusicJsonToolbox.intervalSimilarity"></a>
 
 ### MusicJsonToolbox.intervalSimilarity(object1, object2) ⇒ <code>number</code>
-Returns minimum edit distance between two document.Calculation based on intervals
+Returns the fine score for similarity between two document.Calculation based on intervals
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between intervals  
+**Returns**: <code>number</code> - The fine score for similarity between intervals (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -539,7 +539,7 @@ Returns minimum edit distance between two document.Calculation based on interva
 Returns minimum edit-distance between searched notes and the given document.Calculation is based on pitch and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between pitch & duration values  
+**Returns**: <code>number</code> - The fine score for similarity between pitch & duration values (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -549,10 +549,10 @@ Returns minimum edit-distance between searched notes and the given document.Cal
 <a name="module_MusicJsonToolbox.pitchDurationSimilarity"></a>
 
 ### MusicJsonToolbox.pitchDurationSimilarity(object1, object2) ⇒ <code>number</code>
-Returns minimum edit distance between two document.Calculation based on pitch and duration values
+Returns the fine score for similarity between two document.Calculation based on pitch and duration values
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>number</code> - The edit distance between pitch and duration values  
+**Returns**: <code>number</code> - The fine score for similarity between pitch and duration values (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -562,10 +562,10 @@ Returns minimum edit distance between two document.Calculation based on pitch a
 <a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
 
 ### MusicJsonToolbox.distanceParsonsNgrams(object, search) ⇒ <code>Array</code>
-Returns minimum edit distance between searched notes and the corresponding ngrams.Notes are represented in parsons code.
+Returns the fine score for similarity between searched notes and the corresponding ngrams.Notes are represented in parsons code.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - The cost for each ngram  
+**Returns**: <code>Array</code> - The fine score for similarity for each ngram (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -575,10 +575,10 @@ Returns minimum edit distance between searched notes and the corresponding ngram
 <a name="module_MusicJsonToolbox.distancePitchNgrams"></a>
 
 ### MusicJsonToolbox.distancePitchNgrams(object, search) ⇒ <code>Array</code>
-Returns the minimum edit-distance between the searched notes and corresponding ngrams.Notes are represented with pitch and duration
+Returns the fine score for similarity between the searched notes and corresponding ngrams.Notes are represented with pitch and duration
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - The cost for each ngram  
+**Returns**: <code>Array</code> - The fine score for similarity for each ngram (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -588,10 +588,10 @@ Returns the minimum edit-distance between the searched notes and corresponding n
 <a name="module_MusicJsonToolbox.distanceIntervalsNgrams"></a>
 
 ### MusicJsonToolbox.distanceIntervalsNgrams(object, search) ⇒ <code>Array</code>
-Returns the minimum distance between the searched notes and the corresponding ngrams.Notes are represented as intervals.
+Returns the fine score for similarity between the searched notes and the corresponding ngrams.Notes are represented as intervals.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - The cost for each ngram  
+**Returns**: <code>Array</code> - The fine score for similarity for each ngram (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -601,10 +601,10 @@ Returns the minimum distance between the searched notes and the corresponding ng
 <a name="module_MusicJsonToolbox.distancePitchDurationNgrams"></a>
 
 ### MusicJsonToolbox.distancePitchDurationNgrams(object, search) ⇒ <code>Array</code>
-Returns the minimum distance between the searched notes and the corresponding ngrams.Notes are represented as pitch and duration values.
+Returns the fine score for similarity between the searched notes and the corresponding ngrams.Notes are represented as pitch and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
-**Returns**: <code>Array</code> - The cost for each ngram  
+**Returns**: <code>Array</code> - The fine score for similarity for each ngram (0-1)  
 
 | Param | Type | Description |
 | --- | --- | --- |

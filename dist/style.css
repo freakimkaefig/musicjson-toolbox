@@ -1,5 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
+
 body {
     margin: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 #main {
@@ -17,11 +20,6 @@ body {
 .row > .col {
     flex: 1;
     padding: 0 15px;
-}
-
-#example-json,
-#output {
-    overflow-y: scroll;
 }
 
 label,

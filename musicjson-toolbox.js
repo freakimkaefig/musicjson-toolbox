@@ -163,19 +163,24 @@
       var tempNotes = [];
       var repeatStart = -1;
 
+      // loop over measures
       for (var i = 0; i < obj.measures.length; i++) {
 
+        // add note and measure number for eventual identification
         for (var j = 0; j < obj.measures[i].notes.length; j++) {
           obj.measures[i].notes[j].measureNumber = i;
           obj.measures[i].notes[j].noteNumber = j;
         }
 
+        // store repeat start point
         if (repeat && obj.measures[i].attributes.repeat.left) {
           repeatStart = i;
         }
 
+        // add notes of measure
         tempNotes = tempNotes.concat(obj.measures[i].notes);
 
+        // add repeating notes if activated
         if (repeat && obj.measures[i].attributes.repeat.right) {
           /* istanbul ignore else  */
           if (repeatStart !== -1) {
@@ -188,9 +193,12 @@
         }
       }
 
-      for (var k = 0; k < tempNotes.length; k++) {
-        if ((tempNotes[k].rest === true || tempNotes[k].rest === 'true') && rests === false) {
-          tempNotes.splice(k, 1);
+      // remove rests when set
+      if (rests === false) {
+        for (var k = 0; k < tempNotes.length; k++) {
+          if ((tempNotes[k].rest === true || tempNotes[k].rest === 'true')) {
+            tempNotes.splice(k, 1);
+          }
         }
       }
 
@@ -208,6 +216,7 @@
     intervals: function(notes) {
       var tempIntervals = [];
 
+      // add initial interval '*'
       tempIntervals.push({
         value: '*',
         duration: '*',
@@ -216,8 +225,11 @@
       });
 
       for (var i = 1; i < notes.length; i++) {
+        // calculate differences in pitch and duration
         var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
         var durationDiff = this.durationDifference(notes[i-1].duration, notes[i].duration, false);
+
+        // add interval to array
         var tempNote = {
           value: pitchDiff,
           duration: durationDiff,
@@ -239,6 +251,7 @@
     parsons: function(notes) {
       var tempParsons = [];
 
+      // add initial parsons item '*'
       tempParsons.push({
         value: '*',
         noteNumber: 0,
@@ -247,16 +260,19 @@
 
       for (var i = 1; i < notes.length; i++) {
         var parson;
+        // calculate difference in pitch
         var pitchDiff = this.pitchDifference(notes[i-1].pitch, 0, notes[i].pitch, true, false);
-        /* istanbul ignore else  */
-        if (pitchDiff === 0) {
-          parson = 'r';
-        } else if (pitchDiff > 0) {
+
+        // set parsons code according to pitch difference
+        if (pitchDiff > 0) {
           parson = 'u';
         } else if (pitchDiff < 0) {
           parson = 'd';
+        } else {
+          parson = 'r';
         }
 
+        // add parsons code item to array
         tempParsons.push({
           value: parson,
           noteNumber: notes[i].noteNumber,
@@ -299,6 +315,7 @@
      */
     pitchValues: function(notes, keyAdjust) {
       return notes.map(function(item) {
+        // calculate base 12 pitch values
         return this.base12Pitch(
           item.pitch.step,
           keyAdjust,
@@ -321,6 +338,7 @@
      */
     pitchDurationValues: function(notes, keyAdjust, divisions, beatType) {
       return notes.map(function(item) {
+        // calculate base 12 pitch value
         var base12Pitch = this.base12Pitch(
           item.pitch.step,
           keyAdjust,
@@ -331,7 +349,7 @@
         return {
           value: base12Pitch,
           rest: item.rest,
-          duration: (item.duration / divisions / beatType) * 16
+          duration: (item.duration / divisions / beatType) * 16   // normalize duration
         };
       }.bind(this));
     },
@@ -347,6 +365,7 @@
       var adjustedNotes = [];
       for (var i = 0; i < notes.length; i++) {
         var tempNote = notes[i];
+        // calculate adjust function for every note
         tempNote.duration = adjust(tempNote.duration);
         adjustedNotes.push(tempNote);
       }
@@ -391,35 +410,44 @@
      * @returns {number} The base12 pitch number
      */
     base12Pitch: function(step, keyAdjust, octave, alter, withOctave) {
+      // lookup semitones in c major scale
       var ret = this.base12[step];
+
+      // optionally add alter value (from key or accidental)
       if (alter) {
         ret += alter;
       }
 
+      // transposition to c major
       if (keyAdjust < 0) {
+        // reduce pitch to keep octave level
         ret -= Math.round(Math.abs(keyAdjust) / 2) * 12;
         while (keyAdjust < 0) {
+          // add fifth (moving in circle of fifth clockwise)
           ret += 7;
           keyAdjust++;
         }
       } else {
+        // increase pitch to keep octave level
         ret += Math.round(Math.abs(keyAdjust) / 2) * 12;
         while (keyAdjust > 0) {
+          // subtract fifth (moving in circle of fifth contraclockwise)
           ret -= 7;
           keyAdjust--;
         }
       }
 
-      // base12 '0' = '12'
+      // set base 12 value of '0' to '12'
       if (ret === 0) {
         ret = 12;
         octave--;
       }
 
+      // add octave if activated
       if (withOctave) {
         ret += (octave * 12);
       } else {
-        // reset to relative base12 value
+        // reset to relative base 12 value
         while (ret > 12) {
           ret -= 12;
         }
@@ -551,10 +579,10 @@
      */
     editDistance: function(a, b, compare, weight) {
       if (a.length === 0) {
-        return b.length;
+        return 0;
       }
       if (b.length === 0) {
-        return a.length;
+        return 0;
       }
 
       var matrix = [];
@@ -586,7 +614,7 @@
         }
       }
 
-      return matrix[b.length][a.length];
+      return 1 - matrix[b.length][a.length] / Math.max(matrix[b.length][0], matrix[0][a.length]);
     },
 
     /**
@@ -636,6 +664,13 @@
      * @returns {number} The calculated edit distance
      */
     weightedEditDistance: function(a, b) {
+      if (a.length === 0) {
+        return 0;
+      }
+      if (b.length === 0) {
+        return 0;
+      }
+
       var matrix = [];
 
       // increment along the first column of each row
@@ -716,7 +751,7 @@
         }
       }
 
-      return matrix[a.length][b.length];
+      return 1 - matrix[a.length][b.length] / Math.max(matrix[a.length][0], matrix[0][b.length]);
     },
 
     /**
@@ -879,12 +914,12 @@
     },
 
     /**
-     * Returns minimum edit distance between searched notes and the given document.
+     * Returns the fine score for similarity between searched notes and the given document.
      * Calculation based on parsons code strings
      *
      * @param {object} object - A musicjson object to search in
      * @param {string} search - A string in parsons code (e.g. '*udu')
-     * @returns {number} The edit distance between parsons codes
+     * @returns {number} The fine score for similarity between parsons codes (0-1)
      */
     distanceParsons: function(object, search) {
       return this.stringEditDistance(
@@ -896,12 +931,12 @@
     },
 
     /**
-     * Returns minimum edit distance between two document.
+     * Returns the fine score for similarity between two document.
      * Calculation based on parsons code strings
      *
      * @param {object} object1 - The first musicjson object
      * @param {object} object2 - The second musicjson object
-     * @returns {number} The edit distance between parsons codes
+     * @returns {number} The fine score for similarity between parsons codes (0-1)
      */
     parsonSimilarity: function(object1, object2) {
       return this.distanceParsons(
@@ -911,12 +946,12 @@
     },
 
     /**
-     * Returns minimum edit distance between searched notes and the given document.
+     * Returns the fine score for similarity between searched notes and the given document.
      * Calculation based on pitch values
      *
      * @param {object} object - The document
      * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
-     * @returns {number} The edit distance between pitch values
+     * @returns {number} The fine score for similarity between pitch values (0-1)
      */
     distancePitch: function(object, search) {
       return this.arrayEditDistance(
@@ -929,12 +964,12 @@
     },
 
     /**
-     * Returns minimum edit distance between two document.
+     * Returns the fine score for similarity between two document.
      * Calculation based on pitch values
      *
      * @param {object} object1 - The first musicjson object
      * @param {object} object2 - The second musicjson object
-     * @returns {number} The edit distance between pitch values
+     * @returns {number} The fine score for similarity between pitch values (0-1)
      */
     pitchSimilarity: function(object1, object2) {
       return this.distancePitch(
@@ -944,12 +979,12 @@
     },
 
     /**
-     * Returns minimum edit distance between searched notes and the given document.
+     * Returns the fine score for similarity between searched notes and the given document.
      * Calculation based on intervals
      *
      * @param {object} object - The musicjson document
      * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
-     * @returns {number} The edit distance between intervals
+     * @returns {number} The fine score for similarity between intervals (0-1)
      */
     distanceIntervals: function(object, search) {
       return this.arrayEditDistance(
@@ -959,12 +994,12 @@
     },
 
     /**
-     * Returns minimum edit distance between two document.
+     * Returns the fine score for similarity between two document.
      * Calculation based on intervals
      *
      * @param {object} object1 - The first musicjson object
      * @param {object} object2 - The second musicjson object
-     * @returns {number} The edit distance between intervals
+     * @returns {number} The fine score for similarity between intervals (0-1)
      */
     intervalSimilarity: function(object1, object2) {
       return this.distanceIntervals(
@@ -979,7 +1014,7 @@
      *
      * @param {object} object - The musicjson document
      * @param {Array} search - An array of notes (duration with divisions 16, e.g. eighth=8, quarter=16)
-     * @returns {number} The edit distance between pitch & duration values
+     * @returns {number} The fine score for similarity between pitch & duration values (0-1)
      */
     distancePitchDuration: function(object, search) {
       return this.weightedEditDistance(
@@ -992,12 +1027,12 @@
     },
 
     /**
-     * Returns minimum edit distance between two document.
+     * Returns the fine score for similarity between two document.
      * Calculation based on pitch and duration values
      *
      * @param {object} object1 - The first musicjson object
      * @param {object} object2 - The second musicjson object
-     * @returns {number} The edit distance between pitch and duration values
+     * @returns {number} The fine score for similarity between pitch and duration values (0-1)
      */
     pitchDurationSimilarity: function(object1, object2) {
       return this.distancePitchDuration(
@@ -1012,12 +1047,12 @@
     },
 
     /**
-     * Returns minimum edit distance between searched notes and the corresponding ngrams.
+     * Returns the fine score for similarity between searched notes and the corresponding ngrams.
      * Notes are represented in parsons code.
      *
      * @param {object} object - A musicjson object to search in
      * @param {string} search - A string in parsons code (e.g. '*udu')
-     * @returns {Array} The cost for each ngram
+     * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
     distanceParsonsNgrams: function(object, search) {
       var ngrams = this.ngrams(this.parsons(this.notes(object, false, false)), search.length);
@@ -1045,12 +1080,12 @@
     },
 
     /**
-     * Returns the minimum edit-distance between the searched notes and corresponding ngrams.
+     * Returns the fine score for similarity between the searched notes and corresponding ngrams.
      * Notes are represented with pitch and duration
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
-     * @returns {Array} The cost for each ngram
+     * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
     distancePitchNgrams: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
@@ -1068,12 +1103,12 @@
     },
 
     /**
-     * Returns the minimum distance between the searched notes and the corresponding ngrams.
+     * Returns the fine score for similarity between the searched notes and the corresponding ngrams.
      * Notes are represented as intervals.
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
-     * @returns {Array} The cost for each ngram
+     * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
     distanceIntervalsNgrams: function(object, search) {
       var ngrams = this.ngrams(this.intervals(this.notes(object, false, false)), search.length);
@@ -1100,18 +1135,18 @@
     },
 
     /**
-     * Returns the minimum distance between the searched notes and the corresponding ngrams.
+     * Returns the fine score for similarity between the searched notes and the corresponding ngrams.
      * Notes are represented as pitch and duration values.
      *
      * @param {object} object - A musicjson object to search in
      * @param {Array} search - An array of notes ((duration with divisions 16, e.g. eighth=8, quarter=16)
-     * @returns {Array} The cost for each ngram
+     * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
     distancePitchDurationNgrams: function(object, search) {
       var divisions = parseInt(object.attributes.divisions);
       var beatType = parseInt(object.attributes.time['beat-type']);
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false, true), search.length);
+      var ngrams = this.ngrams(this.notes(object, false, true), search.length * 2);
       var distances = [];
 
       for (var i = 0; i < ngrams.length; i++) {

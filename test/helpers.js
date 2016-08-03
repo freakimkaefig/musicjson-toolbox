@@ -346,19 +346,19 @@ describe('MusicJsonToolbox Helper Functions', function() {
       var output;
 
       output = MusicJsonToolbox.stringEditDistance('uudr', '');
-      expect(output).to.equal(4);
-
-      output = MusicJsonToolbox.stringEditDistance('', 'uudr');
-      expect(output).to.equal(4);
-
-      output = MusicJsonToolbox.stringEditDistance('uudr', 'uudr');
       expect(output).to.equal(0);
 
+      output = MusicJsonToolbox.stringEditDistance('', 'uudr');
+      expect(output).to.equal(0);
+
+      output = MusicJsonToolbox.stringEditDistance('uudr', 'uudr');
+      expect(output).to.equal(1);
+
       output = MusicJsonToolbox.stringEditDistance('udru', 'uudr');
-      expect(output).to.equal(2);
+      expect(output).to.equal(0.5);
 
       output = MusicJsonToolbox.stringEditDistance('rduu', 'uudr');
-      expect(output).to.equal(4);
+      expect(output).to.equal(0);
     });
   });
 
@@ -367,38 +367,38 @@ describe('MusicJsonToolbox Helper Functions', function() {
       var output;
 
       output = MusicJsonToolbox.arrayEditDistance([1, 2, 3, 4], []);
-      expect(output).to.equal(4);
-
-      output = MusicJsonToolbox.arrayEditDistance([], [1, 2, 3, 4]);
-      expect(output).to.equal(4);
-
-      output = MusicJsonToolbox.arrayEditDistance([1, 2, 3, 4], [1, 2, 3, 4]);
       expect(output).to.equal(0);
 
+      output = MusicJsonToolbox.arrayEditDistance([], [1, 2, 3, 4]);
+      expect(output).to.equal(0);
+
+      output = MusicJsonToolbox.arrayEditDistance([1, 2, 3, 4], [1, 2, 3, 4]);
+      expect(output).to.equal(1);
+
       output = MusicJsonToolbox.arrayEditDistance([1, 2, 3, 4], [1, 2, 5, 6]);
-      expect(output).to.equal(2);
+      expect(output).to.equal(0.5);
 
       output = MusicJsonToolbox.arrayEditDistance([1, 2, 3, 4], [5, 6, 7, 8]);
-      expect(output).to.equal(4);
+      expect(output).to.equal(0);
     });
 
     it('calculates edit distance between two interval arrays', function() {
       var output;
 
       output = MusicJsonToolbox.arrayEditDistance([0, 2, -2, 2], []);
-      expect(output).to.equal(4);
-
-      output = MusicJsonToolbox.arrayEditDistance([], [0, 2, -2, 2]);
-      expect(output).to.equal(4);
-
-      output = MusicJsonToolbox.arrayEditDistance([0, 2, -2, 2], [0, 2, -2, 2]);
       expect(output).to.equal(0);
 
-      output = MusicJsonToolbox.arrayEditDistance([0, 2, -2, 2], [0, 2, -2, 4]);
+      output = MusicJsonToolbox.arrayEditDistance([], [0, 2, -2, 2]);
+      expect(output).to.equal(0);
+
+      output = MusicJsonToolbox.arrayEditDistance([0, 2, -2, 2], [0, 2, -2, 2]);
       expect(output).to.equal(1);
 
+      output = MusicJsonToolbox.arrayEditDistance([0, 2, -2, 2], [0, 2, -2, 4]);
+      expect(output).to.equal(0.75);
+
       output = MusicJsonToolbox.arrayEditDistance([0, 2, -2, 2], [0, 4, -6, 3]);
-      expect(output).to.equal(3);
+      expect(output).to.equal(0.25);
     });
   });
 

@@ -1,6 +1,6 @@
 [
   {
-    "distance": 3.636,
+    "distance": 0.03333333,
     "highlight": [
       {
         "measure": 0,
@@ -21,29 +21,12 @@
     ]
   },
   {
-    "distance": 3.586,
+    "distance": 0.168495297,
     "highlight": [
       {
         "measure": 0,
         "note": 1
       },
-      {
-        "measure": 0,
-        "note": 2
-      },
-      {
-        "measure": 0,
-        "note": 3
-      },
-      {
-        "measure": 0,
-        "note": 4
-      }
-    ]
-  },
-  {
-    "distance": 3.536,
-    "highlight": [
       {
         "measure": 0,
         "note": 2
@@ -55,6 +38,23 @@
       {
         "measure": 0,
         "note": 4
+      }
+    ]
+  },
+  {
+    "distance": 0.321120689,
+    "highlight": [
+      {
+        "measure": 0,
+        "note": 2
+      },
+      {
+        "measure": 0,
+        "note": 3
+      },
+      {
+        "measure": 0,
+        "note": 4
       },
       {
         "measure": 0,
@@ -63,7 +63,7 @@
     ]
   },
   {
-    "distance": 4.49,
+    "distance": 0.2964190981,
     "highlight": [
       {
         "measure": 0,
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "distance": 5.278,
+    "distance": 0.2356321839,
     "highlight": [
       {
         "measure": 0,
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "distance": 4.132,
+    "distance": 0.2356321839,
     "highlight": [
       {
         "measure": 0,
@@ -122,90 +122,6 @@
       {
         "measure": 1,
         "note": 2
-      }
-    ]
-  },
-  {
-    "distance": 3.436,
-    "highlight": [
-      {
-        "measure": 1,
-        "note": 0
-      },
-      {
-        "measure": 1,
-        "note": 1
-      },
-      {
-        "measure": 1,
-        "note": 2
-      },
-      {
-        "measure": 2,
-        "note": 0
-      }
-    ]
-  },
-  {
-    "distance": 3.436,
-    "highlight": [
-      {
-        "measure": 1,
-        "note": 1
-      },
-      {
-        "measure": 1,
-        "note": 2
-      },
-      {
-        "measure": 2,
-        "note": 0
-      },
-      {
-        "measure": 2,
-        "note": 1
-      }
-    ]
-  },
-  {
-    "distance": 4.04,
-    "highlight": [
-      {
-        "measure": 1,
-        "note": 2
-      },
-      {
-        "measure": 2,
-        "note": 0
-      },
-      {
-        "measure": 2,
-        "note": 1
-      },
-      {
-        "measure": 2,
-        "note": 2
-      }
-    ]
-  },
-  {
-    "distance": 3.344,
-    "highlight": [
-      {
-        "measure": 2,
-        "note": 0
-      },
-      {
-        "measure": 2,
-        "note": 1
-      },
-      {
-        "measure": 2,
-        "note": 2
-      },
-      {
-        "measure": 2,
-        "note": 3
       }
     ]
   }
