@@ -11,6 +11,9 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.deg](#module_MusicJsonToolbox.deg) : <code>object</code>
     * [.ton](#module_MusicJsonToolbox.ton) : <code>object</code>
     * [.globalK](#module_MusicJsonToolbox.globalK) : <code>number</code>
+    * [.globalK1](#module_MusicJsonToolbox.globalK1) : <code>number</code>
+    * [.globalK2](#module_MusicJsonToolbox.globalK2) : <code>number</code>
+    * [.globalK3](#module_MusicJsonToolbox.globalK3) : <code>number</code>
     * [.abcStep](#module_MusicJsonToolbox.abcStep) : <code>Array</code>
     * [.abcAccidental](#module_MusicJsonToolbox.abcAccidental) : <code>object</code>
     * [.notes(obj, repeat, rests)](#module_MusicJsonToolbox.notes) ⇒ <code>Array</code>
@@ -31,13 +34,13 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.editDistance(a, b, compare, weight)](#module_MusicJsonToolbox.editDistance) ⇒ <code>number</code>
     * [.stringEditDistance(a, b)](#module_MusicJsonToolbox.stringEditDistance) ⇒ <code>number</code>
     * [.arrayEditDistance(a, b)](#module_MusicJsonToolbox.arrayEditDistance) ⇒ <code>number</code>
-    * [.weightedEditDistance(a, b)](#module_MusicJsonToolbox.weightedEditDistance) ⇒ <code>number</code>
-    * [.weightSubstitution(a, b, i, j)](#module_MusicJsonToolbox.weightSubstitution) ⇒ <code>number</code>
-    * [.weightInsertion(b, j)](#module_MusicJsonToolbox.weightInsertion) ⇒ <code>number</code>
-    * [.weightDeletion(a, i)](#module_MusicJsonToolbox.weightDeletion) ⇒ <code>number</code>
-    * [.weightFragmentation(matrix, a, b, i, j, f)](#module_MusicJsonToolbox.weightFragmentation) ⇒ <code>number</code>
-    * [.weightConsolidation(matrix, a, b, i, j, c)](#module_MusicJsonToolbox.weightConsolidation) ⇒ <code>number</code>
-    * [.weightInterval(a, b)](#module_MusicJsonToolbox.weightInterval) ⇒ <code>number</code>
+    * [.weightedEditDistance(a, b, adjusted)](#module_MusicJsonToolbox.weightedEditDistance) ⇒ <code>number</code>
+    * [.weightSubstitution(a, b, i, j, adjusted)](#module_MusicJsonToolbox.weightSubstitution) ⇒ <code>number</code>
+    * [.weightInsertion(b, j, adjusted)](#module_MusicJsonToolbox.weightInsertion) ⇒ <code>number</code>
+    * [.weightDeletion(a, i, adjusted)](#module_MusicJsonToolbox.weightDeletion) ⇒ <code>number</code>
+    * [.weightFragmentation(matrix, a, b, i, j, f, adjusted)](#module_MusicJsonToolbox.weightFragmentation) ⇒ <code>number</code>
+    * [.weightConsolidation(matrix, a, b, i, j, c, adjusted)](#module_MusicJsonToolbox.weightConsolidation) ⇒ <code>number</code>
+    * [.weightInterval(a, b, adjusted)](#module_MusicJsonToolbox.weightInterval) ⇒ <code>number</code>
     * [.weightLength(a, b)](#module_MusicJsonToolbox.weightLength) ⇒ <code>number</code>
     * [.distanceParsons(object, search)](#module_MusicJsonToolbox.distanceParsons) ⇒ <code>number</code>
     * [.parsonSimilarity(object1, object2)](#module_MusicJsonToolbox.parsonSimilarity) ⇒ <code>number</code>
@@ -45,12 +48,12 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.pitchSimilarity(object1, object2)](#module_MusicJsonToolbox.pitchSimilarity) ⇒ <code>number</code>
     * [.distanceIntervals(object, search)](#module_MusicJsonToolbox.distanceIntervals) ⇒ <code>number</code>
     * [.intervalSimilarity(object1, object2)](#module_MusicJsonToolbox.intervalSimilarity) ⇒ <code>number</code>
-    * [.distancePitchDuration(object, search)](#module_MusicJsonToolbox.distancePitchDuration) ⇒ <code>number</code>
-    * [.pitchDurationSimilarity(object1, object2)](#module_MusicJsonToolbox.pitchDurationSimilarity) ⇒ <code>number</code>
+    * [.distancePitchDuration(object, search, adjusted)](#module_MusicJsonToolbox.distancePitchDuration) ⇒ <code>number</code>
+    * [.pitchDurationSimilarity(object1, object2, adjusted)](#module_MusicJsonToolbox.pitchDurationSimilarity) ⇒ <code>number</code>
     * [.distanceParsonsNgrams(object, search)](#module_MusicJsonToolbox.distanceParsonsNgrams) ⇒ <code>Array</code>
     * [.distancePitchNgrams(object, search)](#module_MusicJsonToolbox.distancePitchNgrams) ⇒ <code>Array</code>
     * [.distanceIntervalsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsNgrams) ⇒ <code>Array</code>
-    * [.distancePitchDurationNgrams(object, search)](#module_MusicJsonToolbox.distancePitchDurationNgrams) ⇒ <code>Array</code>
+    * [.distancePitchDurationNgrams(object, search, adjusted)](#module_MusicJsonToolbox.distancePitchDurationNgrams) ⇒ <code>Array</code>
 
 <a name="module_MusicJsonToolbox.base12"></a>
 
@@ -85,7 +88,25 @@ Weights for ton(m)-function of Mongeau-Sankoff-Measure.m = number of semitones
 <a name="module_MusicJsonToolbox.globalK"></a>
 
 ### MusicJsonToolbox.globalK : <code>number</code>
-Parameter k of Mongeau-Sankoff-Measure.Represents the relative contribution of w_length and w_intervalCan be set via:<pre><code>  MusicJsonToolbox.globalK = 0.456;</pre></code>
+Parameter k of Mongeau-Sankoff-Measure.Represents the relative contribution of w_length and w_intervalCan be set runtime via:<pre><code>  MusicJsonToolbox.globalK = 0.456;</pre></code>
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.globalK1"></a>
+
+### MusicJsonToolbox.globalK1 : <code>number</code>
+Parameter k1 of adjusted Mongeau-Sankoff-Measure according to Gomez, Abad-Mota & Ruckhaus, 2007.[http://www.music-ir.org/mirex/abstracts/2007/QBSH_SMS_gomez.pdf](http://www.music-ir.org/mirex/abstracts/2007/QBSH_SMS_gomez.pdf)Used when calculating weight for substitution.Can be set runtime via:<pre><code>  MusicJsonToolbox.globalK1 = 0.5;</pre></code>
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.globalK2"></a>
+
+### MusicJsonToolbox.globalK2 : <code>number</code>
+Parameter k2 of adjusted Mongeau-Sankoff-Measure according to Gomez, Abad-Mota & Ruckhaus, 2007.[http://www.music-ir.org/mirex/abstracts/2007/QBSH_SMS_gomez.pdf](http://www.music-ir.org/mirex/abstracts/2007/QBSH_SMS_gomez.pdf)Can be set at runtime via:<pre><code>  MusicJsonToolbox.globalK3 = 0.5;</pre></code>
+
+**Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
+<a name="module_MusicJsonToolbox.globalK3"></a>
+
+### MusicJsonToolbox.globalK3 : <code>number</code>
+Parameter k3 of adjusted Mongeau-Sankoff-Measure according to Gomez, Abad-Mota & Ruckhaus, 2007.[http://www.music-ir.org/mirex/abstracts/2007/QBSH_SMS_gomez.pdf](http://www.music-ir.org/mirex/abstracts/2007/QBSH_SMS_gomez.pdf)Used when calculating weight for insertion and deletion.Can be set at runtime via:<pre><code>  MusicJsonToolbox.globalK3 = 0.5;</pre></code>
 
 **Kind**: static constant of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 <a name="module_MusicJsonToolbox.abcStep"></a>
@@ -343,7 +364,7 @@ Calculate edit distance for arrays
 
 <a name="module_MusicJsonToolbox.weightedEditDistance"></a>
 
-### MusicJsonToolbox.weightedEditDistance(a, b) ⇒ <code>number</code>
+### MusicJsonToolbox.weightedEditDistance(a, b, adjusted) ⇒ <code>number</code>
 Calculate weighted edit distance for arraysThe function implements improved weighting for interval differences based on consonance / dissonanceConcepts are taken from Mongeau, M., & Sankoff, D. (1990). Comparison of musical sequences. Computers and the Humanities, 24(3), 161–175. http://doi.org/10.1007/BF00117340
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -353,10 +374,11 @@ Calculate weighted edit distance for arraysThe function implements improved wei
 | --- | --- | --- |
 | a | <code>Array</code> | The first notes array (document), format: output of MusicJsonToolbox.pitchDurationValues |
 | b | <code>Array</code> | The second notes array (query), format: output of MusicJsonToolbox.pitchDurationValues |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightSubstitution"></a>
 
-### MusicJsonToolbox.weightSubstitution(a, b, i, j) ⇒ <code>number</code>
+### MusicJsonToolbox.weightSubstitution(a, b, i, j, adjusted) ⇒ <code>number</code>
 Calculates weight for substitution of two notes
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -368,10 +390,11 @@ Calculates weight for substitution of two notes
 | b | <code>Array</code> | Second array of notes (search) |
 | i | <code>number</code> | Position to compare in a (1-based) |
 | j | <code>number</code> | Position to compare in a (1-based) |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightInsertion"></a>
 
-### MusicJsonToolbox.weightInsertion(b, j) ⇒ <code>number</code>
+### MusicJsonToolbox.weightInsertion(b, j, adjusted) ⇒ <code>number</code>
 Calculates weight for insertion of a note
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -381,10 +404,11 @@ Calculates weight for insertion of a note
 | --- | --- | --- |
 | b | <code>Array</code> | The array where the note should be inserted from |
 | j | <code>number</code> | The position of the note that should be inserted |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightDeletion"></a>
 
-### MusicJsonToolbox.weightDeletion(a, i) ⇒ <code>number</code>
+### MusicJsonToolbox.weightDeletion(a, i, adjusted) ⇒ <code>number</code>
 Calculates weight for insertion of a note
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -394,10 +418,11 @@ Calculates weight for insertion of a note
 | --- | --- | --- |
 | a | <code>Array</code> | The array where the note should be deleted from |
 | i | <code>number</code> | The position of the note that should be deleted |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightFragmentation"></a>
 
-### MusicJsonToolbox.weightFragmentation(matrix, a, b, i, j, f) ⇒ <code>number</code>
+### MusicJsonToolbox.weightFragmentation(matrix, a, b, i, j, f, adjusted) ⇒ <code>number</code>
 Calculates weight for fragmentation of one note in to several others
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -411,10 +436,11 @@ Calculates weight for fragmentation of one note in to several others
 | i | <code>number</code> | Current position in a |
 | j | <code>number</code> | Current position in b |
 | f | <code>number</code> | Constant parameter F (calculated by length of notes in both arrays) |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightConsolidation"></a>
 
-### MusicJsonToolbox.weightConsolidation(matrix, a, b, i, j, c) ⇒ <code>number</code>
+### MusicJsonToolbox.weightConsolidation(matrix, a, b, i, j, c, adjusted) ⇒ <code>number</code>
 Calculates weight for fragmentation of one several notes to one
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -428,10 +454,11 @@ Calculates weight for fragmentation of one several notes to one
 | i | <code>number</code> | Current position in a |
 | j | <code>number</code> | Current position in b |
 | c | <code>number</code> | Constant parameter C (calculated by length of notes in both arrays) |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightInterval"></a>
 
-### MusicJsonToolbox.weightInterval(a, b) ⇒ <code>number</code>
+### MusicJsonToolbox.weightInterval(a, b, adjusted) ⇒ <code>number</code>
 Calculates weight for difference of pitch values
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -441,6 +468,7 @@ Calculates weight for difference of pitch values
 | --- | --- | --- |
 | a | <code>object</code> | First note object (from document) |
 | b | <code>object</code> | Second note object (from search) |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.weightLength"></a>
 
@@ -535,7 +563,7 @@ Returns the fine score for similarity between two document.Calculation based on
 
 <a name="module_MusicJsonToolbox.distancePitchDuration"></a>
 
-### MusicJsonToolbox.distancePitchDuration(object, search) ⇒ <code>number</code>
+### MusicJsonToolbox.distancePitchDuration(object, search, adjusted) ⇒ <code>number</code>
 Returns minimum edit-distance between searched notes and the given document.Calculation is based on pitch and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -545,10 +573,11 @@ Returns minimum edit-distance between searched notes and the given document.Cal
 | --- | --- | --- |
 | object | <code>object</code> | The musicjson document |
 | search | <code>Array</code> | An array of notes (duration with divisions 16, e.g. eighth=8, quarter=16) |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.pitchDurationSimilarity"></a>
 
-### MusicJsonToolbox.pitchDurationSimilarity(object1, object2) ⇒ <code>number</code>
+### MusicJsonToolbox.pitchDurationSimilarity(object1, object2, adjusted) ⇒ <code>number</code>
 Returns the fine score for similarity between two document.Calculation based on pitch and duration values
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -558,6 +587,7 @@ Returns the fine score for similarity between two document.Calculation based on
 | --- | --- | --- |
 | object1 | <code>object</code> | The first musicjson object |
 | object2 | <code>object</code> | The second musicjson object |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 
 <a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
 
@@ -600,7 +630,7 @@ Returns the fine score for similarity between the searched notes and the corresp
 
 <a name="module_MusicJsonToolbox.distancePitchDurationNgrams"></a>
 
-### MusicJsonToolbox.distancePitchDurationNgrams(object, search) ⇒ <code>Array</code>
+### MusicJsonToolbox.distancePitchDurationNgrams(object, search, adjusted) ⇒ <code>Array</code>
 Returns the fine score for similarity between the searched notes and the corresponding ngrams.Notes are represented as pitch and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -610,4 +640,5 @@ Returns the fine score for similarity between the searched notes and the corresp
 | --- | --- | --- |
 | object | <code>object</code> | A musicjson object to search in |
 | search | <code>Array</code> | An array of notes ((duration with divisions 16, e.g. eighth=8, quarter=16) |
+| adjusted | <code>boolean</code> | Use adjusted weighting function |
 

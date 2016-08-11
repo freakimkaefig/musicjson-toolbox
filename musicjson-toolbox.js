@@ -658,7 +658,8 @@
         }
       }
 
-      return 1 - matrix[b.length][a.length] / Math.max(matrix[b.length][0], matrix[0][a.length]);
+      var max = Math.max(matrix[b.length][0], matrix[0][a.length]);
+      return 1 - matrix[b.length][a.length] / max;
     },
 
     /**
@@ -723,7 +724,7 @@
       for (i = 0; i <= a.length; i++) {
         // console.log(i, a[i+1].duration);
         if (i > 0) {
-          matrix[i] = [parseFloat(matrix[i-1]) + this.weightDeletion(a, i)];
+          matrix[i] = [parseFloat(matrix[i-1]) + this.weightDeletion(a, i, adjusted)];
         } else {
           matrix[i] = [i];
         }
@@ -734,7 +735,7 @@
       var j;
       for (j = 0; j <= b.length; j++) {
         if (j > 0) {
-          matrix[0][j] = parseFloat(matrix[0][j-1]) + this.weightInsertion(b, j);
+          matrix[0][j] = parseFloat(matrix[0][j-1]) + this.weightInsertion(b, j, adjusted);
         } else {
           matrix[0][j] = j;
         }
@@ -796,7 +797,14 @@
         }
       }
 
-      return 1 - matrix[a.length][b.length] / Math.max(matrix[a.length][0], matrix[0][b.length]);
+      var max = -Infinity;
+      for (i = 0; i < matrix.length; i++) {
+        var rowMax = Math.max.apply(null, matrix[i]);
+        if (rowMax > max) {
+          max = rowMax;
+        }
+      }
+      return (max - matrix[a.length][b.length]) / max;
     },
 
     /**
@@ -829,7 +837,7 @@
      */
     weightInsertion: function(b, j, adjusted) {
       var localK = adjusted ? this.globalK3 : this.globalK;
-      return (localK * b[j-1].duration);
+      return (localK * parseFloat(b[j-1].duration));
     },
 
     /**
