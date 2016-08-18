@@ -12,8 +12,8 @@ program.parse(process.argv);
 // ========== Toolbox =========
 // ==============================
 var MusicJsonToolbox = require('../musicjson-toolbox');
+var doc = require('../a59114.json');
 // var doc = require('../test/example.json');
-var doc = require('../test/example.json');
 var searchPitch = [1, 6, 1, 6];
 var searchParsons = '*uuruddrdrr';
 var searchIntervals = ['*', 5, -5, 5];
@@ -23,6 +23,42 @@ var searchIntervalsDuration = [
   {value: 12, rest: false, duration: 2},
   {value: 7, rest: false, duration: 1}
 ];
+
+var searchPitchDuration = [ { pitch: { step: 'D', octave: 5, accidental: '' },
+  rest: false,
+  duration: 16,
+  type: 'quarter',
+  dot: false },
+  { pitch: { step: 'C', octave: 5, accidental: '' },
+    rest: false,
+    duration: 16,
+    type: 'quarter',
+    dot: false },
+  { pitch: { step: 'B', octave: 4, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'A', octave: 4, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'G', octave: 4, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'D', octave: 5, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'D', octave: 5, accidental: '' },
+    rest: false,
+    duration: 16,
+    type: 'quarter',
+    dot: false } ];
 
 // var notes = MusicJsonToolbox.notes(doc, false, false);
 // var parsons = MusicJsonToolbox.parsons(notes);
@@ -46,7 +82,12 @@ var searchIntervalsDuration = [
 // var distance = MusicJsonToolbox.distanceIntervalsNgrams(doc, searchIntervals);
 
 // var distance = MusicJsonToolbox.distancePitchDuration(doc, searchIntervalsDuration);
-// var distance = MusicJsonToolbox.distancePitchDurationNgrams(doc, searchIntervalsDuration);
+var pitchDurationValues = MusicJsonToolbox.pitchDurationValues(
+  searchPitchDuration,
+  0, 16, 4
+);
+console.log(pitchDurationValues);
+var distance = MusicJsonToolbox.distancePitchDurationNgrams(doc, pitchDurationValues, false);
 
 // var distance = MusicJsonToolbox.distanceIntervals(doc, ['*', 2, 2, 1, 2, 5, -11, 0, 10, -7, 5, -5, 5]);
 // var distance = MusicJsonToolbox.distanceParsons(doc, '*uuuuudrududu');
@@ -79,20 +120,20 @@ var searchIntervalsDuration = [
 //     return item.value;
 //   }).join(' '));
 // }
-// fs.writeFileSync('../data/output.json',JSON.stringify(ngrams));
+fs.writeFileSync('output.json',JSON.stringify(distance));
 
 
-var output = MusicJsonToolbox.weightedEditDistance(
-  [
-    {value: 1, rest: false, duration: 4},
-    {value: 3, rest: false, duration: 4},
-    {value: 5, rest: false, duration: 2},
-    {value: 6, rest: false, duration: 2}
-  ],
-  [
-    {value: 8, rest: false, duration: 2},
-    {value: 10, rest: false, duration: 2},
-    {value: 12, rest: false, duration: 4},
-    {value: 1, rest: false, duration: 4}
-  ], true);
-console.log(output);
+// var output = MusicJsonToolbox.weightedEditDistance(
+//   [
+//     {value: 1, rest: false, duration: 4},
+//     {value: 3, rest: false, duration: 4},
+//     {value: 5, rest: false, duration: 2},
+//     {value: 6, rest: false, duration: 2}
+//   ],
+//   [
+//     {value: 8, rest: false, duration: 2},
+//     {value: 10, rest: false, duration: 2},
+//     {value: 12, rest: false, duration: 4},
+//     {value: 1, rest: false, duration: 4}
+//   ], true);
+// console.log(output);
