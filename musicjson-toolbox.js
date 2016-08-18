@@ -1081,7 +1081,7 @@
     },
 
     /**
-     * Returns minimum edit-distance between searched notes and the given document.
+     * Returns fine score for similarity between searched notes and the given document.
      * Calculation is based on pitch and duration values.
      *
      * @param {object} object - The musicjson document
@@ -1129,9 +1129,9 @@
      * @param {string} search - A string in parsons code (e.g. '*udu')
      * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
-    distanceParsonsNgrams: function(object, search) {
+    parsonsNgramSimilarity: function(object, search) {
       var ngrams = this.ngrams(this.parsons(this.notes(object, false, false)), search.length);
-      var distances = [];
+      var similarities = [];
 
       for (var i = 0; i < ngrams.length; i++) {
 
@@ -1142,8 +1142,8 @@
           }
         }
 
-        distances.push({
-          distance: this.stringEditDistance(
+        similarities.push({
+          similarity: this.stringEditDistance(
             this.valueMapping(ngrams[i]).join(''),
             search
           ),
@@ -1151,7 +1151,7 @@
         });
       }
 
-      return distances;
+      return similarities;
     },
 
     /**
@@ -1162,19 +1162,19 @@
      * @param {Array} search - An array of pitch values (e.g. [1, 6, 1, 6])
      * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
-    distancePitchNgrams: function(object, search) {
+    pitchNgramSimilarity: function(object, search) {
       var keyAdjust = parseInt(object.attributes.key.fifths);
       var ngrams = this.ngrams(this.notes(object, false, false), search.length);
-      var distances = [];
+      var similarities = [];
 
       for (var i = 0; i < ngrams.length; i++) {
-        distances.push({
-          distance: this.arrayEditDistance(this.pitchValues(ngrams[i], keyAdjust), search),
+        similarities.push({
+          similarity: this.arrayEditDistance(this.pitchValues(ngrams[i], keyAdjust), search),
           highlight: this.highlightMapping(ngrams[i])
         });
       }
 
-      return distances;
+      return similarities;
     },
 
     /**
@@ -1185,9 +1185,9 @@
      * @param {Array} search - An array of intervals (e.g. [0, 5, -5, 5])
      * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
-    distanceIntervalsNgrams: function(object, search) {
+    intervalNgramSimilarity: function(object, search) {
       var ngrams = this.ngrams(this.intervals(this.notes(object, false, false)), search.length);
-      var distances = [];
+      var similarities = [];
 
       for (var i = 0; i < ngrams.length; i++) {
         for (var j = 0; j < ngrams[i].length; j++) {
@@ -1197,8 +1197,8 @@
           }
         }
 
-        distances.push({
-          distance: this.arrayEditDistance(
+        similarities.push({
+          similarity: this.arrayEditDistance(
             this.valueMapping(ngrams[i]),
             search
           ),
@@ -1206,7 +1206,7 @@
         });
       }
 
-      return distances;
+      return similarities;
     },
 
     /**
@@ -1218,17 +1218,17 @@
      * @param {boolean} adjusted - Use adjusted weighting function
      * @returns {Array} The fine score for similarity for each ngram (0-1)
      */
-    distancePitchDurationNgrams: function(object, search, adjusted) {
+    pitchDurationNgramSimilarity: function(object, search, adjusted) {
       var divisions = parseInt(object.attributes.divisions);
       var beatType = parseInt(object.attributes.time['beat-type']);
       var keyAdjust = parseInt(object.attributes.key.fifths);
       var ngrams = this.ngrams(this.notes(object, false, true), search.length * 2);
-      var distances = [];
+      var similarities = [];
 
       for (var i = 0; i < ngrams.length; i++) {
 
-        distances.push({
-          distance: this.weightedEditDistance(
+        similarities.push({
+          similarity: this.weightedEditDistance(
             this.pitchDurationValues(
               ngrams[i],
               keyAdjust,
@@ -1239,7 +1239,7 @@
         });
       }
 
-      return distances;
+      return similarities;
     }
   };
 

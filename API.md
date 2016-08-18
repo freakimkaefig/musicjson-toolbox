@@ -50,10 +50,10 @@ The MusicJsonToolbox class implements static functions to operate with musicjson
     * [.intervalSimilarity(object1, object2)](#module_MusicJsonToolbox.intervalSimilarity) ⇒ <code>number</code>
     * [.distancePitchDuration(object, search, adjusted)](#module_MusicJsonToolbox.distancePitchDuration) ⇒ <code>number</code>
     * [.pitchDurationSimilarity(object1, object2, adjusted)](#module_MusicJsonToolbox.pitchDurationSimilarity) ⇒ <code>number</code>
-    * [.distanceParsonsNgrams(object, search)](#module_MusicJsonToolbox.distanceParsonsNgrams) ⇒ <code>Array</code>
-    * [.distancePitchNgrams(object, search)](#module_MusicJsonToolbox.distancePitchNgrams) ⇒ <code>Array</code>
-    * [.distanceIntervalsNgrams(object, search)](#module_MusicJsonToolbox.distanceIntervalsNgrams) ⇒ <code>Array</code>
-    * [.distancePitchDurationNgrams(object, search, adjusted)](#module_MusicJsonToolbox.distancePitchDurationNgrams) ⇒ <code>Array</code>
+    * [.parsonsNgramSimilarity(object, search)](#module_MusicJsonToolbox.parsonsNgramSimilarity) ⇒ <code>Array</code>
+    * [.pitchNgramSimilarity(object, search)](#module_MusicJsonToolbox.pitchNgramSimilarity) ⇒ <code>Array</code>
+    * [.intervalNgramSimilarity(object, search)](#module_MusicJsonToolbox.intervalNgramSimilarity) ⇒ <code>Array</code>
+    * [.pitchDurationNgramSimilarity(object, search, adjusted)](#module_MusicJsonToolbox.pitchDurationNgramSimilarity) ⇒ <code>Array</code>
 
 <a name="module_MusicJsonToolbox.base12"></a>
 
@@ -564,7 +564,7 @@ Returns the fine score for similarity between two document.Calculation based on
 <a name="module_MusicJsonToolbox.distancePitchDuration"></a>
 
 ### MusicJsonToolbox.distancePitchDuration(object, search, adjusted) ⇒ <code>number</code>
-Returns minimum edit-distance between searched notes and the given document.Calculation is based on pitch and duration values.
+Returns fine score for similarity between searched notes and the given document.Calculation is based on pitch and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
 **Returns**: <code>number</code> - The fine score for similarity between pitch & duration values (0-1)  
@@ -589,9 +589,9 @@ Returns the fine score for similarity between two document.Calculation based on
 | object2 | <code>object</code> | The second musicjson object |
 | adjusted | <code>boolean</code> | Use adjusted weighting function |
 
-<a name="module_MusicJsonToolbox.distanceParsonsNgrams"></a>
+<a name="module_MusicJsonToolbox.parsonsNgramSimilarity"></a>
 
-### MusicJsonToolbox.distanceParsonsNgrams(object, search) ⇒ <code>Array</code>
+### MusicJsonToolbox.parsonsNgramSimilarity(object, search) ⇒ <code>Array</code>
 Returns the fine score for similarity between searched notes and the corresponding ngrams.Notes are represented in parsons code.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -602,9 +602,9 @@ Returns the fine score for similarity between searched notes and the correspondi
 | object | <code>object</code> | A musicjson object to search in |
 | search | <code>string</code> | A string in parsons code (e.g. '*udu') |
 
-<a name="module_MusicJsonToolbox.distancePitchNgrams"></a>
+<a name="module_MusicJsonToolbox.pitchNgramSimilarity"></a>
 
-### MusicJsonToolbox.distancePitchNgrams(object, search) ⇒ <code>Array</code>
+### MusicJsonToolbox.pitchNgramSimilarity(object, search) ⇒ <code>Array</code>
 Returns the fine score for similarity between the searched notes and corresponding ngrams.Notes are represented with pitch and duration
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -615,9 +615,9 @@ Returns the fine score for similarity between the searched notes and correspondi
 | object | <code>object</code> | A musicjson object to search in |
 | search | <code>Array</code> | An array of pitch values (e.g. [1, 6, 1, 6]) |
 
-<a name="module_MusicJsonToolbox.distanceIntervalsNgrams"></a>
+<a name="module_MusicJsonToolbox.intervalNgramSimilarity"></a>
 
-### MusicJsonToolbox.distanceIntervalsNgrams(object, search) ⇒ <code>Array</code>
+### MusicJsonToolbox.intervalNgramSimilarity(object, search) ⇒ <code>Array</code>
 Returns the fine score for similarity between the searched notes and the corresponding ngrams.Notes are represented as intervals.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
@@ -628,9 +628,9 @@ Returns the fine score for similarity between the searched notes and the corresp
 | object | <code>object</code> | A musicjson object to search in |
 | search | <code>Array</code> | An array of intervals (e.g. [0, 5, -5, 5]) |
 
-<a name="module_MusicJsonToolbox.distancePitchDurationNgrams"></a>
+<a name="module_MusicJsonToolbox.pitchDurationNgramSimilarity"></a>
 
-### MusicJsonToolbox.distancePitchDurationNgrams(object, search, adjusted) ⇒ <code>Array</code>
+### MusicJsonToolbox.pitchDurationNgramSimilarity(object, search, adjusted) ⇒ <code>Array</code>
 Returns the fine score for similarity between the searched notes and the corresponding ngrams.Notes are represented as pitch and duration values.
 
 **Kind**: static method of <code>[MusicJsonToolbox](#module_MusicJsonToolbox)</code>  
