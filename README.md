@@ -24,7 +24,8 @@ $ bower install --save musicjson-toolbox
 Example
 ---------------------------------------------------------------------------
 
-For usage in browser, have a look at [demo page](http://musicjson-toolbox.lukaslamm.com/).
+For usage in browser, have a look at [tools demo page](http://musicjson-toolbox.lukaslamm.com/) or
+[similarity demo page](http://musicjson-similarity-demo.lukaslamm.com/).
 
 For use as node module refer to the following:
 
