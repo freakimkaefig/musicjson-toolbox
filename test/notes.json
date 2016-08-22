@@ -9,7 +9,8 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 0,
-    "noteNumber": 0
+    "noteNumber": 0,
+    "noteNumberAbsolute": 0
   },
   {
     "pitch": {
@@ -21,7 +22,8 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 0,
-    "noteNumber": 1
+    "noteNumber": 1,
+    "noteNumberAbsolute": 1
   },
   {
     "pitch": {
@@ -33,7 +35,8 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 0,
-    "noteNumber": 2
+    "noteNumber": 2,
+    "noteNumberAbsolute": 2
   },
   {
     "pitch": {
@@ -45,7 +48,8 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 0,
-    "noteNumber": 3
+    "noteNumber": 3,
+    "noteNumberAbsolute": 3
   },
   {
     "pitch": {
@@ -57,7 +61,8 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 0,
-    "noteNumber": 4
+    "noteNumber": 4,
+    "noteNumberAbsolute": 4
   },
   {
     "pitch": {
@@ -70,7 +75,8 @@
     "duration": 4,
     "type": "quarter",
     "measureNumber": 1,
-    "noteNumber": 0
+    "noteNumber": 0,
+    "noteNumberAbsolute": 6
   },
   {
     "pitch": {
@@ -83,7 +89,8 @@
     "duration": 4,
     "type": "quarter",
     "measureNumber": 1,
-    "noteNumber": 1
+    "noteNumber": 1,
+    "noteNumberAbsolute": 7
   },
   {
     "pitch": {
@@ -96,7 +103,8 @@
     "duration": 4,
     "type": "quarter",
     "measureNumber": 1,
-    "noteNumber": 2
+    "noteNumber": 2,
+    "noteNumberAbsolute": 8
   },
   {
     "pitch": {
@@ -108,7 +116,8 @@
     "duration": 4,
     "type": "quarter",
     "measureNumber": 2,
-    "noteNumber": 0
+    "noteNumber": 0,
+    "noteNumberAbsolute": 9
   },
   {
     "pitch": {
@@ -120,7 +129,8 @@
     "duration": 4,
     "type": "quarter",
     "measureNumber": 2,
-    "noteNumber": 1
+    "noteNumber": 1,
+    "noteNumberAbsolute": 10
   },
   {
     "pitch": {
@@ -132,7 +142,8 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 2,
-    "noteNumber": 2
+    "noteNumber": 2,
+    "noteNumberAbsolute": 11
   },
   {
     "pitch": {
@@ -144,6 +155,7 @@
     "duration": 2,
     "type": "eighth",
     "measureNumber": 2,
-    "noteNumber": 3
+    "noteNumber": 3,
+    "noteNumberAbsolute": 12
   }
 ]

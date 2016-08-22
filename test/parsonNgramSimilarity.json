@@ -3,19 +3,23 @@
     "highlight": [
       {
         "measure": 0,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 0
       },
       {
         "measure": 0,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 1
       },
       {
         "measure": 0,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 2
       },
       {
         "measure": 0,
-        "note": 3
+        "note": 3,
+        "noteAbsolute": 3
       }
     ],
     "similarity": 0.75
@@ -24,19 +28,23 @@
     "highlight": [
       {
         "measure": 0,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 1
       },
       {
         "measure": 0,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 2
       },
       {
         "measure": 0,
-        "note": 3
+        "note": 3,
+        "noteAbsolute": 3
       },
       {
         "measure": 0,
-        "note": 4
+        "note": 4,
+        "noteAbsolute": 4
       }
     ],
     "similarity": 0.75
@@ -45,19 +53,23 @@
     "highlight": [
       {
         "measure": 0,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 2
       },
       {
         "measure": 0,
-        "note": 3
+        "note": 3,
+        "noteAbsolute": 3
       },
       {
         "measure": 0,
-        "note": 4
+        "note": 4,
+        "noteAbsolute": 4
       },
       {
         "measure": 1,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 6
       }
     ],
     "similarity": 0.5
@@ -66,19 +78,23 @@
     "highlight": [
       {
         "measure": 0,
-        "note": 3
+        "note": 3,
+        "noteAbsolute": 3
       },
       {
         "measure": 0,
-        "note": 4
+        "note": 4,
+        "noteAbsolute": 4
       },
       {
         "measure": 1,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 6
       },
       {
         "measure": 1,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 7
       }
     ],
     "similarity": 0.75
@@ -87,19 +103,23 @@
     "highlight": [
       {
         "measure": 0,
-        "note": 4
+        "note": 4,
+        "noteAbsolute": 4
       },
       {
         "measure": 1,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 6
       },
       {
         "measure": 1,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 7
       },
       {
         "measure": 1,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 8
       }
     ],
     "similarity": 0.5
@@ -108,19 +128,23 @@
     "highlight": [
       {
         "measure": 1,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 6
       },
       {
         "measure": 1,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 7
       },
       {
         "measure": 1,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 8
       },
       {
         "measure": 2,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 9
       }
     ],
     "similarity": 0.5
@@ -129,19 +153,23 @@
     "highlight": [
       {
         "measure": 1,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 7
       },
       {
         "measure": 1,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 8
       },
       {
         "measure": 2,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 9
       },
       {
         "measure": 2,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 10
       }
     ],
     "similarity": 1
@@ -150,19 +178,23 @@
     "highlight": [
       {
         "measure": 1,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 8
       },
       {
         "measure": 2,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 9
       },
       {
         "measure": 2,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 10
       },
       {
         "measure": 2,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 11
       }
     ],
     "similarity": 0.5
@@ -171,19 +203,23 @@
     "highlight": [
       {
         "measure": 2,
-        "note": 0
+        "note": 0,
+        "noteAbsolute": 9
       },
       {
         "measure": 2,
-        "note": 1
+        "note": 1,
+        "noteAbsolute": 10
       },
       {
         "measure": 2,
-        "note": 2
+        "note": 2,
+        "noteAbsolute": 11
       },
       {
         "measure": 2,
-        "note": 3
+        "note": 3,
+        "noteAbsolute": 12
       }
     ],
     "similarity": 1

@@ -2,74 +2,86 @@
   {
     "value": "*",
     "duration": "*",
+    "measureNumber": 0,
     "noteNumber": 0,
-    "measureNumber": 0
+    "noteNumberAbsolute": 0
   },
   {
     "value": 2,
     "duration": 0,
+    "measureNumber": 0,
     "noteNumber": 1,
-    "measureNumber": 0
+    "noteNumberAbsolute": 1
   },
   {
     "value": 2,
     "duration": 0,
+    "measureNumber": 0,
     "noteNumber": 2,
-    "measureNumber": 0
+    "noteNumberAbsolute": 2
   },
   {
     "value": 1,
     "duration": 0,
+    "measureNumber": 0,
     "noteNumber": 3,
-    "measureNumber": 0
+    "noteNumberAbsolute": 3
   },
   {
     "value": 2,
     "duration": 0,
+    "measureNumber": 0,
     "noteNumber": 4,
-    "measureNumber": 0
+    "noteNumberAbsolute": 4
   },
   {
 
     "value": -6,
     "duration": 2,
+    "measureNumber": 1,
     "noteNumber": 0,
-    "measureNumber": 1
+    "noteNumberAbsolute": 6
   },
   {
     "value": 0,
     "duration": 0,
+    "measureNumber": 1,
     "noteNumber": 1,
-    "measureNumber": 1
+    "noteNumberAbsolute": 7
   },
   {
     "value": 10,
     "duration": 0,
+    "measureNumber": 1,
     "noteNumber": 2,
-    "measureNumber": 1
+    "noteNumberAbsolute": 8
   },
   {
     "value": -7,
     "duration": 0,
+    "measureNumber": 2,
     "noteNumber": 0,
-    "measureNumber": 2
+    "noteNumberAbsolute": 9
   },
   {
     "value": 5,
     "duration": 0,
+    "measureNumber": 2,
     "noteNumber": 1,
-    "measureNumber": 2
+    "noteNumberAbsolute": 10
   },
   {
     "value": -5,
     "duration": -2,
+    "measureNumber": 2,
     "noteNumber": 2,
-    "measureNumber": 2
+    "noteNumberAbsolute": 11
   },
   {
     "value": 5,
     "duration": 0,
+    "measureNumber": 2,
     "noteNumber": 3,
-    "measureNumber": 2
+    "noteNumberAbsolute": 12
   }
 ]

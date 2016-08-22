@@ -175,21 +175,25 @@ describe('MusicJsonToolbox Helper Functions', function() {
       output = MusicJsonToolbox.highlightMapping([
         {
           measureNumber: 0,
-          noteNumber: 0
+          noteNumber: 0,
+          noteNumberAbsolute: 0
         },
         {
           measureNumber: 0,
-          noteNumber: 1
+          noteNumber: 1,
+          noteNumberAbsolute: 1
         }
       ]);
       expect(output).to.deep.equal([
         {
           measure: 0,
-          note: 0
+          note: 0,
+          noteAbsolute: 0
         },
         {
           measure: 0,
-          note: 1
+          note: 1,
+          noteAbsolute: 1
         }
       ]);
     });

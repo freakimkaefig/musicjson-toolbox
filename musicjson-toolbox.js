@@ -208,12 +208,15 @@
       var repeatStart = -1;
 
       // loop over measures
+      var absoluteNoteCounter = 0;
       for (var i = 0; i < obj.measures.length; i++) {
 
-        // add note and measure number for eventual identification
+        // add note and measure number for identification
         for (var j = 0; j < obj.measures[i].notes.length; j++) {
           obj.measures[i].notes[j].measureNumber = i;
           obj.measures[i].notes[j].noteNumber = j;
+          obj.measures[i].notes[j].noteNumberAbsolute = absoluteNoteCounter;
+          absoluteNoteCounter++;
         }
 
         // store repeat start point
@@ -264,8 +267,9 @@
       tempIntervals.push({
         value: '*',
         duration: '*',
+        measureNumber: 0,
         noteNumber: 0,
-        measureNumber: 0
+        noteNumberAbsolute: 0
       });
 
       for (var i = 1; i < notes.length; i++) {
@@ -277,8 +281,9 @@
         var tempNote = {
           value: pitchDiff,
           duration: durationDiff,
+          measureNumber: notes[i].measureNumber,
           noteNumber: notes[i].noteNumber,
-          measureNumber: notes[i].measureNumber
+          noteNumberAbsolute: notes[i].noteNumberAbsolute
         };
         tempIntervals.push(tempNote);
       }
@@ -298,8 +303,9 @@
       // add initial parsons item '*'
       tempParsons.push({
         value: '*',
+        measureNumber: 0,
         noteNumber: 0,
-        measureNumber: 0
+        noteNumberAbsolute: 0
       });
 
       for (var i = 1; i < notes.length; i++) {
@@ -319,8 +325,9 @@
         // add parsons code item to array
         tempParsons.push({
           value: parson,
+          measureNumber: notes[i].measureNumber,
           noteNumber: notes[i].noteNumber,
-          measureNumber: notes[i].measureNumber
+          noteNumberAbsolute: notes[i].noteNumberAbsolute
         });
       }
 
@@ -438,7 +445,8 @@
       return array.map(function(item) {
         return {
           measure: item.measureNumber,
-          note: item.noteNumber
+          note: item.noteNumber,
+          noteAbsolute: item.noteNumberAbsolute
         };
       });
     },
