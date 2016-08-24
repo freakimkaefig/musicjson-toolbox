@@ -812,7 +812,7 @@
           max = rowMax;
         }
       }
-      return (max - matrix[a.length][b.length]) / max;
+      return 1 - (matrix[a.length][b.length] / max);
     },
 
     /**
