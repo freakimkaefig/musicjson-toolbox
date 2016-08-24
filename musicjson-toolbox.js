@@ -1230,7 +1230,10 @@
       var divisions = parseInt(object.attributes.divisions);
       var beatType = parseInt(object.attributes.time['beat-type']);
       var keyAdjust = parseInt(object.attributes.key.fifths);
-      var ngrams = this.ngrams(this.notes(object, false, true), search.length * 2);
+      var notes = this.notes(object, false, true);
+      var ngrams = this.ngrams(notes, search.length);
+      ngrams = ngrams.concat(this.ngrams(notes, Math.floor(search.length * 1.5)));
+      ngrams = ngrams.concat(this.ngrams(notes, search.length * 2));
       var similarities = [];
 
       for (var i = 0; i < ngrams.length; i++) {
