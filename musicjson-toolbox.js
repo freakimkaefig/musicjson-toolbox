@@ -135,7 +135,7 @@
      *
      * Can be set at runtime via:
      * <pre><code>
-     *   MusicJsonToolbox.globalK3 = 0.5;
+     *   MusicJsonToolbox.globalK2 = 0.5;
      * </pre></code>
      *
      * @constant
