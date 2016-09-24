@@ -127,7 +127,7 @@
      * @constant
      * @type {number}
      */
-    globalK1: 0.46,
+    globalK1: 0.3,
 
     /**
      * Parameter k2 of adjusted Mongeau-Sankoff-Measure according to Gomez, Abad-Mota & Ruckhaus, 2007.
@@ -156,7 +156,7 @@
      * @constant
      * @type {number}
      */
-    globalK3: 1,
+    globalK3: 0.1,
 
     /**
      * Holds abc steps for conversion from base12 pitch values (including octaves).

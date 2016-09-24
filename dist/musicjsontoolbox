@@ -12,17 +12,38 @@ program.parse(process.argv);
 // ========== Toolbox =========
 // ==============================
 var MusicJsonToolbox = require('../musicjson-toolbox');
-var doc = require('../demoB.json');
-// var doc = require('../test/example.json');
-var searchPitch = [1, 6, 1, 6];
-var searchParsons = '*uuruddrdrr';
-var searchIntervals = ['*', 5, -5, 5];
+// var doc = require('../demoB.json');
+var doc = require('../../melodicsimilarity/examples/a59114.json');
+// var searchPitch = [1, 6, 1, 6];
+// var searchParsons = '*uuruddrdrr';
+// var searchIntervals = ['*', 5, -5, 5];
 var searchIntervalsDuration = [
-  {value: 12, rest: false, duration: 4},
-  {value: 7, rest: false, duration: 4},
-  {value: 12, rest: false, duration: 2},
-  {value: 7, rest: false, duration: 1}
-];
+  { pitch: { step: 'D', octave: 5, accidental: '' }, rest: false, duration: 16, type: 'quarter', dot: false },
+  { pitch: { step: 'C', octave: 5, accidental: '' },
+    rest: false,
+    duration: 16,
+    type: 'quarter',
+    dot: false },
+  { pitch: { step: 'B', octave: 4, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'A', octave: 4, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'G', octave: 4, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false },
+  { pitch: { step: 'D', octave: 5, accidental: '' },
+    rest: false,
+    duration: 8,
+    type: 'eighth',
+    dot: false } ];
 
 // var notes = MusicJsonToolbox.notes(doc, false, false);
 // var parsons = MusicJsonToolbox.parsons(notes);
@@ -30,8 +51,18 @@ var searchIntervalsDuration = [
 // var ngrams = MusicJsonToolbox.ngrams(notes, searchPitch.length);
 // var pitchDurationValues = MusicJsonToolbox.pitchDurationValues(notes, -1, 4, 4);
 // var value = MusicJsonToolbox.base12Pitch('C', 0, 4, 0, true);
+var similarities = MusicJsonToolbox.pitchDurationNgramSimilarity(
+  doc,
+  MusicJsonToolbox.pitchDurationValues(
+    searchIntervalsDuration,
+    0, 16, 4
+  ),
+  true
+);
 
-// console.log(parsons);
+console.log(similarities.map(function(item) {
+  return item.similarity;
+}).join(', '));
 
 // ==============================
 // ========== DISTANCE ==========
@@ -50,11 +81,11 @@ var searchIntervalsDuration = [
 //   searchPitchDuration,
 //   0, 16, 4
 // );
-var distance = MusicJsonToolbox.pitchDurationSimilarity(
-  require('../demoB.json'),
-  require('../demoA.json'),
-  false
-);
+// var distance = MusicJsonToolbox.pitchDurationSimilarity(
+//   require('../demoB.json'),
+//   require('../demoA.json'),
+//   false
+// );
 // console.log(distance);
 // var distance = MusicJsonToolbox.distancePitchDurationNgrams(doc, pitchDurationValues, false);
 

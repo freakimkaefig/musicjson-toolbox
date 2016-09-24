@@ -22,7 +22,7 @@
         "noteAbsolute": 3
       }
     ],
-    "similarity": 0.03333333
+    "similarity": 0.050156739811912265
   },
   {
     "highlight": [
@@ -47,7 +47,7 @@
         "noteAbsolute": 4
       }
     ],
-    "similarity": 0.168495297
+    "similarity": 0.11061507936507942
   },
   {
     "highlight": [
@@ -72,7 +72,7 @@
         "noteAbsolute": 5
       }
     ],
-    "similarity": 0.321120689
+    "similarity": 0.0762800417972831
   },
   {
     "highlight": [
@@ -97,7 +97,7 @@
         "noteAbsolute": 6
       }
     ],
-    "similarity": 0.2964190981
+    "similarity": 0
   },
   {
     "highlight": [
@@ -122,7 +122,7 @@
         "noteAbsolute": 7
       }
     ],
-    "similarity": 0.2356321839
+    "similarity": 0
   },
   {
     "highlight": [
@@ -147,6 +147,60 @@
         "noteAbsolute": 8
       }
     ],
-    "similarity": 0.2356321839
+    "similarity": 0.18015873015873007
+  },
+  {
+    "similarity": 0.3829022988505747
+  },
+  {
+    "similarity": 0.3829022988505747
+  },
+  {
+    "similarity": 0.17077175697865354
+  },
+  {
+    "similarity": 0.1992337164750958
+  },
+  {
+    "similarity": 0
+  },
+  {
+    "similarity": 0.04761904761904767
+  },
+  {
+    "similarity": 0
+  },
+  {
+    "similarity": 0.20593869731800774
+  },
+  {
+    "similarity": 0.30632183908045973
+  },
+  {
+    "similarity": 0.27847439916405436
+  },
+  {
+    "similarity": 0.27847439916405436
+  },
+  {
+    "similarity": 0.30632183908045973
+  },
+  {
+    "similarity": 0.033333333333333215
+  },
+  {
+    "similarity": 0.16849529780564254
+  },
+  {
+    "similarity": 0.3211206896551724
+  },
+  {
+    "similarity": 0.2964190981432361
+  },
+  {
+    "similarity": 0.23563218390804597
+  },
+  {
+    "similarity": 0.23563218390804597
   }
 ]
