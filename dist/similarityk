@@ -4,15 +4,17 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var MusicJsonToolbox = require('../musicjson-toolbox');
 
+var algorithmValue;
 var json1Path;
 var json2Path;
 var outputPath;
 
 commander
   .version(require('../package.json').version)
-  .usage('<json1> <json2> <output>')
-  .arguments('<json1> <json2> <output>')
-  .action(function(json1, json2, output) {
+  .usage('<algorithm> <json1> <json2> <output>')
+  .arguments('<algorithm> <json1> <json2> <output>')
+  .action(function(algorithm, json1, json2, output) {
+    algorithmValue = algorithm;
     json1Path = json1;
     json2Path = json2;
     outputPath = output;
@@ -31,6 +33,10 @@ commander
   })
   .parse(process.argv);
 
+if (typeof algorithmValue === 'undefined') {
+  console.error('no algortihm specified!');
+  process.exit(1);
+}
 if (typeof json1Path === 'undefined') {
   console.error('no json1 specified!');
   process.exit(1);
@@ -47,18 +53,29 @@ if (typeof outputPath === 'undefined') {
 json1Content = JSON.parse(fs.readFileSync(json1Path, 'utf-8'));
 json2Content = JSON.parse(fs.readFileSync(json2Path, 'utf-8'));
 
-var outputContent = 'k1;k3;similarity\n';
-
-for (var i = 1; i <= 10; i++) {
-  for (var j = 1; j <= 10; j++) {
-    MusicJsonToolbox.globalK1 = j / 10;
-    MusicJsonToolbox.globalK3 = i / 10;
-    outputContent += MusicJsonToolbox.globalK1;
+var outputContent, i, j;
+if (algorithmValue === 'ms') {
+  outputContent = 'k1resu ;similarity\n';
+  for (i = 1; i <= 10; i++) {
+    MusicJsonToolbox.globalK = i / 10;
+    outputContent += MusicJsonToolbox.globalK;
     outputContent += ';';
-    outputContent += MusicJsonToolbox.globalK3;
-    outputContent += ';';
-    outputContent += MusicJsonToolbox.pitchDurationSimilarity(json1Content, json2Content, true).toFixed(3);
+    outputContent += MusicJsonToolbox.pitchDurationSimilarity(json1Content, json2Content, false).toFixed(3);
     outputContent += '\n';
+  }
+} else if (algorithmValue === 'gar') {
+  outputContent = 'k1;k3;similarity\n';
+  for (i = 1; i <= 10; i++) {
+    for (j = 1; j <= 10; j++) {
+      MusicJsonToolbox.globalK1 = j / 10;
+      MusicJsonToolbox.globalK3 = i / 10;
+      outputContent += MusicJsonToolbox.globalK1;
+      outputContent += ';';
+      outputContent += MusicJsonToolbox.globalK3;
+      outputContent += ';';
+      outputContent += MusicJsonToolbox.pitchDurationSimilarity(json1Content, json2Content, true).toFixed(3);
+      outputContent += '\n';
+    }
   }
 }
 
